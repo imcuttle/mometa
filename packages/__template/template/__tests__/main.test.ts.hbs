@@ -1,0 +1,11 @@
+{{#if useTs}}
+  import
+  {{camelCase name}}
+  from '../src'
+{{else}}
+  const
+  {{camelCase name}}
+  = require('../src')
+{{/if}}
+
+describe('{{camelCase name}}', function() { it( 'spec case', function () { } ) })

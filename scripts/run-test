@@ -1,0 +1,21 @@
+#!/usr/bin/env node
+const nps = require('path')
+const { execSync } = require('child_process')
+const { Command } = require('commander')
+
+const restArgs = process.argv.slice(2)
+// const program = new Command()
+
+// program.parse(process.argv)
+console.log(process.cwd())
+
+const root = nps.join(__dirname, '..')
+
+try {
+  execSync(`npx jest ${process.cwd()} ${restArgs.join(' ')}`, {
+    stdio: 'inherit',
+    cwd: root
+  })
+} catch (ex) {
+  process.exitCode = ex.status
+}

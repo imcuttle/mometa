@@ -1,0 +1,40 @@
+{
+  "name": "@mometa/dsl-core",
+  "version": "0.0.0",
+  "publishConfig": {
+    "access": "public"
+  },
+  "author": "余聪 <yucong@yuanfudao.com>",
+  "description": "DSL 的 parser & stringify",
+  "main": "lib",
+  "types": "types",
+  "module": "es",
+  "files": [
+    "lib",
+    "es",
+    "types"
+  ],
+  "scripts": {
+    "test": "../../scripts/run test",
+    "build": "../../scripts/run build",
+    "packlimit": "../../scripts/run packlimit",
+    "dev": "npm run build -- --watch",
+    "prepublishOnly": "npm run build && npm run packlimit",
+    "version": "npm test && npm run packlimit"
+  },
+  "dependencies": {
+    "@babel/parser": "^7.16.4"
+  },
+  "keywords": [
+    "余聪",
+    "dsl-core",
+    "余聪",
+    "mometa",
+    "mometa"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+undefined",
+    "directory": "packages/dsl-core"
+  }
+}

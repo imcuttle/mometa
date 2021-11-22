@@ -1,0 +1,7 @@
+/** * @file helper */ const nps = require('path')
+
+{{#if useTs}}
+  export function fixture(...args: string[]) { return nps.join.apply(nps, [__dirname, 'fixture'].concat(...args)) }
+{{else}}
+  export function fixture(...args) { return nps.join.apply(nps, [__dirname, 'fixture'].concat(...args)) }
+{{/if}}

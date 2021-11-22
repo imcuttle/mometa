@@ -1,0 +1,43 @@
+#!/usr/bin/env node
+const nps = require('path')
+const fs = require('fs')
+const { promisify } = require('util')
+const { execSync } = require('child_process')
+const concurrently = require('concurrently')
+
+const restArgs = process.argv.slice(2)
+
+// const { Command } = require('commander')
+// const program = new Command()
+// program.parse(process.argv)
+
+// "build": "npm run clean && run-p --print-label \"build:**\"",
+//     "build:es": "tsc --outDir es --module es6",
+//     "build:cjs": "tsc --outDir lib",
+//     "build:tds": "tsc --emitDeclarationOnly -d",
+
+const rootBin = nps.join(__dirname, '../node_modules/.bin')
+const hasBuildJson = fs.existsSync(nps.join(process.cwd(), 'tsconfig.build.json'))
+const buildArgStr = hasBuildJson ? '--project tsconfig.build.json' : '--project tsconfig.json'
+
+try {
+  execSync(`${rootBin}/rimraf es lib types`, { stdio: 'inherit' })
+  const { exitCode } = concurrently([
+    {
+      command: `${rootBin}/tsc ${buildArgStr} --outDir es --module es6 ` + restArgs.join(' '),
+      prefix: 'build:es'
+    },
+    {
+      command: `${rootBin}/tsc ${buildArgStr} --outDir lib --module commonjs ` + restArgs.join(' '),
+      prefix: 'build:cjs'
+    },
+    {
+      command: `${rootBin}/tsc ${buildArgStr} --outDir types --emitDeclarationOnly -d ` + restArgs.join(' '),
+      prefix: 'build:tds'
+    }
+  ])
+  process.exitCode = exitCode
+} catch (ex) {
+  console.error(ex)
+  process.exitCode = ex.status
+}
