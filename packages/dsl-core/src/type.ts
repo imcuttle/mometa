@@ -3,9 +3,29 @@ export interface Node<T extends string = string, D = any> {
   data?: D
 }
 
-export interface ImportNode extends Node<'import'> {
-  // mode: 'default' | ;named;
+// import * as _hintedName from "source"
+export interface NamespaceImportNode extends Node<'import', { nameHint?: string }> {
+  mode: 'namespace'
+  source: string
 }
+// import "source"
+export interface SideEffectImportNode extends Node<'import'> {
+  mode: 'sideEffect'
+  source: string
+}
+// import { named as _hintedName } from "source"
+export interface NamedImportNode extends Node<'import', { nameHint?: string }> {
+  mode: 'named'
+  source: string
+}
+// import _hintedName from "source"
+export interface DefaultImportNode extends Node<'import', { nameHint?: string }> {
+  mode: 'default'
+  source: string
+}
+
+export type ImportNode = NamespaceImportNode | DefaultImportNode | SideEffectImportNode | NamedImportNode
+
 export interface ExportNode extends Node<'export'> {
   mode: 'default' | 'named'
 }

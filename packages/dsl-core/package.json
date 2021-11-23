@@ -23,6 +23,7 @@
     "version": "npm test && npm run packlimit"
   },
   "dependencies": {
+    "@babel/core": "^7.16.0",
     "@babel/parser": "^7.16.4"
   },
   "keywords": [
