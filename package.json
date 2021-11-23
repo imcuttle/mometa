@@ -1,7 +1,7 @@
 {
   "name": "mometa",
   "version": "1.0.0",
-  "description": "面向研发的代码DSL平台",
+  "description": "面向研发的低代码元编程平台",
   "author": "余聪 <yucong@yuanfudao.com>",
   "scripts": {
     "test": "npx jest",
