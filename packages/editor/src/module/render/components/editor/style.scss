@@ -1,0 +1,7 @@
+@import '../../style/_var';
+
+.#{$prefix} {
+  &__r-panel {
+    width: 320px;
+  }
+}

@@ -4,6 +4,7 @@
  */
 import { ModuleNode } from './type'
 import { transformAsync, TransformOptions } from '@babel/core'
+// import { transformAsync, TransformOptions } from '@babel/parser'
 import { createMetaPlugins } from './plugins/pluggable'
 
 interface CommonOptions {
@@ -14,12 +15,9 @@ interface ParseOptions extends CommonOptions {
 }
 interface StringifyOptions extends CommonOptions {}
 
-export async function parseModuleNode(
-  moduleCode: string,
-  { id = null, plugins }: ParseOptions = {}
-): Promise<ModuleNode> {
+export async function parseModuleNode(moduleCode: string, { id, plugins }: ParseOptions = {}): Promise<ModuleNode> {
   const plgMan = createMetaPlugins(plugins)
-  const x = await transformAsync(moduleCode, {
+  const res = await transformAsync(moduleCode, {
     parserOpts: {
       plugins: [
         'jsx',
@@ -51,11 +49,11 @@ export async function parseModuleNode(
         'topLevelAwait'
       ]
     },
-    plugins: plgMan.plugins,
+    // plugins: plgMan.plugins,
     babelrc: false,
     filename: id
   })
-  console.log(x.metadata, x.metadata.modulePath)
+  // console.log(x.metadata)
 
   return {
     type: 'module',

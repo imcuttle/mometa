@@ -2,7 +2,7 @@
 .DS_Store
 node_modules/
 dist/
-public/
+/public/
 **/*debug.log
 coverage/
 .entry

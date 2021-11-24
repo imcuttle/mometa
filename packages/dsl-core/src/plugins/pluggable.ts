@@ -1,19 +1,25 @@
 import { BabelFile, PluginObj, PluginPass, TransformOptions } from '@babel/core'
 import { ImportNode, ModuleNode } from '../type'
-import * as t from '@babel/types'
-import { Hub, NodePath, Scope } from '@babel/traverse'
+
+interface MetaPluginCtx {
+  modulePath: ModulePath
+}
+
+interface MetaBabelFile extends BabelFile {
+  metadata: MetaPluginCtx
+}
+
+interface MetaPluginPass extends PluginPass {
+  file: MetaBabelFile
+}
 
 declare module '@babel/core' {
   interface BabelFile {
     // @ts-ignore
-    metadata: {
-      modulePath: ModulePath
-    }
+    metadata: MetaPluginCtx
   }
 
-  interface BabelFileMetadata {
-    modulePath: ModulePath
-  }
+  interface BabelFileMetadata extends MetaPluginCtx {}
 }
 
 class ModulePath {
@@ -31,9 +37,12 @@ const createParseImportsPlugin = () => {
   return {
     name: plgName('parse-imports'),
     visitor: {
-      // Imp
+      ImportDeclaration(path, p) {
+        path.get('source').node.extra
+        // console.log(path.get('source').getSource())
+      }
     }
-  } as PluginObj
+  } as PluginObj<MetaPluginPass>
 }
 
 export const createMetaPlugins = (customPlugins = []) => {

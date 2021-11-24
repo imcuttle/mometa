@@ -1,12 +1,15 @@
-export interface Node<T extends string = string, D = any> {
+export interface Node<T extends string = string, D = unknown> {
   type: T
   data?: D
 }
 
-// import * as _hintedName from "source"
-export interface NamespaceImportNode extends Node<'import', { nameHint?: string }> {
-  mode: 'namespace'
+interface BaseImportNode<D = unknown> extends Node<'import', D> {
   source: string
+  local: string
+}
+// import * as _hintedName from "source"
+export interface NamespaceImportNode extends BaseImportNode<{ nameHint?: string }> {
+  mode: 'namespace'
 }
 // import "source"
 export interface SideEffectImportNode extends Node<'import'> {
@@ -14,14 +17,13 @@ export interface SideEffectImportNode extends Node<'import'> {
   source: string
 }
 // import { named as _hintedName } from "source"
-export interface NamedImportNode extends Node<'import', { nameHint?: string }> {
+export interface NamedImportNode extends BaseImportNode<{ nameHint?: string }> {
   mode: 'named'
-  source: string
+  imported: string
 }
 // import _hintedName from "source"
-export interface DefaultImportNode extends Node<'import', { nameHint?: string }> {
+export interface DefaultImportNode extends BaseImportNode<{ nameHint?: string }> {
   mode: 'default'
-  source: string
 }
 
 export type ImportNode = NamespaceImportNode | DefaultImportNode | SideEffectImportNode | NamedImportNode
