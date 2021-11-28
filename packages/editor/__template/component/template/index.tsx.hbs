@@ -1,0 +1,23 @@
+import React from 'react'
+import p from 'prefix-classname'
+import { CLS_PREFIX } from '../../../config/const'
+
+import './style.scss'
+
+const cn = p('')
+const c = p(`${CLS_PREFIX}-{{{name}}}`)
+
+export interface {{{pascalCase name}}}Props {
+  className?: string
+}
+
+const {{{pascalCase name}}}: React.FC<{{{pascalCase name}}}Props> = React.memo(({ className }) => {
+  return (
+    <div className={cn(c(), className)}>
+    </div>
+  )
+})
+
+{{{pascalCase name}}}.defaultProps = {}
+
+export default {{{pascalCase name}}}

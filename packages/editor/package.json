@@ -23,6 +23,12 @@
     "version": "npm test && npm run packlimit"
   },
   "dependencies": {
+    "@codesandbox/sandpack-react": "^0.9.1",
+    "@rcp/use.persistfn": "^1.0.2",
+    "@rcp/util.open": "^1.0.3",
+    "antd": "^4.17.1",
+    "assign-ref": "^1.0.1",
+    "lodash-es": "^4.17.21",
     "prefix-classname": "^1.0.3"
   },
   "keywords": [
@@ -38,6 +44,8 @@
     "directory": "packages/editor"
   },
   "devDependencies": {
-    "react": "^17.0.2"
+    "moment": "^2.29.1",
+    "react": "^17.0.2",
+    "sass": "^1.43.4"
   }
 }

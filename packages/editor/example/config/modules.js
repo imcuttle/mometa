@@ -2,6 +2,7 @@
 
 const fs = require('fs')
 const path = require('path')
+const hq = require('alias-hq')
 const paths = require('./paths')
 const chalk = require('react-dev-utils/chalk')
 const resolve = require('resolve')
@@ -58,14 +59,15 @@ function getWebpackAliases(options = {}) {
   const baseUrl = options.baseUrl
 
   if (!baseUrl) {
-    return {}
+    return hq.get('webpack')
   }
 
   const baseUrlResolved = path.resolve(paths.appPath, baseUrl)
 
   if (path.relative(paths.appPath, baseUrlResolved) === '') {
     return {
-      src: paths.appSrc
+      src: paths.appSrc,
+      ...hq.get('webpack')
     }
   }
 }

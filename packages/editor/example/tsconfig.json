@@ -14,7 +14,12 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "baseUrl": ".",
+    "paths": {
+      "@mometa/editor": ["../src"],
+      "@mometa/editor/*": ["../src/*"]
+    }
   },
   "include": ["src"]
 }

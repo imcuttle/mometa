@@ -38,13 +38,20 @@
   "repository": "余聪/mometa",
   "module": "es",
   "edam": {
-    "source": "pkg",
     "alias": {
       "pkg": {
         "url": "./packages/__template",
         "type": "file",
         "config": {
           "output": "./packages/"
+        }
+      },
+      "editor-component": {
+        "description": "Editor 组件",
+        "url": "./packages/editor/__template/component",
+        "type": "file",
+        "config": {
+          "output": "./packages/editor/src/module/render/components"
         }
       }
     }
@@ -76,6 +83,8 @@
     "@commitlint/cli": "^15.0.0",
     "@commitlint/config-conventional": "^15.0.0",
     "@types/jest": "^27.0.3",
+    "@types/webpack-env": "^1.16.3",
+    "babel-plugin-import": "^1.13.3",
     "change-case": "^4.1.2",
     "commander": "^8.3.0",
     "concurrently": "^6.4.0",

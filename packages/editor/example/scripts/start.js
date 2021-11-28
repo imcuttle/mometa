@@ -73,14 +73,7 @@ checkBrowsers(paths.appPath, isInteractive)
     const useTypeScript = fs.existsSync(paths.appTsConfig)
     const urls = prepareUrls(protocol, HOST, port, paths.publicUrlOrPath.slice(0, -1))
     // Create a webpack compiler that is configured with custom messages.
-    const compiler = createCompiler({
-      appName,
-      config,
-      urls,
-      useYarn,
-      useTypeScript,
-      webpack
-    })
+    const compiler = webpack(config)
     // Load proxy config
     const proxySetting = require(paths.appPackageJson).proxy
     const proxyConfig = prepareProxy(proxySetting, paths.appPublic, paths.publicUrlOrPath)
@@ -104,7 +97,6 @@ checkBrowsers(paths.appPath, isInteractive)
       console.log(chalk.cyan('Starting the development server...\n'))
       openBrowser(urls.localUrlForBrowser)
     })
-
     ;['SIGINT', 'SIGTERM'].forEach(function (sig) {
       process.on(sig, function () {
         devServer.close()
