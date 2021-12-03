@@ -1,6 +1,11 @@
 @import '../../style/_var';
 
 .#{$prefix}-material-panel {
+  &-dragging {
+    .ant-image-mask {
+      //display: none;
+    }
+  }
   &__asset-group {
     display: flex;
     flex-direction: column;
@@ -13,6 +18,7 @@
       max-width: 33%;
       width: 33%;
       padding: 4px;
+      background-color: #fff;
 
       border: 1px solid #ccc;
       margin-left: -1px;

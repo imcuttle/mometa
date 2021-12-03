@@ -1,6 +1,7 @@
 import React from 'react'
 import p from 'prefix-classname'
 import { Radio, Empty, Image, Divider } from 'antd'
+import { useDrag } from 'react-dnd'
 import { CLS_PREFIX } from '../../../config/const'
 
 import './style.scss'
@@ -31,18 +32,45 @@ export interface Asset {
   cover?: string
 }
 
+const AssetUI = React.memo<Asset>(({ cover, name }) => {
+  const [{ isDragging }, drag, preview] = useDrag(
+    () => ({
+      type: 'asset',
+      item: { name },
+      end: (item, monitor) => {
+        // const dropResult = monitor.getDropResult()
+        // if (item && dropResult) {
+        //   alert(`You dropped ${item.name} into ${dropResult.name}!`)
+        // }
+      },
+      collect: (monitor) => ({
+        isDragging: monitor.isDragging()
+      })
+    }),
+    [name]
+  )
+  const opacity = isDragging ? 0.4 : 1
+
+  const renderComp = ({ ref, opacity, preview, style, className }: any) => {
+    return (
+      <div ref={ref} className={c('__asset-group__cell', className)} style={{ opacity, ...style }}>
+        <Image className={c('__asset-group__cell__img')} src={cover} />
+        <span className={c('__asset-group__cell__name')}>{name}</span>
+      </div>
+    )
+  }
+
+  // preview
+  return <>{renderComp({ ref: drag, opacity, className: isDragging && '-dragging' })}</>
+})
+
 const AssetGroup: React.FC<{ assetGroup: AssetGroup }> = React.memo(({ assetGroup }) => {
   return (
     <div className={c('__asset-group')}>
       <h5>{assetGroup.name}</h5>
       <div className={c('__asset-group__container')}>
         {assetGroup.assets?.map((asset) => {
-          return (
-            <div className={c('__asset-group__cell')}>
-              <Image className={c('__asset-group__cell__img')} src={asset.cover} />
-              <span className={c('__asset-group__cell__name')}>{asset.name}</span>
-            </div>
-          )
+          return <AssetUI {...asset} />
         })}
       </div>
     </div>

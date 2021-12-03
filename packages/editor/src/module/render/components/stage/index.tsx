@@ -23,7 +23,7 @@ type Props = {
   x: string
 }
 export default function App(props: Props) {
-  return <h1>Hello World</h1>
+  return <h1 title={'abc'}>Hello World</h1>
 }
 `
           },
