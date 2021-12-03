@@ -1,20 +1,22 @@
 import React from 'react'
 import p from 'prefix-classname'
 import { CLS_PREFIX } from '../../../config/const'
-import Iframe from '../iframe'
 
 const cn = p('')
 const c = p(`${CLS_PREFIX}-stage`)
 
+import './style.scss'
+
 import { SandpackProvider, SandpackLayout, SandpackCodeEditor, SandpackPreview } from '@codesandbox/sandpack-react'
 
 const CustomSandpack = ({ bundlerURL }) => (
-  <SandpackProvider
-    bundlerURL={bundlerURL}
-    customSetup={{
-      files: {
-        '/App.tsx': {
-          code: `
+  <div className={c('__sandpack')}>
+    <SandpackProvider
+      bundlerURL={bundlerURL}
+      customSetup={{
+        files: {
+          '/App.tsx': {
+            code: `
 import React, { StrictMode } from "react";
 
 type Props = {
@@ -24,9 +26,9 @@ export default function App(props: Props) {
   return <h1>Hello World</h1>
 }
 `
-        },
-        '/index.tsx': {
-          code: `import React, { StrictMode } from "react";
+          },
+          '/index.tsx': {
+            code: `import React, { StrictMode } from "react";
 import ReactDOM from "react-dom";
 import "./styles.css";
 
@@ -39,9 +41,9 @@ ReactDOM.render(
   </StrictMode>,
   rootElement
 );`
-        },
-        '/styles.css': {
-          code: `body {
+          },
+          '/styles.css': {
+            code: `body {
   font-family: sans-serif;
   -webkit-font-smoothing: auto;
   -moz-font-smoothing: auto;
@@ -56,9 +58,9 @@ ReactDOM.render(
 h1 {
   font-size: 1.5rem;
 }`
-        },
-        '/public/index.html': {
-          code: `<!DOCTYPE html>
+          },
+          '/public/index.html': {
+            code: `<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8">
@@ -69,23 +71,24 @@ h1 {
     <div id="root"></div>
   </body>
 </html>`
-        }
-      },
-      dependencies: {
-        react: '^17.0.0',
-        'react-dom': '^17.0.0',
-        'react-scripts': '^4.0.0'
-      },
-      entry: '/index.tsx',
-      // main: '/App.tsx',
-      environment: 'create-react-app-typescript'
-    }}
-  >
-    <SandpackLayout>
-      {/*<SandpackCodeEditor showLineNumbers showInlineErrors />*/}
-      <SandpackPreview showNavigator />
-    </SandpackLayout>
-  </SandpackProvider>
+          }
+        },
+        dependencies: {
+          react: '^17.0.0',
+          'react-dom': '^17.0.0',
+          'react-scripts': '^4.0.0'
+        },
+        entry: '/index.tsx',
+        // main: '/App.tsx',
+        environment: 'create-react-app-typescript'
+      }}
+    >
+      <SandpackLayout>
+        {/*<SandpackCodeEditor showLineNumbers showInlineErrors />*/}
+        <SandpackPreview showNavigator viewportOrientation={'landscape'} />
+      </SandpackLayout>
+    </SandpackProvider>
+  </div>
 )
 
 export interface StageProps {

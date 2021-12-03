@@ -1,0 +1,39 @@
+@import '../../style/_var';
+
+.#{$prefix}-material-panel {
+  &__asset-group {
+    display: flex;
+    flex-direction: column;
+
+    &__container {
+      display: flex;
+    }
+
+    &__cell {
+      max-width: 33%;
+      width: 33%;
+      padding: 4px;
+
+      border: 1px solid #ccc;
+      margin-left: -1px;
+
+      display: flex;
+      flex-direction: column;
+
+      height: auto;
+      aspect-ratio: 1/1;
+
+      &__img {
+        width: auto;
+        max-height: 70px;
+        object-fit: contain;
+        margin: auto;
+      }
+      &__name {
+        margin-top: 4px;
+        text-align: center;
+        display: block;
+      }
+    }
+  }
+}

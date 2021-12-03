@@ -1,4 +1,13 @@
 @import '../../style/_var';
 
 .#{$prefix}-stage {
+  &__sandpack {
+    &,
+    .sp-wrapper,
+    .sp-layout,
+    .sp-stack,
+    .sp-preview-container {
+      height: 100% !important;
+    }
+  }
 }
