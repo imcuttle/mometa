@@ -82,12 +82,12 @@ const MaterialPanel: React.FC<MaterialPanelProps> = React.memo(({ className, mat
 
   const panels = React.useMemo(() => {
     return materials.map((mat) => (
-      <div className={c('__mp', mat.key === materialValue && '__map-active')}>
+      <div key={mat.key} className={c('__mp', mat.key === materialValue && '__map-active')}>
         {mat.assetGroups.map((group, index, { length }) => (
-          <>
-            <AssetGroup key={group.key} assetGroup={group} />
+          <div key={group.key}>
+            <AssetGroup assetGroup={group} />
             {index !== length - 1 && <Divider type={'horizontal'} />}
-          </>
+          </div>
         ))}
       </div>
     ))

@@ -1,6 +1,10 @@
 import React from 'react'
 import p from 'prefix-classname'
+import { useDragDropManager } from 'react-dnd'
 import { CLS_PREFIX } from '../../../config/const'
+import { addModule } from '../../utils/externals-modules'
+
+const Dnd = require('react-dnd')
 
 const cn = p('')
 const c = p(`${CLS_PREFIX}-stage`)
@@ -18,12 +22,25 @@ const CustomSandpack = ({ bundlerURL }) => (
           '/App.tsx': {
             code: `
 import React, { StrictMode } from "react";
+import Tabs from "antd/es/tabs";
+import "antd/es/tabs/style/index.css";
 
 type Props = {
   x: string
 }
 export default function App(props: Props) {
-  return <h1 title={'abc'}>Hello World</h1>
+  return (
+    <div>
+      <h1 title={'abc'}>Hello World</h1>
+      <Tabs>
+      <Tabs.TabPane key={'tool'} tab={'物料'}>
+        <p>物料</p>
+        <p className='empty'></p>
+      </Tabs.TabPane>
+      <Tabs.TabPane key={'attr'} tab={'属性'}></Tabs.TabPane>
+      </Tabs>
+    </div>
+  )
 }
 `
           },
@@ -76,7 +93,8 @@ h1 {
         dependencies: {
           react: '^17.0.0',
           'react-dom': '^17.0.0',
-          'react-scripts': '^4.0.0'
+          'react-scripts': '^4.0.0',
+          antd: '^4.17.0'
         },
         entry: '/index.tsx',
         // main: '/App.tsx',
@@ -97,6 +115,14 @@ export interface StageProps {
 }
 
 const Stage: React.FC<StageProps> = React.memo(({ className, bundlerURL }) => {
+  const ddManager = useDragDropManager()
+  React.useLayoutEffect(() => {
+    addModule('react-dnd', {
+      ...Dnd,
+      DndProvider: (props) => <Dnd.DndProvider {...props} manager={ddManager} />
+    })
+  }, [ddManager])
+
   return (
     <div className={cn(c(), className)}>
       <CustomSandpack bundlerURL={bundlerURL} />
