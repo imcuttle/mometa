@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@codesandbox/sandpack-react": "^0.9.1",
+    "@rcp/use.behaviorsubject": "^1.0.2",
     "@rcp/use.persistfn": "^1.0.2",
     "@rcp/util.open": "^1.0.3",
     "antd": "^4.17.1",
@@ -31,7 +32,8 @@
     "lodash-es": "^4.17.21",
     "prefix-classname": "^1.0.3",
     "react-dnd": "^14.0.4",
-    "react-dnd-html5-backend": "^14.0.2"
+    "react-dnd-html5-backend": "^14.0.2",
+    "rxjs": "^7.4.0"
   },
   "keywords": [
     "余聪",

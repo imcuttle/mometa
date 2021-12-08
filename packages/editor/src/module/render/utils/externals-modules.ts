@@ -5,5 +5,9 @@ const modules = (global.__externals_modules = {
 })
 
 export function addModule(path, exports: any) {
+  const prev = modules[path]
   modules[path] = exports
+  return () => {
+    modules[path] = prev
+  }
 }

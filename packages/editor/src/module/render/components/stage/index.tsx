@@ -12,6 +12,7 @@ const c = p(`${CLS_PREFIX}-stage`)
 import './style.scss'
 
 import { SandpackProvider, SandpackLayout, SandpackCodeEditor, SandpackPreview } from '@codesandbox/sandpack-react'
+import { headerStatusSubject, useHeaderStatus } from '../header'
 
 const CustomSandpack = ({ bundlerURL }) => (
   <div className={c('__sandpack')}>
@@ -28,14 +29,19 @@ import "antd/es/tabs/style/index.css";
 type Props = {
   x: string
 }
+
+const array = new Array(100).fill(1)
+
 export default function App(props: Props) {
+
   return (
     <div>
       <h1 title={'abc'}>Hello World</h1>
       <Tabs>
       <Tabs.TabPane key={'tool'} tab={'物料'}>
-        <p>物料</p>
         <p className='empty'></p>
+        <p>单独 p</p>
+        {array.map((x, i) => <p key={i}>物料__{i}</p>)}
       </Tabs.TabPane>
       <Tabs.TabPane key={'attr'} tab={'属性'}></Tabs.TabPane>
       </Tabs>
@@ -116,12 +122,24 @@ export interface StageProps {
 
 const Stage: React.FC<StageProps> = React.memo(({ className, bundlerURL }) => {
   const ddManager = useDragDropManager()
-  React.useLayoutEffect(() => {
-    addModule('react-dnd', {
-      ...Dnd,
-      DndProvider: (props) => <Dnd.DndProvider {...props} manager={ddManager} />
-    })
-  }, [ddManager])
+  const statusValue = useHeaderStatus()
+  React.useLayoutEffect(
+    () =>
+      addModule('react-dnd', {
+        ...Dnd,
+        DndProvider: (props) => <Dnd.DndProvider {...props} manager={ddManager} />
+      }),
+    [ddManager]
+  )
+
+  React.useLayoutEffect(
+    () =>
+      addModule('@@__moment-external/header-status', {
+        useHeaderStatus,
+        headerStatusSubject
+      }),
+    [statusValue]
+  )
 
   return (
     <div className={cn(c(), className)}>
