@@ -13,6 +13,7 @@
 - [@mometa/adapter-react](packages/adapter-react) - react 适配器，包括 editor compile / editor render
 - [@mometa/dsl-core](packages/dsl-core) - DSL 的 parser & stringify
 - [@mometa/editor](packages/editor) - 编辑器
+- [@mometa/fs-handler](packages/fs-handler) - file updator
 
 ## Contributing
 

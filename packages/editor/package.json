@@ -24,8 +24,10 @@
   },
   "dependencies": {
     "@codesandbox/sandpack-react": "^0.9.1",
+    "@mometa/fs-handler": "^0.0.0",
     "@rcp/use.behaviorsubject": "^1.0.2",
     "@rcp/use.persistfn": "^1.0.2",
+    "@rcp/use.shared": "^1.1.1",
     "@rcp/util.open": "^1.0.3",
     "antd": "^4.17.1",
     "assign-ref": "^1.0.1",

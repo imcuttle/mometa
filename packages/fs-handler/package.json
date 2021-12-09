@@ -1,0 +1,42 @@
+{
+  "name": "@mometa/fs-handler",
+  "version": "0.0.0",
+  "publishConfig": {
+    "access": "public"
+  },
+  "author": "余聪 <yucong@yuanfudao.com>",
+  "description": "file updator",
+  "main": "lib",
+  "types": "types",
+  "module": "es",
+  "files": [
+    "lib",
+    "es",
+    "types"
+  ],
+  "scripts": {
+    "test": "../../scripts/run test",
+    "build": "../../scripts/run build",
+    "packlimit": "../../scripts/run packlimit",
+    "dev": "npm run build -- --watch",
+    "prepublishOnly": "npm run build && npm run packlimit",
+    "version": "npm test && npm run packlimit"
+  },
+  "dependencies": {
+    "run-seq": "^1.0.4",
+    "pify": "^4.0.1",
+    "lazy-value": "^2.0.0"
+  },
+  "keywords": [
+    "余聪",
+    "fs-handler",
+    "余聪",
+    "mometa",
+    "mometa"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/imcuttle/mometa.git",
+    "directory": "packages/fs-handler"
+  }
+}

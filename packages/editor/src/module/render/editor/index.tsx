@@ -7,6 +7,7 @@ import Header from '../components/header'
 import Stage, { StageProps } from '../components/stage'
 import RightPanel, { RightPanelProps } from '../components/right-panel'
 
+import { SharedProvider } from '@rcp/use.shared'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 
@@ -23,17 +24,19 @@ export interface EditorProps {
 
 const Editor: React.FC<EditorProps> = React.memo(({ className, rightPanelProps, stageProps }) => {
   return (
-    <ConfigProvider locale={zhCN}>
-      <DndProvider backend={HTML5Backend}>
-        <div className={cn(c(), className)}>
-          <Header />
-          <div className={c('__main-content')}>
-            <Stage {...stageProps} className={c('__stage')} />
-            <RightPanel {...rightPanelProps} className={c('__r-panel')} />
+    <SharedProvider>
+      <ConfigProvider locale={zhCN}>
+        <DndProvider backend={HTML5Backend}>
+          <div className={cn(c(), className)}>
+            <Header />
+            <div className={c('__main-content')}>
+              <Stage {...stageProps} className={c('__stage')} />
+              <RightPanel {...rightPanelProps} className={c('__r-panel')} />
+            </div>
           </div>
-        </div>
-      </DndProvider>
-    </ConfigProvider>
+        </DndProvider>
+      </ConfigProvider>
+    </SharedProvider>
   )
 })
 
