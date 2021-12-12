@@ -18,6 +18,7 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
+      "@mometa/fs-handler": ["../../fs-handler/src"],
       "@mometa/editor": ["../src"],
       "@mometa/editor/*": ["../src/*"]
     }

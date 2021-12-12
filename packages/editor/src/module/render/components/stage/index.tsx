@@ -1,9 +1,15 @@
 import React from 'react'
 import p from 'prefix-classname'
 import { useDragDropManager } from 'react-dnd'
-import { CLS_PREFIX } from '../../../config/const'
+import {
+  CLS_PREFIX,
+  useOveringNode,
+  useSelectedNode,
+  overingNodeSubject,
+  selectedNodeSubject
+} from '../../../config/const'
 import { addModule, addModules } from '../../utils/externals-modules'
-import createApi from './client-pack-api'
+import createApi, { useFiles } from './client-pack-api'
 import { useSharedMap, useSharedUpdateMap, SharedProvider, useShared, useSharedProvider } from '@rcp/use.shared'
 
 const Dnd = require('react-dnd')
@@ -13,20 +19,18 @@ const c = p(`${CLS_PREFIX}-stage`)
 
 import './style.scss'
 
-import { SandpackProvider, SandpackLayout, SandpackPreview } from '@codesandbox/sandpack-react'
+import { SandpackProvider, SandpackLayout, SandpackPreview, useSandpack } from '@codesandbox/sandpack-react'
 import { headerStatusSubject, useHeaderStatus } from '../header'
 import { ConfigProvider } from 'antd'
 import zhCN from 'antd/lib/locale/zh_CN'
 
-const CustomSandpack = ({ bundlerURL, customSetup }) => {
+const CustomSandpack = ({}) => {
   return (
     <div className={c('__sandpack')}>
-      <SandpackProvider bundlerURL={bundlerURL} customSetup={customSetup}>
-        <SandpackLayout>
-          {/*<SandpackCodeEditor showLineNumbers showInlineErrors />*/}
-          <SandpackPreview showNavigator viewportOrientation={'landscape'} />
-        </SandpackLayout>
-      </SandpackProvider>
+      <SandpackLayout>
+        {/*<SandpackCodeEditor showLineNumbers showInlineErrors />*/}
+        <SandpackPreview showNavigator viewportOrientation={'landscape'} />
+      </SandpackLayout>
     </div>
   )
 }
@@ -126,11 +130,10 @@ h1 {
   environment: 'create-react-app-typescript'
 }
 
-const Stage: React.FC<StageProps> = React.memo(({ className, bundlerURL, externalModules }) => {
-  const [customSetup] = useSharedProvider(DEFAULT_CUSTOM_SETUP, { key: 'stage.customSetup' })
-
+const StageContent: React.FC<StageProps> = React.memo(({ className, externalModules }) => {
   React.useLayoutEffect(() => !!externalModules && addModules(externalModules), [externalModules])
 
+  const { sandpack } = useSandpack()
   const ddManager = useDragDropManager()
   const _sharedMap = useSharedMap()
   const _sharedUpdateMap = useSharedUpdateMap()
@@ -140,12 +143,15 @@ const Stage: React.FC<StageProps> = React.memo(({ className, bundlerURL, externa
         '@@__mometa-external/shared': {
           get api() {
             // lazy get, 依赖 iframe 中的数据
-            return createApi()
+            return createApi(sandpack)
           },
 
           // value shared
           useShared,
-
+          overingNodeSubject,
+          selectedNodeSubject,
+          useOveringNode,
+          useSelectedNode,
           useHeaderStatus,
           headerStatusSubject,
           RootProvider: (props) => {
@@ -159,15 +165,27 @@ const Stage: React.FC<StageProps> = React.memo(({ className, bundlerURL, externa
           }
         }
       }),
-    [ddManager, _sharedMap, _sharedUpdateMap]
+    [ddManager, _sharedMap, _sharedUpdateMap, sandpack]
   )
 
   return (
     <div className={cn(c(), className)}>
-      {!!customSetup && <CustomSandpack bundlerURL={bundlerURL} customSetup={customSetup} />}
+      <CustomSandpack />
     </div>
   )
 })
+
+const Stage = (props) => {
+  const [customSetup] = useSharedProvider(DEFAULT_CUSTOM_SETUP, { key: 'stage.customSetup' })
+
+  return (
+    !!customSetup && (
+      <SandpackProvider bundlerURL={props.bundlerURL} customSetup={customSetup as any}>
+        <StageContent {...props} />
+      </SandpackProvider>
+    )
+  )
+}
 
 Stage.defaultProps = {
   bundlerURL: location.origin + '/bundler.html'

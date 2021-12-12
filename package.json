@@ -70,7 +70,8 @@
       "node"
     ],
     "testMatch": [
-      "**/__test{s,}__/*.(spec|test).{t,j}s{x,}"
+      "**/__test{s,}__/*.(spec|test).{t,j}s{x,}",
+      "**/*.test{s,}.{t,j}s{x,}"
     ]
   },
   "packagePrefix": "@mometa/",

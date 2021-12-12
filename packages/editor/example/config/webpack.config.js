@@ -3,6 +3,7 @@
 const fs = require('fs')
 const path = require('path')
 const webpack = require('webpack')
+const FilterWarningsPlugin = require('webpack-filter-warnings-plugin')
 const resolve = require('resolve')
 const nps = require('path')
 const AbsoluteModuleMapperPlugin = require('absolute-module-mapper-plugin')
@@ -535,6 +536,9 @@ function getSingleConfig(webpackEnv, { entry, name, ...opts }) {
       ].filter(Boolean)
     },
     plugins: [
+      new FilterWarningsPlugin({
+        exclude: /Critical dependency: the request of a dependency is an expression/
+      }),
       new NodePolyfillPlugin(),
       // Generates an `index.html` file with the <script> injected.
       opts.htmlName &&
