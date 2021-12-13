@@ -1,143 +1,161 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`babel-inject spec 1`] = `
-"\\"use strict\\";
-
-var _interopRequireDefault = require(\\"@babel/runtime/helpers/interopRequireDefault\\");
-
-var _emptyChildrenPlaceholder = _interopRequireDefault(require(\\"@@__moment/empty-children-placeholder\\"));
-
-var elem = /*#__PURE__*/React.createElement(\\"div\\", {
-  __mometa: {
-    \\"start\\": {
-      \\"line\\": 2,
-      \\"column\\": 17
-    },
-    \\"end\\": {
-      \\"line\\": 11,
-      \\"column\\": 10
-    },
-    \\"name\\": \\"div\\",
-    \\"text\\": \\"<div>\\\\n      <h1 title={'abc'}>Hello World</h1>\\\\n      <Tabs>\\\\n      <Tabs.TabPane key={'tool'} tab={'物料'}>\\\\n        <p>物料</p>\\\\n        <p className='empty'></p>\\\\n      </Tabs.TabPane>\\\\n      <Tabs.TabPane key={'attr'} tab={'属性'}></Tabs.TabPane>\\\\n      </Tabs>\\\\n    </div>\\",
-    \\"filename\\": \\"/file.jsx\\"
-  }
-}, /*#__PURE__*/React.createElement(\\"h1\\", {
-  title: 'abc',
-  __mometa: {
-    \\"start\\": {
-      \\"line\\": 3,
-      \\"column\\": 6
-    },
-    \\"end\\": {
-      \\"line\\": 3,
-      \\"column\\": 40
-    },
-    \\"name\\": \\"h1\\",
-    \\"text\\": \\"<h1 title={'abc'}>Hello World</h1>\\",
-    \\"filename\\": \\"/file.jsx\\"
-  }
-}, \\"Hello World\\"), /*#__PURE__*/React.createElement(Tabs, {
-  __mometa: {
+"import _MometaEmptyPlaceholder from \\"empty\\";
+const arr = new Array(100).fill(1);
+const elem = <div __mometa={{
+  \\"start\\": {
+    \\"line\\": 3,
+    \\"column\\": 17
+  },
+  \\"end\\": {
+    \\"line\\": 13,
+    \\"column\\": 10
+  },
+  \\"filename\\": \\"/file.jsx\\",
+  \\"name\\": \\"div\\",
+  \\"text\\": \\"<div>\\\\n      <h1 title={'abc'}>Hello World</h1>\\\\n      <Tabs>\\\\n      <Tabs.TabPane key={'tool'} tab={'物料'}>\\\\n        <p>物料</p>\\\\n        {arr.map((x, i) => <p key={i}>content_{i}</p>)}\\\\n        <p className='empty'></p>\\\\n      </Tabs.TabPane>\\\\n      <Tabs.TabPane key={'attr'} tab={'属性'}></Tabs.TabPane>\\\\n      </Tabs>\\\\n    </div>\\",
+  \\"emptyChildren\\": false,
+  \\"hash\\": \\"69b55d25a313ebc36c1b97c06e6f16314152291f\\"
+}}>
+      <h1 title={'abc'} __mometa={{
     \\"start\\": {
       \\"line\\": 4,
       \\"column\\": 6
     },
     \\"end\\": {
-      \\"line\\": 10,
-      \\"column\\": 13
+      \\"line\\": 4,
+      \\"column\\": 40
     },
-    \\"name\\": \\"Tabs\\",
-    \\"text\\": \\"<Tabs>\\\\n      <Tabs.TabPane key={'tool'} tab={'物料'}>\\\\n        <p>物料</p>\\\\n        <p className='empty'></p>\\\\n      </Tabs.TabPane>\\\\n      <Tabs.TabPane key={'attr'} tab={'属性'}></Tabs.TabPane>\\\\n      </Tabs>\\",
-    \\"filename\\": \\"/file.jsx\\"
-  }
-}, /*#__PURE__*/React.createElement(Tabs.TabPane, {
-  key: 'tool',
-  tab: '物料',
-  __mometa: {
+    \\"filename\\": \\"/file.jsx\\",
+    \\"name\\": \\"h1\\",
+    \\"text\\": \\"<h1 title={'abc'}>Hello World</h1>\\",
+    \\"emptyChildren\\": false,
+    \\"hash\\": \\"a36db603dd3d8ffdd3cc21f3f9a235a1905b8587\\"
+  }}>Hello World</h1>
+      <Tabs __mometa={{
     \\"start\\": {
       \\"line\\": 5,
       \\"column\\": 6
     },
     \\"end\\": {
-      \\"line\\": 8,
-      \\"column\\": 21
+      \\"line\\": 12,
+      \\"column\\": 13
     },
-    \\"name\\": \\"Tabs.TabPane\\",
-    \\"text\\": \\"<Tabs.TabPane key={'tool'} tab={'物料'}>\\\\n        <p>物料</p>\\\\n        <p className='empty'></p>\\\\n      </Tabs.TabPane>\\",
-    \\"filename\\": \\"/file.jsx\\"
-  }
-}, /*#__PURE__*/React.createElement(\\"p\\", {
-  __mometa: {
-    \\"start\\": {
-      \\"line\\": 6,
-      \\"column\\": 8
-    },
-    \\"end\\": {
-      \\"line\\": 6,
-      \\"column\\": 17
-    },
-    \\"name\\": \\"p\\",
-    \\"text\\": \\"<p>物料</p>\\",
-    \\"filename\\": \\"/file.jsx\\"
-  }
-}, \\"\\\\u7269\\\\u6599\\"), /*#__PURE__*/React.createElement(\\"p\\", {
-  className: \\"empty\\",
-  __mometa: {
-    \\"start\\": {
-      \\"line\\": 7,
-      \\"column\\": 8
-    },
-    \\"end\\": {
-      \\"line\\": 7,
-      \\"column\\": 33
-    },
-    \\"name\\": \\"p\\",
-    \\"text\\": \\"<p className='empty'></p>\\",
-    \\"filename\\": \\"/file.jsx\\"
-  }
-}, /*#__PURE__*/React.createElement(_emptyChildrenPlaceholder[\\"default\\"], {
-  __mometa: {
-    \\"start\\": {
-      \\"line\\": 7,
-      \\"column\\": 8
-    },
-    \\"end\\": {
-      \\"line\\": 7,
-      \\"column\\": 33
-    },
-    \\"name\\": \\"p\\",
-    \\"text\\": \\"<p className='empty'></p>\\",
-    \\"filename\\": \\"/file.jsx\\"
-  }
-}))), /*#__PURE__*/React.createElement(Tabs.TabPane, {
-  key: 'attr',
-  tab: '属性',
-  __mometa: {
-    \\"start\\": {
-      \\"line\\": 9,
-      \\"column\\": 6
-    },
-    \\"end\\": {
-      \\"line\\": 9,
-      \\"column\\": 59
-    },
-    \\"name\\": \\"Tabs.TabPane\\",
-    \\"text\\": \\"<Tabs.TabPane key={'attr'} tab={'属性'}></Tabs.TabPane>\\",
-    \\"filename\\": \\"/file.jsx\\"
-  }
-}, /*#__PURE__*/React.createElement(_emptyChildrenPlaceholder[\\"default\\"], {
-  __mometa: {
-    \\"start\\": {
-      \\"line\\": 9,
-      \\"column\\": 6
-    },
-    \\"end\\": {
-      \\"line\\": 9,
-      \\"column\\": 59
-    },
-    \\"name\\": \\"Tabs.TabPane\\",
-    \\"text\\": \\"<Tabs.TabPane key={'attr'} tab={'属性'}></Tabs.TabPane>\\",
-    \\"filename\\": \\"/file.jsx\\"
-  }
-}))));"
+    \\"filename\\": \\"/file.jsx\\",
+    \\"name\\": \\"Tabs\\",
+    \\"text\\": \\"<Tabs>\\\\n      <Tabs.TabPane key={'tool'} tab={'物料'}>\\\\n        <p>物料</p>\\\\n        {arr.map((x, i) => <p key={i}>content_{i}</p>)}\\\\n        <p className='empty'></p>\\\\n      </Tabs.TabPane>\\\\n      <Tabs.TabPane key={'attr'} tab={'属性'}></Tabs.TabPane>\\\\n      </Tabs>\\",
+    \\"emptyChildren\\": false,
+    \\"hash\\": \\"abef8e0c432ec8abb4bf02798693d3cac1725fcb\\"
+  }}>
+      <Tabs.TabPane key={'tool'} tab={'物料'} __mometa={{
+      \\"start\\": {
+        \\"line\\": 6,
+        \\"column\\": 6
+      },
+      \\"end\\": {
+        \\"line\\": 10,
+        \\"column\\": 21
+      },
+      \\"filename\\": \\"/file.jsx\\",
+      \\"name\\": \\"Tabs.TabPane\\",
+      \\"text\\": \\"<Tabs.TabPane key={'tool'} tab={'物料'}>\\\\n        <p>物料</p>\\\\n        {arr.map((x, i) => <p key={i}>content_{i}</p>)}\\\\n        <p className='empty'></p>\\\\n      </Tabs.TabPane>\\",
+      \\"emptyChildren\\": false,
+      \\"hash\\": \\"41a785e61dfd2ffd977585c83c81ee1dd7b9b7d2\\"
+    }}>
+        <p __mometa={{
+        \\"start\\": {
+          \\"line\\": 7,
+          \\"column\\": 8
+        },
+        \\"end\\": {
+          \\"line\\": 7,
+          \\"column\\": 17
+        },
+        \\"filename\\": \\"/file.jsx\\",
+        \\"name\\": \\"p\\",
+        \\"text\\": \\"<p>物料</p>\\",
+        \\"emptyChildren\\": false,
+        \\"hash\\": \\"ad5873e6d64b703488a207615e517edffd18acf3\\"
+      }}>物料</p>
+        {arr.map((x, i) => <p key={i} __mometa={{
+        \\"start\\": {
+          \\"line\\": 8,
+          \\"column\\": 27
+        },
+        \\"end\\": {
+          \\"line\\": 8,
+          \\"column\\": 53
+        },
+        \\"filename\\": \\"/file.jsx\\",
+        \\"name\\": \\"p\\",
+        \\"text\\": \\"<p key={i}>content_{i}</p>\\",
+        \\"emptyChildren\\": false,
+        \\"hash\\": \\"4dbeda90f4d5937dbc64671e4cc4e6102d983144\\",
+        \\"container\\": {
+          \\"text\\": \\"{arr.map((x, i) => <p key={i}>content_{i}</p>)}\\",
+          \\"hash\\": \\"00283db5b21c90789431eb422b44efb9662801fd\\"
+        }
+      }}>content_{i}</p>)}
+        <p className='empty' __mometa={{
+        \\"start\\": {
+          \\"line\\": 9,
+          \\"column\\": 8
+        },
+        \\"end\\": {
+          \\"line\\": 9,
+          \\"column\\": 33
+        },
+        \\"filename\\": \\"/file.jsx\\",
+        \\"name\\": \\"p\\",
+        \\"text\\": \\"<p className='empty'></p>\\",
+        \\"emptyChildren\\": true,
+        \\"hash\\": \\"c6fe1cb542edb56d9520ff8f293fb21f34622560\\"
+      }}><_MometaEmptyPlaceholder __mometa={{
+          \\"start\\": {
+            \\"line\\": 9,
+            \\"column\\": 8
+          },
+          \\"end\\": {
+            \\"line\\": 9,
+            \\"column\\": 33
+          },
+          \\"filename\\": \\"/file.jsx\\",
+          \\"name\\": \\"p\\",
+          \\"text\\": \\"<p className='empty'></p>\\",
+          \\"emptyChildren\\": true,
+          \\"hash\\": \\"c6fe1cb542edb56d9520ff8f293fb21f34622560\\"
+        }} /></p>
+      </Tabs.TabPane>
+      <Tabs.TabPane key={'attr'} tab={'属性'} __mometa={{
+      \\"start\\": {
+        \\"line\\": 11,
+        \\"column\\": 6
+      },
+      \\"end\\": {
+        \\"line\\": 11,
+        \\"column\\": 59
+      },
+      \\"filename\\": \\"/file.jsx\\",
+      \\"name\\": \\"Tabs.TabPane\\",
+      \\"text\\": \\"<Tabs.TabPane key={'attr'} tab={'属性'}></Tabs.TabPane>\\",
+      \\"emptyChildren\\": true,
+      \\"hash\\": \\"f93a18c6aa0f86e9780035367059aef790c62966\\"
+    }}><_MometaEmptyPlaceholder __mometa={{
+        \\"start\\": {
+          \\"line\\": 11,
+          \\"column\\": 6
+        },
+        \\"end\\": {
+          \\"line\\": 11,
+          \\"column\\": 59
+        },
+        \\"filename\\": \\"/file.jsx\\",
+        \\"name\\": \\"Tabs.TabPane\\",
+        \\"text\\": \\"<Tabs.TabPane key={'attr'} tab={'属性'}></Tabs.TabPane>\\",
+        \\"emptyChildren\\": true,
+        \\"hash\\": \\"f93a18c6aa0f86e9780035367059aef790c62966\\"
+      }} /></Tabs.TabPane>
+      </Tabs>
+    </div>;"
 `;

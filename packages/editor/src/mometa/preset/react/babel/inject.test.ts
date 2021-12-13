@@ -24,7 +24,7 @@ describe('babel-inject', () => {
           plugins: ['jsx']
         },
         babelrc: false,
-        plugins: [babelPluginMometaReactInject]
+        plugins: [[babelPluginMometaReactInject, { emptyPlaceholderPath: 'empty' }]]
       }
     )
 
