@@ -1,3 +1,4 @@
+const fs = require('fs')
 const { createServer } = require('./create-server')
 
 module.exports = class MometaEditorPlugin {
@@ -31,7 +32,11 @@ module.exports = class MometaEditorPlugin {
       }
       this.server = await createServer({
         ...this.options,
-        fileSystem: compiler.inputFileSystem
+        context: compiler.context,
+        fileSystem: {
+          readFile: compiler.inputFileSystem.readFile,
+          writeFile: fs.writeFile
+        }
       })
 
       cb()

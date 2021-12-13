@@ -1,6 +1,6 @@
 const http = require('http')
 const fs = require('fs')
-const { Writable } = require('stream')
+const nps = require('path')
 const { createFsHandler, reactMiddlewares } = require('@mometa/fs-handler')
 
 const joinUrl = (a, b) => (a + b).replace(/\/+/g, '/')
@@ -34,6 +34,7 @@ exports.createServer = function createServer({
   port = '8686',
   apiBaseURL = '',
   fileSystem = fs,
+  context = '',
   react
 }) {
   const fsHandler = createFsHandler({
@@ -61,9 +62,11 @@ exports.createServer = function createServer({
         switch (stripPrefix(apiBaseURL, req.url)) {
           case '/submit-op': {
             const body = await json(req)
+            body.preload.filename = nps.relative(context, body.preload.filename)
+            // console.log('body.preload.filename', body.preload.filename)
             await fsHandler(body)
             res.statusCode = 200
-            res.write(true)
+            res.write('true')
             return
           }
         }
