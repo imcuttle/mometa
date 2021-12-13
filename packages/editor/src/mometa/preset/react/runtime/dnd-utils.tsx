@@ -85,9 +85,8 @@ function DndNode({ dom }) {
 }
 
 function useMometaDomInject(dom: MometaHTMLElement) {
-  dom.__mometa = dom.__mometa ?? new MometaDomApi(dom)
-
   React.useLayoutEffect(() => {
+    dom.__mometa = new MometaDomApi(dom)
     return () => {
       delete dom.__mometa
     }

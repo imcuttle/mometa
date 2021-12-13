@@ -84,7 +84,10 @@ const hasJsxRuntime = (() => {
 
 // This is the production and development configuration.
 // It is focused on developer experience, fast rebuilds, and a minimal bundle.
-function getSingleConfig(webpackEnv, { entry, name, plugins = [], babelPresets = [], babelPlugins = [], ...opts }) {
+function getSingleConfig(
+  webpackEnv,
+  { entry, name, plugins = [], babelPresets = [], babelPlugins = [], refresh, ...opts }
+) {
   const isEnvDevelopment = webpackEnv === 'development'
   const isEnvProduction = webpackEnv === 'production'
 
@@ -98,7 +101,7 @@ function getSingleConfig(webpackEnv, { entry, name, plugins = [], babelPresets =
   // Get environment variables to inject into our app.
   const env = getClientEnvironment(paths.publicUrlOrPath.slice(0, -1))
 
-  const shouldUseReactRefresh = env.raw.FAST_REFRESH
+  const shouldUseReactRefresh = refresh === false ? false : env.raw.FAST_REFRESH
 
   // common function to get style loaders
   const getStyleLoaders = (cssOptions, preProcessor) => {
@@ -417,7 +420,7 @@ function getSingleConfig(webpackEnv, { entry, name, plugins = [], babelPresets =
                 // This is a feature of `babel-loader` for webpack (not Babel itself).
                 // It enables caching results in ./node_modules/.cache/babel-loader/
                 // directory for faster rebuilds.
-                cacheDirectory: false,
+                cacheDirectory: true,
                 // See #6846 for context on why cacheCompression is disabled
                 cacheCompression: false,
                 compact: isEnvProduction
@@ -732,7 +735,6 @@ function getSingleConfig(webpackEnv, { entry, name, plugins = [], babelPresets =
 
 module.exports = function getConfig(webpackEnv) {
   return [
-    getSingleConfig(webpackEnv, { name: 'editor', htmlName: 'index.html' }),
     getSingleConfig(webpackEnv, {
       name: 'app',
       htmlName: 'bundler.html',
@@ -744,8 +746,10 @@ module.exports = function getConfig(webpackEnv) {
           editorServe: false,
           react: true
         })
-      ]
-    })
+      ],
+      refresh: false
+    }),
+    getSingleConfig(webpackEnv, { name: 'editor', htmlName: 'index.html', refresh: true })
     // getSingleConfig(webpackEnv, {
     //   name: 'preview',
     //   htmlName: 'preview.html',

@@ -1,7 +1,10 @@
 // @ts-nocheck
-import { hmrManager } from './runtime/hmr-manager'
+import { refresh } from '../../utils/emotion-css'
+import { overingNodeSubject, selectedNodeSubject } from '@@__mometa-external/shared'
 
-hmrManager.mount()
+refresh()
+overingNodeSubject.next(null)
+selectedNodeSubject.next(null)
 
 const React = require('@@__mometa-external/react')
 const { RootProvider } = require('@@__mometa-external/shared')
@@ -21,9 +24,6 @@ if (!global.__MOMETA_INITIALIZED__) {
   // eslint-disable-next-line no-unused-expressions
   require('@@__mometa-external/react-dom').render = function _render(...argv) {
     const [elem, dom, cb] = argv
-    // eslint-disable-next-line no-console
-    console.log('render', { elem, dom })
-    // eslint-disable-next-line no-console
     return rawRender.apply(this, [
       <RootProvider>
         <DndLayout dom={dom}>{elem}</DndLayout>
