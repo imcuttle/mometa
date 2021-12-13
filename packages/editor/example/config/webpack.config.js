@@ -749,7 +749,7 @@ module.exports = function getConfig(webpackEnv) {
       ],
       refresh: false
     }),
-    getSingleConfig(webpackEnv, { name: 'editor', htmlName: 'index.html', refresh: true })
+    getSingleConfig(webpackEnv, { name: 'editor', htmlName: 'index.html' })
     // getSingleConfig(webpackEnv, {
     //   name: 'preview',
     //   htmlName: 'preview.html',
