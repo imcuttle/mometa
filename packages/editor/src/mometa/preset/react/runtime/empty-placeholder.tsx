@@ -1,6 +1,8 @@
-import React from '@@__mometa-external/react'
-
 export default function ({ __mometa }) {
-  // @ts-ignore
-  return <mometa-empty-placeholder __mometa={__mometa} />
+  const React = require('@@__mometa-external/react')
+  if (!React) {
+    return null
+  }
+
+  return React.createElement('mometa-empty-placeholder', { __mometa })
 }
