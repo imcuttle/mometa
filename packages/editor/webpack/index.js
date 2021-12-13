@@ -16,7 +16,7 @@ module.exports = class MometaEditorPlugin {
     externals.push(({ request, context }, callback) => {
       if (this.options.react) {
         if (/^(react|react-dom)$/.test(request)) {
-          // return callback(null, ['parent', '__externals_modules', RegExp.$1])
+          return callback(null, ['parent', '__externals_modules', RegExp.$1])
         }
       }
 
