@@ -1,4 +1,4 @@
-import { RequestData, createFsHandler } from '@mometa/fs-handler'
+import type { RequestData } from '@mometa/fs-handler'
 
 export interface Toast {
   error: (message: string) => void | (() => void)
@@ -8,8 +8,8 @@ export interface Toast {
 
 const delay = (ms) => new Promise((res) => setTimeout(res, ms))
 
-export abstract class Api {
-  constructor(protected toast: Toast, protected handler: ReturnType<typeof createFsHandler>) {}
+export abstract class ApiCore {
+  constructor(protected toast: Toast) {}
   public async submitOperation(requestData: RequestData): Promise<boolean> {
     const p = Promise.resolve(this._submitOperation(requestData))
 
@@ -21,15 +21,19 @@ export abstract class Api {
           dispose?.()
         }),
       delay(100).then(() => 'TIME_OUT')
-    ]).then((res) => {
-      if (res === 'TIME_OUT') {
-        dispose = this.toast.info(`执行 ${requestData.type} 操作中...`)
+    ]).then(
+      (res) => {
+        if (res === 'TIME_OUT') {
+          dispose = this.toast.info(`执行 ${requestData.type} 操作中...`)
+        }
+      },
+      (err) => {
+        this.toast.error(err.message)
+        throw err
       }
-    })
+    )
 
     return p
   }
-  protected _submitOperation(requestData: RequestData) {
-    return this.handler(requestData)
-  }
+  protected abstract _submitOperation(requestData: RequestData): Promise<boolean>
 }

@@ -1,7 +1,6 @@
 import React from 'react'
 import p from 'prefix-classname'
 import { Tabs } from 'antd'
-import assignRef from 'assign-ref'
 import { CLS_PREFIX } from '../../../config/const'
 
 import './style.scss'

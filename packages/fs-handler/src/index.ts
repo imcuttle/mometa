@@ -7,13 +7,10 @@ import { waterFall } from 'run-seq'
 import pify from 'pify'
 import lazy from 'lazy-value'
 import { createLineContentsByContent, LineContents, Range } from './utils/line-contents'
+import { OpType } from './const'
+export * from './const'
 
 export { default as reactMiddlewares } from './react'
-
-export const enum OpType {
-  DEL,
-  INSERT
-}
 
 export interface CommonPreload extends Range {
   filename: string

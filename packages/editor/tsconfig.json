@@ -1,7 +1,9 @@
 {
   "extends": "../../tsconfig.json",
+  "type": "module",
   "compilerOptions": {
-    "module": "esnext",
+    "module": "ESNext",
+    "baseUrl": ".",
     "paths": {
       "@mometa/fs-handler": ["../fs-handler/src"]
     }

@@ -7,6 +7,7 @@ const FilterWarningsPlugin = require('webpack-filter-warnings-plugin')
 const resolve = require('resolve')
 const nps = require('path')
 const AbsoluteModuleMapperPlugin = require('absolute-module-mapper-plugin')
+const { SuffixResolvePlugin } = require('suffix-resolve-plugin')
 const moment = require('moment')
 const NodePolyfillPlugin = require('node-polyfill-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
@@ -32,6 +33,7 @@ const ForkTsCheckerWebpackPlugin =
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
 
 const createEnvironmentHash = require('./webpack/persistentCache/createEnvironmentHash')
+const MometaEditorPlugin = require('../../webpack')
 
 // Source maps are resource heavy and can cause out of memory issue for large source files.
 const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false'
@@ -82,7 +84,7 @@ const hasJsxRuntime = (() => {
 
 // This is the production and development configuration.
 // It is focused on developer experience, fast rebuilds, and a minimal bundle.
-function getSingleConfig(webpackEnv, { entry, name, ...opts }) {
+function getSingleConfig(webpackEnv, { entry, name, plugins = [], babelPresets = [], babelPlugins = [], ...opts }) {
   const isEnvDevelopment = webpackEnv === 'development'
   const isEnvProduction = webpackEnv === 'production'
 
@@ -165,7 +167,6 @@ function getSingleConfig(webpackEnv, { entry, name, ...opts }) {
 
   const basename = `${name}/`
   const DATETIME = moment().utcOffset(8, false).format('YYYYMMDD_HHmm')
-  const webpackNodeModulePath = nps.resolve(require.resolve('webpack/package.json'), '../..')
 
   return {
     ignoreWarnings: [/Failed to parse source map/],
@@ -299,17 +300,17 @@ function getSingleConfig(webpackEnv, { entry, name, ...opts }) {
         ...(modules.webpackAliases || {})
       },
       plugins: [
-        new AbsoluteModuleMapperPlugin({
-          silent: false,
-          include: [/./],
-          requestMapper: {
-            // 'terser-webpack-plugin': paths.resolveApp('src/mock/terser-webpack-plugin.js'),
-          },
-          mapper: {
-            // [nps.resolve(webpackNodeModulePath, 'webpack/lib/[url]')]: paths.resolveApp('src/mock/noop-webpack-plugin.js'),
-            // [require.resolve('webpack/lib/debug/ProfilingPlugin')]: paths.resolveApp('src/mock/noop-webpack-plugin.js'),
-          }
-        })
+        // new AbsoluteModuleMapperPlugin({
+        //   silent: false,
+        //   include: [/./],
+        //   requestMapper: {
+        //     // 'terser-webpack-plugin': paths.resolveApp('src/mock/terser-webpack-plugin.js'),
+        //   },
+        //   mapper: {
+        //     // [nps.resolve(webpackNodeModulePath, 'webpack/lib/[url]')]: paths.resolveApp('src/mock/noop-webpack-plugin.js'),
+        //     // [require.resolve('webpack/lib/debug/ProfilingPlugin')]: paths.resolveApp('src/mock/noop-webpack-plugin.js'),
+        //   }
+        // })
         // Prevents users from importing files from outside of src/ (or node_modules/).
         // This often causes confusion because we only process files within src/ with babel.
         // To fix this, we prevent you from importing files out of src/ -- if you'd like to,
@@ -399,6 +400,7 @@ function getSingleConfig(webpackEnv, { entry, name, ...opts }) {
               options: {
                 customize: require.resolve('babel-preset-react-app/webpack-overrides'),
                 presets: [
+                  ...babelPresets,
                   [
                     require.resolve('babel-preset-react-app'),
                     {
@@ -408,6 +410,7 @@ function getSingleConfig(webpackEnv, { entry, name, ...opts }) {
                 ],
 
                 plugins: [
+                  ...babelPlugins,
                   ['babel-plugin-import', { libraryName: 'antd', style: 'css' }],
                   isEnvDevelopment && shouldUseReactRefresh && require.resolve('react-refresh/babel')
                 ].filter(Boolean),
@@ -536,6 +539,10 @@ function getSingleConfig(webpackEnv, { entry, name, ...opts }) {
       ].filter(Boolean)
     },
     plugins: [
+      ...plugins,
+      new webpack.DefinePlugin({
+        __CLIENT__: process.env.MOMETA_MODE === 'client'
+      }),
       new FilterWarningsPlugin({
         exclude: /Critical dependency: the request of a dependency is an expression/
       }),
@@ -725,7 +732,20 @@ function getSingleConfig(webpackEnv, { entry, name, ...opts }) {
 
 module.exports = function getConfig(webpackEnv) {
   return [
-    getSingleConfig(webpackEnv, { name: 'editor', htmlName: 'index.html' })
+    getSingleConfig(webpackEnv, { name: 'editor', htmlName: 'index.html' }),
+    getSingleConfig(webpackEnv, {
+      name: 'app',
+      htmlName: 'bundler.html',
+      entry: [require.resolve('../../webpack/react-runtime-entry'), paths.resolveApp('src/app/index.tsx')],
+      babelPresets: [],
+      babelPlugins: [require.resolve('../../babel/plugin-react-runtime')],
+      plugins: [
+        new MometaEditorPlugin({
+          editorServe: false,
+          react: true
+        })
+      ]
+    })
     // getSingleConfig(webpackEnv, {
     //   name: 'preview',
     //   htmlName: 'preview.html',

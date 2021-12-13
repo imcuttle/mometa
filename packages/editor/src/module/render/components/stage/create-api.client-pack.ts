@@ -1,4 +1,4 @@
-import { Api } from './api'
+import { ApiCore } from './api-core'
 import { message } from 'antd'
 import { EventEmitter } from 'events'
 import { reactMiddlewares, createFsHandler } from '@mometa/fs-handler'
@@ -32,7 +32,7 @@ export function useFiles(files: Record<string, { code: string }> = {}) {
   }, [updatedFiles, files])
 }
 
-class ClientPackApi extends Api {
+class CreateApiClientPack extends ApiCore {
   constructor(sandpack: SandpackState) {
     const bFs = BrowserFS.BFSRequire('fs')
     const mockFs = {
@@ -43,20 +43,24 @@ class ClientPackApi extends Api {
         cb()
       }
     }
-    super(
-      {
-        info: (str) => message.info(str, -1),
-        error: (str) => message.error(str, -1)
-      },
-      createFsHandler({
-        // @ts-ignore
-        fs: mockFs,
-        middlewares: reactMiddlewares()
-      })
-    )
+    // @ts-ignore
+    this.handler = createFsHandler({
+      // @ts-ignore
+      fs: mockFs,
+      middlewares: reactMiddlewares()
+    })
+    super({
+      info: (str) => message.info(str),
+      error: (str) => message.error(str)
+    })
+  }
+
+  protected _submitOperation(requestData): any {
+    // @ts-ignore
+    return this.handler(requestData)
   }
 }
 
 export default function createApi(sandpack: SandpackState) {
-  return new ClientPackApi(sandpack)
+  return new CreateApiClientPack(sandpack)
 }

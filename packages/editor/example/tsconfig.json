@@ -1,5 +1,12 @@
 {
   "extends": "../tsconfig.json",
+  "type": "module",
+  "ts-node": {
+    "transpileOnly": true,
+    "compilerOptions": {
+      "module": "commonjs"
+    }
+  },
   "compilerOptions": {
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],
@@ -10,7 +17,7 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
-    "module": "esnext",
+    "module": "ESNext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
@@ -19,6 +26,7 @@
     "baseUrl": ".",
     "paths": {
       "@mometa/fs-handler": ["../../fs-handler/src"],
+      "@mometa/fs-handler/*": ["../../fs-handler/*"],
       "@mometa/editor": ["../src"],
       "@mometa/editor/*": ["../src/*"]
     }
