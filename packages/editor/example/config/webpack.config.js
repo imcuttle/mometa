@@ -604,6 +604,7 @@ function getSingleConfig(
       isEnvDevelopment &&
         shouldUseReactRefresh &&
         new ReactRefreshWebpackPlugin({
+          library: name,
           overlay: false
         }),
       // Watcher doesn't work well if you mistype casing in a path so we use
@@ -746,10 +747,14 @@ module.exports = function getConfig(webpackEnv) {
           editorServe: false,
           react: true
         })
-      ],
-      refresh: false
+      ]
+      // refresh: false
     }),
-    getSingleConfig(webpackEnv, { name: 'editor', htmlName: 'index.html' })
+    getSingleConfig(webpackEnv, {
+      refresh: false,
+      name: 'editor',
+      htmlName: 'index.html'
+    })
     // getSingleConfig(webpackEnv, {
     //   name: 'preview',
     //   htmlName: 'preview.html',

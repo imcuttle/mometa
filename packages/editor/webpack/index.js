@@ -1,5 +1,10 @@
 const fs = require('fs')
+const nps = require('path')
 const { createServer } = require('./create-server')
+
+const resolvePath = (moduleName) => nps.dirname(require.resolve(`${moduleName}/package.json`))
+
+const WHITE_MODULES = ['react', 'react-dom']
 
 module.exports = class MometaEditorPlugin {
   constructor(options = {}) {
@@ -13,15 +18,29 @@ module.exports = class MometaEditorPlugin {
     }
     compiler.options.externals = externals
 
-    externals.push(({ request, context }, callback) => {
+    externals.push(({ request, context = '', contextInfo = {} }, callback) => {
+      const issuer = contextInfo.issuer || ''
+      const whiteList = [...WHITE_MODULES.map((module) => resolvePath(module)), /__mometa_require__\.(js|jsx|ts|tsx)$/]
+
+      const isMatched = whiteList.find((rule) => {
+        if (rule instanceof RegExp) {
+          return rule.test(issuer)
+        }
+        return issuer.startsWith(rule)
+      })
+
+      if (isMatched) {
+        return callback()
+      }
+
       if (this.options.react) {
-        if (/^(react|react-dom)$/.test(request)) {
-          return callback(null, ['parent', '__externals_modules', RegExp.$1])
+        if (new RegExp(`^(${WHITE_MODULES.join('|')})$`).test(request)) {
+          return callback(null, `__mometa_require__(${JSON.stringify(RegExp.$1)})`)
         }
       }
 
       if (/^(@@__mometa-external\/(.+))$/.test(request)) {
-        return callback(null, ['parent', '__externals_modules', RegExp.$2])
+        return callback(null, `__mometa_require__(${JSON.stringify(RegExp.$2)})`)
       }
       callback()
     })

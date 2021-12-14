@@ -9,7 +9,8 @@
     "preversion": "npm test",
     "postpublish": "git push --tag origin $(git rev-parse --abbrev-ref HEAD)",
     "new": "npx edam",
-    "bootstrap": "npx lerna bootstrap",
+    "bootstrap": "npx lerna bootstrap && npx patch-package",
+    "postinstall": "npm run bootstrap",
     "release": "npx lerna publish --conventional-commits -m 'chore(release): publish'"
   },
   "husky": {
@@ -81,6 +82,7 @@
     ]
   },
   "devDependencies": {
+    "patch-package": "^6.4.7",
     "@commitlint/cli": "^15.0.0",
     "@commitlint/config-conventional": "^15.0.0",
     "@types/jest": "^27.0.3",

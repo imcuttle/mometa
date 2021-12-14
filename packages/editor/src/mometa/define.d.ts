@@ -22,6 +22,8 @@ declare module '@@__mometa-external/shared' {
   export const api: any
 }
 
+declare var __mometa_require__ = (path: string) => typeof import(path)
+
 interface MometaData {
   start: any
   end: any
