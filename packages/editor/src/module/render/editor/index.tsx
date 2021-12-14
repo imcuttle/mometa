@@ -6,6 +6,7 @@ import { CLS_PREFIX } from '../../config/const'
 import Header from '../components/header'
 import Stage, { StageProps } from '../components/stage'
 import RightPanel, { RightPanelProps } from '../components/right-panel'
+import LeftPanel, { LeftPanelProps } from '../components/left-panel'
 
 import { SharedProvider } from '@rcp/use.shared'
 import { DndProvider } from 'react-dnd'
@@ -19,10 +20,11 @@ const c = p(`${CLS_PREFIX}`)
 export interface EditorProps {
   className?: string
   stageProps?: StageProps
+  leftPanelProps?: LeftPanelProps
   rightPanelProps?: RightPanelProps
 }
 
-const Editor: React.FC<EditorProps> = React.memo(({ className, rightPanelProps, stageProps }) => {
+const Editor: React.FC<EditorProps> = React.memo(({ className, leftPanelProps, rightPanelProps, stageProps }) => {
   return (
     <SharedProvider>
       <ConfigProvider locale={zhCN}>
@@ -30,6 +32,7 @@ const Editor: React.FC<EditorProps> = React.memo(({ className, rightPanelProps, 
           <div className={cn(c(), className)}>
             <Header />
             <div className={c('__main-content')}>
+              <LeftPanel {...leftPanelProps} className={c('__l-panel')} />
               <Stage {...stageProps} className={c('__stage')} />
               <RightPanel {...rightPanelProps} className={c('__r-panel')} />
             </div>

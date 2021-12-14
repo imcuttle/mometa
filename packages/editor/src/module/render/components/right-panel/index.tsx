@@ -9,16 +9,13 @@ import MaterialPanel, { MaterialPanelProps } from '../material-panel'
 const cn = p('')
 const c = p(`${CLS_PREFIX}-rpanel`)
 
-export interface RightPanelProps extends Pick<MaterialPanelProps, 'materials'> {
+export interface RightPanelProps {
   className?: string
 }
 
-const RightPanel: React.FC<RightPanelProps> = React.memo(({ materials, className }) => {
+const RightPanel: React.FC<RightPanelProps> = React.memo(({ className }) => {
   const elem = (
     <Tabs className={cn(c(), className)}>
-      <Tabs.TabPane key={'tool'} tab={'物料'}>
-        <MaterialPanel materials={materials} />
-      </Tabs.TabPane>
       <Tabs.TabPane key={'attr'} tab={'属性'}></Tabs.TabPane>
     </Tabs>
   )
@@ -32,34 +29,6 @@ const RightPanel: React.FC<RightPanelProps> = React.memo(({ materials, className
 //   return render(elem, container, cb)
 // }
 
-RightPanel.defaultProps = {
-  materials:
-    process.env.NODE_ENV === 'development'
-      ? [
-          {
-            name: '组件',
-            key: 'component',
-            assetGroups: [
-              {
-                name: '基础',
-                key: 'basic',
-                assets: [
-                  {
-                    name: '按钮',
-                    key: 'button',
-                    cover: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
-                  },
-                  {
-                    name: '输入',
-                    key: 'input',
-                    cover: 'https://gw.alipayobjects.com/zos/antfincdn/aPkFc8Sj7n/method-draw-image.svg'
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      : []
-}
+RightPanel.defaultProps = {}
 
 export default RightPanel

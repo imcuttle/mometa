@@ -1,0 +1,107 @@
+{
+  "author": {
+    "name": "Michael Mok"
+  },
+  "bugs": {
+    "url": "https://github.com/pmmmwh/react-refresh-webpack-plugin/issues"
+  },
+  "dependencies": {
+    "ansi-html-community": "^0.0.8",
+    "common-path-prefix": "^3.0.0",
+    "core-js-pure": "^3.8.1",
+    "error-stack-parser": "^2.0.6",
+    "find-up": "^5.0.0",
+    "html-entities": "^2.1.0",
+    "loader-utils": "^2.0.0",
+    "schema-utils": "^3.0.0",
+    "source-map": "^0.7.3"
+  },
+  "description": "An **EXPERIMENTAL** Webpack plugin to enable \"Fast Refresh\" (also previously known as _Hot Reloading_) for React components.",
+  "engines": {
+    "node": ">= 10.13"
+  },
+  "files": [
+    "client",
+    "lib",
+    "loader",
+    "options",
+    "overlay",
+    "sockets",
+    "types"
+  ],
+  "homepage": "https://github.com/pmmmwh/react-refresh-webpack-plugin#readme",
+  "keywords": [
+    "react",
+    "javascript",
+    "webpack",
+    "refresh",
+    "hmr",
+    "hotreload",
+    "livereload",
+    "live",
+    "edit",
+    "hot",
+    "reload"
+  ],
+  "license": "MIT",
+  "main": "lib/index.js",
+  "name": "@mometa/react-refresh-webpack-plugin",
+  "peerDependencies": {
+    "@types/webpack": "4.x || 5.x",
+    "react-refresh": ">=0.10.0 <1.0.0",
+    "sockjs-client": "^1.4.0",
+    "type-fest": ">=0.17.0 <3.0.0",
+    "webpack": ">=4.43.0 <6.0.0",
+    "webpack-dev-server": "3.x || 4.x",
+    "webpack-hot-middleware": "2.x",
+    "webpack-plugin-serve": "0.x || 1.x"
+  },
+  "type": "commonjs",
+  "peerDependenciesMeta": {
+    "@types/webpack": {
+      "optional": true
+    },
+    "sockjs-client": {
+      "optional": true
+    },
+    "type-fest": {
+      "optional": true
+    },
+    "webpack-dev-server": {
+      "optional": true
+    },
+    "webpack-hot-middleware": {
+      "optional": true
+    },
+    "webpack-plugin-serve": {
+      "optional": true
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pmmmwh/react-refresh-webpack-plugin.git"
+  },
+  "resolutions": {
+    "type-fest": "1.4.0"
+  },
+  "scripts": {
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
+    "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,md}\"",
+    "generate-types": "run-s types:compile types:prune-private \"format --loglevel silent\"",
+    "lint": "eslint --report-unused-disable-directives --ext .js,.jsx .",
+    "lint:fix": "yarn lint --fix",
+    "prepublishOnly": "run-s types:clean generate-types",
+    "test": "run-s -c test:pre \"test:exec {@}\" test:post --",
+    "test:exec": "node scripts/test.js",
+    "test:post": "yalc remove --all",
+    "test:pre": "run-s yalc:publish yalc:add",
+    "test:webpack-4": "cross-env WEBPACK_VERSION=4 yarn test",
+    "types:clean": "rimraf types",
+    "types:compile": "tsc -p tsconfig.json",
+    "types:prune-private": "del \"types/*/*\" \"!types/{lib,loader,options}/{index,types}.d.ts\"",
+    "yalc:add": "yalc add --dev @pmmmwh/react-refresh-webpack-plugin",
+    "yalc:publish": "yalc publish --no-scripts"
+  },
+  "types": "types/lib/index.d.ts",
+  "version": "0.5.2"
+}

@@ -1,6 +1,7 @@
 const fs = require('fs')
 const nps = require('path')
 const { createServer } = require('./create-server')
+const ReactRefreshWebpackPlugin = require('@mometa/react-refresh-webpack-plugin')
 
 const resolvePath = (moduleName) => nps.dirname(require.resolve(`${moduleName}/package.json`))
 
@@ -8,10 +9,22 @@ const WHITE_MODULES = ['react', 'react-dom']
 
 module.exports = class MometaEditorPlugin {
   constructor(options = {}) {
-    this.options = options
+    this.options = Object.assign(
+      {
+        react: true
+      },
+      options
+    )
     this.server = null
   }
   apply(compiler) {
+    if (this.options.react && this.options.react.refresh !== false) {
+      new ReactRefreshWebpackPlugin({
+        library: compiler.options.name,
+        overlay: false
+      }).apply(compiler)
+    }
+
     let externals = compiler.options.externals || []
     if (!Array.isArray(externals)) {
       externals = [externals]

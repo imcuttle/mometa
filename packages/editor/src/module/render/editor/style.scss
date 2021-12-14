@@ -15,6 +15,10 @@
   &__stage {
     flex: 1;
   }
+  &__l-panel {
+    width: 320px;
+    box-shadow: 0 2px 4px 0 rgb(0 0 0 / 12%), 0 0 6px 0 rgb(0 0 0 / 4%);
+  }
   &__r-panel {
     width: 320px;
     box-shadow: 0 2px 4px 0 rgb(0 0 0 / 12%), 0 0 6px 0 rgb(0 0 0 / 4%);

@@ -14,6 +14,7 @@
 - [@mometa/dsl-core](packages/dsl-core) - DSL 的 parser & stringify
 - [@mometa/editor](packages/editor) - 编辑器
 - [@mometa/fs-handler](packages/fs-handler) - file updator
+- [@mometa/react-refresh-webpack-plugin](packages/react-refresh-webpack-plugin) - An **EXPERIMENTAL** Webpack plugin to enable "Fast Refresh" (also previously known as _Hot Reloading_) for React components.
 
 ## Contributing
 

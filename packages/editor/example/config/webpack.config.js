@@ -747,8 +747,8 @@ module.exports = function getConfig(webpackEnv) {
           editorServe: false,
           react: true
         })
-      ]
-      // refresh: false
+      ],
+      refresh: false
     }),
     getSingleConfig(webpackEnv, {
       refresh: false,
