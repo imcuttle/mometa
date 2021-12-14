@@ -13,7 +13,11 @@ export default function App(props: Props) {
       <Tabs>
         <Tabs.TabPane key={'tool'} tab={'物料'}>
           <p className="empty"></p>
-          <p>单独 p</p>
+          <p>simple 66xxxxxasdasdas6</p>
+          <p>
+            nested
+            <strong>hahahax</strong>
+          </p>
           {array.map((x, i) => (
             <p key={i}>物料__{i}</p>
           ))}

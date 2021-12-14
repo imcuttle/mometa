@@ -1,6 +1,8 @@
 // @ts-nocheck
 
 // 是 iframe 环境
+import { addUpdateCallbackListener } from '../../../shared/hot'
+
 if (require('@@__mometa-external/shared')) {
   const { refresh } = require('../../utils/emotion-css')
   const { overingNodeSubject, selectedNodeSubject } = require('@@__mometa-external/shared')
@@ -18,12 +20,6 @@ if (require('@@__mometa-external/shared')) {
 
     // eslint-disable-next-line global-require
     const rawRender = require('@@__mometa-external/react-dom').render
-
-    // hmrManager.addMountListener(() => {
-    //   // eslint-disable-next-line global-require
-    //   require('react-dom').render = rawRender;
-    // });
-
     // eslint-disable-next-line no-unused-expressions
     require('@@__mometa-external/react-dom').render = function _render(...argv) {
       const [elem, dom, cb] = argv
@@ -35,5 +31,14 @@ if (require('@@__mometa-external/shared')) {
         cb
       ])
     }
+
+    // Hot
+    addUpdateCallbackListener((moduleExports, moduleId, webpackHot, refreshOverlay, isTest) => {
+      const { selectedNodeSubject } = require('@@__mometa-external/shared')
+      // Update selectedNodeSubject for render
+      const prev = selectedNodeSubject.value
+      selectedNodeSubject.next(null)
+      selectedNodeSubject.next(prev)
+    })
   }
 }

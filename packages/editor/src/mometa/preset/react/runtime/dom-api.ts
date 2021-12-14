@@ -67,7 +67,7 @@ export function useProxyEvents(dom: MometaHTMLElement, events: Pick<JSX.Intrinsi
 
       dom.__mometa.addListener(tName, fn)
       disposes.push(() => {
-        dom.__mometa.removeListener(tName, fn)
+        dom.__mometa?.removeListener(tName, fn)
       })
     }
     return () => {

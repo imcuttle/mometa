@@ -15,8 +15,9 @@ const elem = <div __mometa={{
   \\"filename\\": \\"/file.jsx\\",
   \\"name\\": \\"div\\",
   \\"text\\": \\"<div>\\\\n      <h1 title={'abc'}>Hello World</h1>\\\\n      <Tabs>\\\\n      <Tabs.TabPane key={'tool'} tab={'物料'}>\\\\n        <p>物料</p>\\\\n        {arr.map((x, i) => <p key={i}>content_{i}</p>)}\\\\n        <p className='empty'></p>\\\\n      </Tabs.TabPane>\\\\n      <Tabs.TabPane key={'attr'} tab={'属性'}></Tabs.TabPane>\\\\n      </Tabs>\\\\n    </div>\\",
+  \\"relativeFilename\\": \\"file.jsx\\",
   \\"emptyChildren\\": false,
-  \\"hash\\": \\"69b55d25a313ebc36c1b97c06e6f16314152291f\\"
+  \\"hash\\": \\"b94ed37a0eb9e83575e5669c1acbb7bc91590227\\"
 }}>
       <h1 title={'abc'} __mometa={{
     \\"start\\": {
@@ -30,8 +31,9 @@ const elem = <div __mometa={{
     \\"filename\\": \\"/file.jsx\\",
     \\"name\\": \\"h1\\",
     \\"text\\": \\"<h1 title={'abc'}>Hello World</h1>\\",
+    \\"relativeFilename\\": \\"file.jsx\\",
     \\"emptyChildren\\": false,
-    \\"hash\\": \\"a36db603dd3d8ffdd3cc21f3f9a235a1905b8587\\"
+    \\"hash\\": \\"5a68110e5c37c1e66d6bc8f65c31b4a5120d59e1\\"
   }}>Hello World</h1>
       <Tabs __mometa={{
     \\"start\\": {
@@ -45,8 +47,9 @@ const elem = <div __mometa={{
     \\"filename\\": \\"/file.jsx\\",
     \\"name\\": \\"Tabs\\",
     \\"text\\": \\"<Tabs>\\\\n      <Tabs.TabPane key={'tool'} tab={'物料'}>\\\\n        <p>物料</p>\\\\n        {arr.map((x, i) => <p key={i}>content_{i}</p>)}\\\\n        <p className='empty'></p>\\\\n      </Tabs.TabPane>\\\\n      <Tabs.TabPane key={'attr'} tab={'属性'}></Tabs.TabPane>\\\\n      </Tabs>\\",
+    \\"relativeFilename\\": \\"file.jsx\\",
     \\"emptyChildren\\": false,
-    \\"hash\\": \\"abef8e0c432ec8abb4bf02798693d3cac1725fcb\\"
+    \\"hash\\": \\"b3adeb1d710a0b23d17e65af05cf431383d3f855\\"
   }}>
       <Tabs.TabPane key={'tool'} tab={'物料'} __mometa={{
       \\"start\\": {
@@ -60,8 +63,9 @@ const elem = <div __mometa={{
       \\"filename\\": \\"/file.jsx\\",
       \\"name\\": \\"Tabs.TabPane\\",
       \\"text\\": \\"<Tabs.TabPane key={'tool'} tab={'物料'}>\\\\n        <p>物料</p>\\\\n        {arr.map((x, i) => <p key={i}>content_{i}</p>)}\\\\n        <p className='empty'></p>\\\\n      </Tabs.TabPane>\\",
+      \\"relativeFilename\\": \\"file.jsx\\",
       \\"emptyChildren\\": false,
-      \\"hash\\": \\"41a785e61dfd2ffd977585c83c81ee1dd7b9b7d2\\"
+      \\"hash\\": \\"b7275d5cb88300e2360f2542bcd1fb0371909b8a\\"
     }}>
         <p __mometa={{
         \\"start\\": {
@@ -75,8 +79,9 @@ const elem = <div __mometa={{
         \\"filename\\": \\"/file.jsx\\",
         \\"name\\": \\"p\\",
         \\"text\\": \\"<p>物料</p>\\",
+        \\"relativeFilename\\": \\"file.jsx\\",
         \\"emptyChildren\\": false,
-        \\"hash\\": \\"ad5873e6d64b703488a207615e517edffd18acf3\\"
+        \\"hash\\": \\"0e86063ac0e7b8a0e8447a5a4f095f05cac161e9\\"
       }}>物料</p>
         {arr.map((x, i) => <p key={i} __mometa={{
         \\"start\\": {
@@ -90,8 +95,9 @@ const elem = <div __mometa={{
         \\"filename\\": \\"/file.jsx\\",
         \\"name\\": \\"p\\",
         \\"text\\": \\"<p key={i}>content_{i}</p>\\",
+        \\"relativeFilename\\": \\"file.jsx\\",
         \\"emptyChildren\\": false,
-        \\"hash\\": \\"4dbeda90f4d5937dbc64671e4cc4e6102d983144\\",
+        \\"hash\\": \\"b3b7aa8e1d7771600ec1e8aae8a5e496099aa5be\\",
         \\"container\\": {
           \\"text\\": \\"{arr.map((x, i) => <p key={i}>content_{i}</p>)}\\",
           \\"hash\\": \\"00283db5b21c90789431eb422b44efb9662801fd\\"
@@ -109,8 +115,9 @@ const elem = <div __mometa={{
         \\"filename\\": \\"/file.jsx\\",
         \\"name\\": \\"p\\",
         \\"text\\": \\"<p className='empty'></p>\\",
+        \\"relativeFilename\\": \\"file.jsx\\",
         \\"emptyChildren\\": true,
-        \\"hash\\": \\"c6fe1cb542edb56d9520ff8f293fb21f34622560\\"
+        \\"hash\\": \\"92acc077bd194cbb0664c300b83ace4e73fb9ff4\\"
       }}><_MometaEmptyPlaceholder __mometa={{
           \\"start\\": {
             \\"line\\": 9,
@@ -123,8 +130,9 @@ const elem = <div __mometa={{
           \\"filename\\": \\"/file.jsx\\",
           \\"name\\": \\"p\\",
           \\"text\\": \\"<p className='empty'></p>\\",
+          \\"relativeFilename\\": \\"file.jsx\\",
           \\"emptyChildren\\": true,
-          \\"hash\\": \\"c6fe1cb542edb56d9520ff8f293fb21f34622560\\"
+          \\"hash\\": \\"92acc077bd194cbb0664c300b83ace4e73fb9ff4\\"
         }} /></p>
       </Tabs.TabPane>
       <Tabs.TabPane key={'attr'} tab={'属性'} __mometa={{
@@ -139,8 +147,9 @@ const elem = <div __mometa={{
       \\"filename\\": \\"/file.jsx\\",
       \\"name\\": \\"Tabs.TabPane\\",
       \\"text\\": \\"<Tabs.TabPane key={'attr'} tab={'属性'}></Tabs.TabPane>\\",
+      \\"relativeFilename\\": \\"file.jsx\\",
       \\"emptyChildren\\": true,
-      \\"hash\\": \\"f93a18c6aa0f86e9780035367059aef790c62966\\"
+      \\"hash\\": \\"8fef2a65fccbcfa49ac018d2d9e130ab26c6f9e2\\"
     }}><_MometaEmptyPlaceholder __mometa={{
         \\"start\\": {
           \\"line\\": 11,
@@ -153,8 +162,9 @@ const elem = <div __mometa={{
         \\"filename\\": \\"/file.jsx\\",
         \\"name\\": \\"Tabs.TabPane\\",
         \\"text\\": \\"<Tabs.TabPane key={'attr'} tab={'属性'}></Tabs.TabPane>\\",
+        \\"relativeFilename\\": \\"file.jsx\\",
         \\"emptyChildren\\": true,
-        \\"hash\\": \\"f93a18c6aa0f86e9780035367059aef790c62966\\"
+        \\"hash\\": \\"8fef2a65fccbcfa49ac018d2d9e130ab26c6f9e2\\"
       }} /></Tabs.TabPane>
       </Tabs>
     </div>;"

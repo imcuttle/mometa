@@ -14,16 +14,25 @@ export { default as reactMiddlewares } from './react'
 
 export interface CommonPreload extends Range {
   filename: string
+  relativeFilename?: string
   name: string
   text: string
 }
 
 export interface DelPreload extends CommonPreload {}
-
-export interface RequestData {
-  type: OpType.DEL
-  preload: DelPreload
+export interface ReplacePreload extends CommonPreload {
+  newValue: string
 }
+
+export type RequestData =
+  | {
+      type: OpType.DEL
+      preload: DelPreload
+    }
+  | {
+      type: OpType.REPLACE_NODE
+      preload: ReplacePreload
+    }
 
 type Fs = Pick<typeof import('fs'), 'readFile' | 'writeFile'>
 

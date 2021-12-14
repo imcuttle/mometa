@@ -20,6 +20,7 @@ describe('babel-inject', () => {
     `,
       {
         filename: '/file.jsx',
+        cwd: '/',
         parserOpts: {
           plugins: ['jsx']
         },

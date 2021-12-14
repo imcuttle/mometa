@@ -5,6 +5,7 @@ import { PluginObj, PluginPass } from '@babel/core'
 import templateBuilder from '@babel/template'
 import { addDefault } from '@babel/helper-module-imports'
 import { sha1 as hash } from 'object-hash'
+import * as nps from 'path'
 
 export default function babelPluginMometaReactInject(api) {
   const { types: t } = api
@@ -43,6 +44,7 @@ export default function babelPluginMometaReactInject(api) {
                   name: openingElement.get('name')?.toString(),
                   text: path.toString(),
                   filename: this.filename,
+                  relativeFilename: nps.relative(state.cwd || '', this.filename),
                   emptyChildren: !path.node.children?.length
                 } as MometaData
 

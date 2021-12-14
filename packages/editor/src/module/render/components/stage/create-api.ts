@@ -3,17 +3,11 @@ import axios from 'axios'
 import { AxiosInstance } from 'axios'
 import { ApiCore } from './api-core'
 
-class ApiServerPack extends ApiCore {
-  protected axios: AxiosInstance
-  constructor(protected apiBaseURL: string = '') {
-    super({
-      info: (str) => message.info(str),
+export class ApiServerPack extends ApiCore {
+  constructor(apiBaseURL: string = '') {
+    super(apiBaseURL, {
+      loading: (str) => message.loading(str, 0),
       error: (str) => message.error(str)
-    })
-
-    this.axios = axios.create({
-      baseURL: apiBaseURL,
-      validateStatus: (status) => status < 400
     })
   }
 

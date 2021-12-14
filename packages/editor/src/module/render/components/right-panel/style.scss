@@ -2,4 +2,9 @@
 
 .#{$prefix}-rpanel {
   padding: 0 10px;
+
+  &__btns {
+    display: flex;
+    justify-content: flex-end;
+  }
 }

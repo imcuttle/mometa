@@ -215,9 +215,7 @@ export function OveringFloat({ isSelected, onDeselect, onSelect, dom, getContain
     }
   }, [dom])
 
-  const data = React.useMemo(() => {
-    return dom.__mometa.getMometaData()
-  }, [dom])
+  const data = dom.__mometa?.getMometaData()
 
   const onClickFn = usePersistFn(() => {
     // eslint-disable-next-line no-unused-expressions

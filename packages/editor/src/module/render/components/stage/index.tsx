@@ -9,8 +9,6 @@ import {
   selectedNodeSubject
 } from '../../../config/const'
 import { addModules } from '../../utils/externals-modules'
-// @ts-ignore
-import createApi from './client-api'
 import { useSharedMap, useSharedUpdateMap, SharedProvider, useShared, useSharedProvider } from '@rcp/use.shared'
 
 const Dnd = require('react-dnd')
@@ -27,13 +25,13 @@ import zhCN from 'antd/lib/locale/zh_CN'
 export interface StageProps {
   className?: string
   bundlerURL?: string
-  apiBaseURL?: string
   externalModules?: Record<string, any>
 }
 
-const StageContent: React.FC<StageProps> = React.memo(({ className, externalModules, bundlerURL, apiBaseURL }) => {
+const StageContent: React.FC<StageProps> = React.memo(({ className, externalModules, bundlerURL }) => {
   React.useLayoutEffect(() => !!externalModules && addModules(externalModules), [externalModules])
 
+  const [api] = useShared('api')
   const ddManager = useDragDropManager()
   const _sharedMap = useSharedMap()
   const _sharedUpdateMap = useSharedUpdateMap()
@@ -41,7 +39,7 @@ const StageContent: React.FC<StageProps> = React.memo(({ className, externalModu
     () =>
       addModules({
         shared: {
-          api: createApi(apiBaseURL),
+          api,
 
           // value shared
           useShared,
@@ -62,7 +60,7 @@ const StageContent: React.FC<StageProps> = React.memo(({ className, externalModu
           }
         }
       }),
-    [ddManager, _sharedMap, _sharedUpdateMap, apiBaseURL]
+    [ddManager, _sharedMap, _sharedUpdateMap, api]
   )
 
   return (
@@ -77,8 +75,7 @@ const Stage = (props) => {
 }
 
 Stage.defaultProps = {
-  bundlerURL: '/bundler.html',
-  apiBaseURL: 'http://localhost:8686/'
+  bundlerURL: '/bundler.html'
 }
 
 export default Stage

@@ -25,7 +25,7 @@ describe('fsHandler', function () {
     result = null
   })
 
-  it('spec case', async function () {
+  it('spec case DEL', async function () {
     const fsHandler = createFsHandler({
       fs: mockFs,
       middlewares: reactMiddlewares()
@@ -34,6 +34,26 @@ describe('fsHandler', function () {
     await fsHandler({
       type: OpType.DEL,
       preload: {
+        name: 'p',
+        text: '<p>单独 p</p>',
+        filename: fixture('react-comp.tsx'),
+        start: { line: 18, column: 10 },
+        end: { line: 18, column: 21 }
+      }
+    })
+    expect(result).toMatchSnapshot()
+  })
+
+  it('spec case REPLACE_NODE', async function () {
+    const fsHandler = createFsHandler({
+      fs: mockFs,
+      middlewares: reactMiddlewares()
+    })
+
+    await fsHandler({
+      type: OpType.REPLACE_NODE,
+      preload: {
+        newValue: '<span>ppp</span>',
         name: 'p',
         text: '<p>单独 p</p>',
         filename: fixture('react-comp.tsx'),

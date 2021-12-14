@@ -1,5 +1,8 @@
 /* global __webpack_require__ */
 var Refresh = require('react-refresh/runtime')
+var { EventEmitter } = require('events')
+
+var eventEmitter = new EventEmitter()
 
 /**
  * Extracts exports from a webpack module object.
@@ -174,6 +177,7 @@ function shouldInvalidateReactRefreshBoundary(prevExports, nextExports) {
 var enqueueUpdate = createDebounceUpdate()
 function executeRuntime(moduleExports, moduleId, webpackHot, refreshOverlay, isTest) {
   registerExportsForReactRefresh(moduleExports, moduleId)
+  eventEmitter.emit('executeRuntime', moduleExports, moduleId, webpackHot, refreshOverlay, isTest)
 
   if (webpackHot) {
     var isHotUpdate = !!webpackHot.data
@@ -229,6 +233,8 @@ function executeRuntime(moduleExports, moduleId, webpackHot, refreshOverlay, isT
               if (typeof refreshOverlay !== 'undefined' && refreshOverlay) {
                 refreshOverlay.clearRuntimeErrors()
               }
+
+              eventEmitter.emit('updateCallback', moduleExports, moduleId, webpackHot, refreshOverlay, isTest)
             }
           )
         }
@@ -242,6 +248,7 @@ function executeRuntime(moduleExports, moduleId, webpackHot, refreshOverlay, isT
 }
 
 module.exports = Object.freeze({
+  eventEmitter,
   enqueueUpdate: enqueueUpdate,
   executeRuntime: executeRuntime,
   getModuleExports: getModuleExports,

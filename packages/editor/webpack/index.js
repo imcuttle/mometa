@@ -31,7 +31,7 @@ module.exports = class MometaEditorPlugin {
     }
     compiler.options.externals = externals
 
-    externals.push(({ request, context = '', contextInfo = {} }, callback) => {
+    externals.unshift(({ request, context = '', contextInfo = {} }, callback) => {
       const issuer = contextInfo.issuer || ''
       const whiteList = [...WHITE_MODULES.map((module) => resolvePath(module)), /__mometa_require__\.(js|jsx|ts|tsx)$/]
 
@@ -47,8 +47,8 @@ module.exports = class MometaEditorPlugin {
       }
 
       if (this.options.react) {
-        if (new RegExp(`^(${WHITE_MODULES.join('|')})$`).test(request)) {
-          return callback(null, `__mometa_require__(${JSON.stringify(RegExp.$1)})`)
+        if (WHITE_MODULES.includes(request)) {
+          return callback(null, `__mometa_require__(${JSON.stringify(request)})`)
         }
       }
 

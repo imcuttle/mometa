@@ -16,11 +16,22 @@ export function addCss(dom: HTMLElement, cls: string) {
   }
 }
 
+const domMap = new WeakMap()
 export function parseReactDomNode(dom: HTMLElement) {
+  const cachedName = domMap.get(dom)
+  if (cachedName) {
+    if (dom[cachedName]) {
+      return {
+        props: dom[cachedName]
+      }
+    }
+  }
   const propName = Object.keys(dom).find((name) => /^__reactProps\$.+$/.test(name))
   if (!propName) {
     return
   }
+
+  domMap.set(dom, propName)
   const props = dom[propName]
   // eslint-disable-next-line consistent-return
   return {
