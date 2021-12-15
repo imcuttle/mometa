@@ -5,7 +5,7 @@
  */
 import { waterFall } from 'run-seq'
 import pify from 'pify'
-import lazy from 'lazy-value'
+import { robust } from 'memoize-fn'
 import { createLineContentsByContent, LineContents, Range } from './utils/line-contents'
 import { OpType } from './const'
 import { normalizeContent } from './utils/normalize-content'
@@ -86,7 +86,9 @@ export function createFsHandler({ fs, middlewares = [] }: { fs: Fs; middlewares?
     const ctx: MiddlewareContext = {
       fs,
       filename: request.preload.filename,
-      getContent: lazy(() => normalizeContent(pify(fs.readFile)(request.preload.filename, 'utf8')))
+      getContent: robust(async () => normalizeContent(await pify(fs.readFile)(request.preload.filename, 'utf8')), {
+        once: true
+      })
     }
 
     return await waterFall([apiMiddle].concat(middlewares), [request, ctx])

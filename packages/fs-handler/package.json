@@ -26,8 +26,8 @@
   "dependencies": {
     "run-seq": "^1.0.4",
     "pify": "^4.0.1",
-    "lazy-value": "^2.0.0",
-    "prettier": "^2.5.1"
+    "prettier": "^2.5.1",
+    "memoize-fn": "^2.0.1"
   },
   "keywords": [
     "余聪",
