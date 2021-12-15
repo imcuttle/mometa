@@ -15,8 +15,9 @@ export default function reactReplaceNodeMiddleware(): Middleware {
           if (start == 0 && end == null) {
             lineModel.content = EMPTY
           } else {
-            // @ts-ignore
-            lineModel.content = (lineModel.content.slice(0, start) + lineModel.content.slice(end)).trim()
+            lineModel.content =
+              // @ts-ignore
+              lineModel.content.slice(0, start) + lineModel.content.slice(end ?? lineModel.content.length)
             // @ts-ignore
             if (!lineModel.content.trim()) {
               lineModel.content = EMPTY
@@ -26,8 +27,9 @@ export default function reactReplaceNodeMiddleware(): Middleware {
           if (start == 0 && end == null) {
             lineModel.content = newValue
           } else {
-            // @ts-ignore
-            lineModel.content = (lineModel.content.slice(0, start) + newValue + lineModel.content.slice(end)).trim()
+            lineModel.content =
+              // @ts-ignore
+              lineModel.content.slice(0, start) + newValue + lineModel.content.slice(end ?? lineModel.content.length)
             // @ts-ignore
             if (!lineModel.content.trim()) {
               lineModel.content = EMPTY

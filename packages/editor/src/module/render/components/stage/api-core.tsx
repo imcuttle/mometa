@@ -2,11 +2,13 @@ import type { RequestData } from '@mometa/fs-handler'
 import axios, { AxiosInstance } from 'axios'
 import { addUpdateCallbackListener } from '../../../../shared/hot'
 import { OpType } from '@mometa/fs-handler'
+import { ReactNode } from 'react'
+import React from 'react'
 
 export interface Toast {
-  error: (message: string) => void | (() => void)
+  error: (message: ReactNode) => void | (() => void)
   // info: (message: string) => void | (() => void)
-  loading: (message: string) => void | (() => void)
+  loading: (message: ReactNode) => void | (() => void)
   // success: (message: string) => void | (() => void)
 }
 
@@ -18,6 +20,14 @@ export abstract class ApiCore {
     this.axios = axios.create({
       baseURL: apiBaseURL,
       validateStatus: (status) => status < 400
+    })
+    this.axios.interceptors.response.use(undefined, (error) => {
+      console.error('axios error', { ...error })
+      if (error.response?.data?.error) {
+        const err = new Error(error.response?.data?.error) as any
+        err.toastElement = <pre style={{ textAlign: 'left', maxHeight: 400 }}>{error.response?.data?.error}</pre>
+        throw err
+      }
     })
   }
 
@@ -43,7 +53,8 @@ export abstract class ApiCore {
         }
       },
       (err) => {
-        this.toast.error(err.message)
+        const msg = err.toastElement ?? err.message
+        this.toast.error(msg)
         throw err
       }
     )

@@ -11,7 +11,8 @@ export default function reactDelMiddleware(): Middleware {
           lineModel.content = EMPTY
         } else {
           // @ts-ignore
-          lineModel.content = (lineModel.content.slice(0, start) + lineModel.content.slice(end)).trim()
+          lineModel.content =
+            lineModel.content.slice(0, start) + lineModel.content.slice(end ?? lineModel.content.length)
           // @ts-ignore
           if (!lineModel.content.trim()) {
             lineModel.content = EMPTY
