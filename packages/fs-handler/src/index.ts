@@ -8,6 +8,7 @@ import pify from 'pify'
 import lazy from 'lazy-value'
 import { createLineContentsByContent, LineContents, Range } from './utils/line-contents'
 import { OpType } from './const'
+import { normalizeContent } from './utils/normalize-content'
 export * from './const'
 
 export { default as reactMiddlewares } from './react'
@@ -85,7 +86,7 @@ export function createFsHandler({ fs, middlewares = [] }: { fs: Fs; middlewares?
     const ctx: MiddlewareContext = {
       fs,
       filename: request.preload.filename,
-      getContent: lazy(() => pify(fs.readFile)(request.preload.filename, 'utf8'))
+      getContent: lazy(() => normalizeContent(pify(fs.readFile)(request.preload.filename, 'utf8')))
     }
 
     return await waterFall([apiMiddle].concat(middlewares), [request, ctx])

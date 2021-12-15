@@ -11,7 +11,9 @@ describe('babel-inject', () => {
       <Tabs>
       <Tabs.TabPane key={'tool'} tab={'物料'}>
         <p>物料</p>
-        {arr.map((x, i) => <p key={i}>content_{i}</p>)}
+        {arr.map((x, i) => (
+          <p key={i}>content_{i}</p>
+        ))}
         <p className='empty'></p>
       </Tabs.TabPane>
       <Tabs.TabPane key={'attr'} tab={'属性'}></Tabs.TabPane>
