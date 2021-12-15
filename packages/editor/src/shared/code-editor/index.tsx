@@ -16,7 +16,21 @@ export function CodeEditor({
   function handleEditorWillMount(monaco: Monaco) {
     // here is the monaco instance
     // do something before editor is mounted
-    monaco.languages.typescript.javascriptDefaults.setEagerModelSync(true)
+    monaco.languages.typescript.typescriptDefaults.setEagerModelSync(true)
+    monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
+      // noSemanticValidation: true,
+      // noSyntaxValidation: true,
+    })
+
+    monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
+      jsx: monaco.languages.typescript.JsxEmit.React,
+      noEmit: true,
+      jsxFactory: 'React.createElement',
+      reactNamespace: 'React',
+      allowNonTsExtensions: true,
+      allowJs: true,
+      target: monaco.languages.typescript.ScriptTarget.Latest
+    })
   }
 
   const handleEditorDidMount: OnMount = function (editor, monaco) {
@@ -31,7 +45,8 @@ export function CodeEditor({
       },
       lineDecorationsWidth: 0,
       glyphMargin: false,
-      folding: false
+      folding: false,
+      automaticLayout: true
     })
   }
   React.useEffect(() => {

@@ -1,7 +1,7 @@
 /**
  * <Comp /> => <Comp __mometa={{ start: {line: 100, column: 11}, end: {}, text: '<Comp />' }}/>
  */
-import { PluginObj, PluginPass } from '@babel/core'
+import { PluginObj, PluginPass, NodePath } from '@babel/core'
 import templateBuilder from '@babel/template'
 import { addDefault } from '@babel/helper-module-imports'
 import { createLineContentsByContent } from '@mometa/fs-handler'
@@ -69,7 +69,7 @@ export default function babelPluginMometaReactInject(api) {
                   emptyChildren: !path.node.children?.length
                 } as MometaData
 
-                mometaData.hash = hash(mometaData)
+                mometaData.hash = hash(mometaData, { algorithm: 'md5', encoding: 'base64' })
                 if (jsxExpContainerPath) {
                   const container = {
                     text: getText(jsxExpContainerPath.node.loc),
@@ -78,21 +78,76 @@ export default function babelPluginMometaReactInject(api) {
                   let isFirstElement = false
                   jsxExpContainerPath.traverse({
                     JSXElement(_path) {
-                      isFirstElement = _path.node === path.node
+                      isFirstElement = _path === path
                       _path.stop()
                     }
                   })
                   mometaData.container = {
                     isFirstElement,
                     ...container,
-                    hash: hash(container)
+                    hash: hash({ ...container, filename: this.filename }, { algorithm: 'md5', encoding: 'base64' })
+                  }
+                }
+
+                /**
+                 * <div>
+                 *   <p>1</p>
+                 *   <p>2</p>
+                 * </div>
+                 *
+                 * <Render>
+                 *   {() => <p>1</p>}
+                 *   {<p>2</p>}
+                 *   <p>3</p>
+                 *   123
+                 * </Render>
+                 */
+                const parentPath = path.findParent(
+                  (pPath) => pPath !== path && (pPath.isJSXElement() || pPath.isJSXFragment())
+                )
+                if (parentPath) {
+                  const childrenPath = parentPath
+                    .get('children')
+                    .filter(
+                      (p: NodePath) =>
+                        p.isJSXElement() ||
+                        p.isJSXExpressionContainer() ||
+                        (p.isJSXText() && !!(p.node.extra.raw as string).trim())
+                    ) as NodePath[]
+                  const index = childrenPath.findIndex((childPath) => {
+                    if (childPath === path) return true
+                    let f = false
+                    childPath.traverse({
+                      JSXElement(_path) {
+                        if (_path === path) {
+                          f = true
+                          _path.stop()
+                        }
+                      }
+                    })
+                    return f
+                  })
+
+                  if (index >= 0) {
+                    const prevPath = childrenPath[index - 1]
+                    if (prevPath) {
+                      mometaData.previousSibling = {
+                        ...prevPath.node.loc,
+                        text: getText(prevPath.node.loc)
+                      }
+                    }
+                    const nextPath = childrenPath[index + 1]
+                    if (nextPath) {
+                      mometaData.nextSibling = {
+                        ...nextPath.node.loc,
+                        text: getText(nextPath.node.loc)
+                      }
+                    }
                   }
                 }
 
                 const objExp = templateBuilder.expression(JSON.stringify(mometaData))()
-
                 const newProp = t.JSXAttribute(t.JSXIdentifier('__mometa'), t.JSXExpressionContainer(objExp))
-
                 openingElement.node.attributes.push(newProp)
 
                 if (!path.node.children?.length) {

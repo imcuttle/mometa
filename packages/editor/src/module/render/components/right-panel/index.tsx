@@ -82,7 +82,7 @@ const BaseInfoForm = () => {
           </Typography.Title>
         </Form.Item>
         <Form.Item name={'text'} label={'源代码'}>
-          <Input.TextArea rows={3} placeholder={'输入修改'} />
+          <CodeEditor language={'typescript'} height={'100px'} />
         </Form.Item>
         <div className={c('__btns')}>
           <PreventFastClick onClick={onUpdate}>

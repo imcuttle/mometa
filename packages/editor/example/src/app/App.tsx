@@ -15,6 +15,10 @@ export default function App(props: Props) {
           <p className="empty"></p>
           <p>simple 66xxxxxasdasdas6</p>
 
+          <div style={{ display: 'flex' }}>
+            <div style={{ flex: 1, background: '#b39dde' }}>cell1</div>
+            <div style={{ flex: 1, background: '#c7e29c' }}>cell2</div>
+          </div>
           <p>
             nested
             <strong>hahahax</strong>

@@ -6,7 +6,7 @@ import { CLS_PREFIX } from '../../../config/const'
 import './style.scss'
 import { Dropdown, Menu, Typography } from 'antd'
 import { MometaHTMLElement } from '../../dom-api'
-import { useSelectedNode } from '@@__mometa-external/shared'
+import { useSelectedNode, api } from '@@__mometa-external/shared'
 
 const cn = p('')
 const c = p(`${CLS_PREFIX}-more-button`)
@@ -25,12 +25,12 @@ const MoreButton: React.FC<MoreButtonProps> = React.memo(({ className, dom }) =>
       className={c('__dropdown')}
       onVisibleChange={(v) => {
         if (v && !paths.length) {
-          setPaths(dom.__mometa.findParents())
+          setPaths(dom.__mometa.findParents({ includeSelf: false }))
         }
       }}
       overlay={
         <Menu>
-          <Menu.SubMenu title={'路径'} icon={<NodeIndexOutlined />}>
+          <Menu.SubMenu title={'选中层级'} popupOffset={[0, 0]}>
             {paths.map((node, i) => {
               const data = node.__mometa.getMometaData()
               const isActive = dom.__mometa.getKey() === node.__mometa.getKey()
@@ -60,6 +60,21 @@ const MoreButton: React.FC<MoreButtonProps> = React.memo(({ className, dom }) =>
               )
             })}
           </Menu.SubMenu>
+          <Menu.Item
+            onClick={() => {
+              setSelectedNode(null)
+            }}
+          >
+            取消选中
+          </Menu.Item>
+          <Menu.Divider />
+          <Menu.Item
+            onClick={() => {
+              return api.handleViewOp('copy', dom)
+            }}
+          >
+            重复一份
+          </Menu.Item>
         </Menu>
       }
     >

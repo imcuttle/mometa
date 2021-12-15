@@ -86,8 +86,11 @@ const DndNode = React.memo(function ({ dom }: any) {
 
 function useMometaDomInject(dom: MometaHTMLElement) {
   React.useLayoutEffect(() => {
-    dom.__mometa = new MometaDomApi(dom)
+    const mometaApi = (dom.__mometa = new MometaDomApi(dom))
+    dom.removeAttribute('__mometa')
+    dom.dataset.mometaKey = mometaApi.getKey()
     return () => {
+      delete dom.dataset.mometaKey
       delete dom.__mometa
     }
   }, [dom])
@@ -130,8 +133,7 @@ export const DndDropableNode = React.memo(({ dom }: { dom: MometaHTMLElement }) 
         dom,
         css`
           ${EMPTY_PLACEHOLDER_NAME} {
-            display: block;
-            min-height: 30px;
+            display: block !important;
           }
         `
       )

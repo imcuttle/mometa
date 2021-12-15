@@ -3,17 +3,13 @@ import { createPortal } from '@@__mometa-external/react-dom'
 import c from 'classnames'
 import { getScrollParents } from '@floating-ui/dom'
 
-import { ArrowUpOutlined, ArrowDownOutlined, InfoCircleOutlined, DeleteOutlined } from '@ant-design/icons'
-import { Modal, Button, Typography } from 'antd'
+import { ArrowUpOutlined, ArrowDownOutlined, DragOutlined, DeleteOutlined } from '@ant-design/icons'
 import { css } from '../../../utils/emotion-css'
 import usePersistFn from '@rcp/use.persistfn'
 import { api } from '@@__mometa-external/shared'
-import { OpType } from '../../../const'
 import { MometaHTMLElement, useProxyEvents } from './dom-api'
 import MoreButton from './components/more-button'
 import { PreventFastClick } from '@rcp/c.preventfastop'
-import { openReactStandalone } from '../../../utils/open-react-element'
-import { CodeEditor } from '../../../../shared/code-editor'
 
 function useForceUpdate() {
   const [v, setV] = React.useState(1)
@@ -193,9 +189,10 @@ export function OveringFloat({ isSelected, onDeselect, onSelect, dom, getContain
     display: block;
     color: #fff;
     background-color: ${color};
-    padding: 0px 3px;
+    padding: 2px 4px;
     font-size: 12px;
     pointer-events: auto;
+    border-radius: 3px 3px 0 0;
   `
   const btnCss = css`
     display: inline-flex;
@@ -223,17 +220,21 @@ export function OveringFloat({ isSelected, onDeselect, onSelect, dom, getContain
       rightTopElement={
         isSelected && (
           <div className={c(commonCss)}>
-            <PreventFastClick onClick={() => opHandler('info')}>
-              <InfoCircleOutlined className={c(btnCss)} />
+            <PreventFastClick onClick={() => opHandler('moving')}>
+              <DragOutlined title={'按住并拖动来进行移动'} className={c(btnCss)} />
             </PreventFastClick>
-            <PreventFastClick onClick={() => opHandler('up')}>
-              <ArrowUpOutlined className={c(btnCss)} />
-            </PreventFastClick>
-            <PreventFastClick onClick={() => opHandler('down')}>
-              <ArrowDownOutlined className={c(btnCss)} />
-            </PreventFastClick>
+            {!!data.previousSibling && (
+              <PreventFastClick onClick={() => opHandler('up')}>
+                <ArrowUpOutlined title={'上移'} className={c(btnCss)} />
+              </PreventFastClick>
+            )}
+            {!!data.nextSibling && (
+              <PreventFastClick onClick={() => opHandler('down')}>
+                <ArrowDownOutlined title={'下移'} className={c(btnCss)} />
+              </PreventFastClick>
+            )}
             <PreventFastClick onClick={() => opHandler('del')}>
-              <DeleteOutlined className={c(btnCss)} />
+              <DeleteOutlined title={'删除'} className={c(btnCss)} />
             </PreventFastClick>
             <MoreButton className={btnCss} dom={dom} />
           </div>

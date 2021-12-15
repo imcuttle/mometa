@@ -46,7 +46,7 @@ if (require('@@__mometa-external/shared')) {
 
     injectGlobal(`
     body {
-    padding: 20px 10px;
+    padding: 30px 10px;
     }
   `)
   }

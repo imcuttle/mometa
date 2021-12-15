@@ -24,7 +24,7 @@ declare module '@@__mometa-external/shared' {
 
 declare var __mometa_require__ = (path: string) => typeof import(path)
 
-interface MometaData {
+interface RangeLocation {
   start: {
     line: number
     column: number
@@ -33,22 +33,26 @@ interface MometaData {
     line: number
     column: number
   }
+}
+
+interface MometaData extends RangeLocation {
   name: string
   text: string
   filename: string
   emptyChildren: boolean
+  relativeFilename: string
   hash: string
   container?: {
-    start: {
-      line: number
-      column: number
-    }
-    end: {
-      line: number
-      column: number
-    }
     isFirstElement: boolean
     text: string
     hash: string
-  }
+  } & RangeLocation
+
+  previousSibling?: {
+    text: string
+  } & RangeLocation
+
+  nextSibling?: {
+    text: string
+  } & RangeLocation
 }

@@ -20,7 +20,7 @@ export class ApiServerPack extends ApiCore {
     return true
   }
 
-  async handleViewOp(opType: 'up' | 'down' | 'del', dom: MometaHTMLElement) {
+  async handleViewOp(opType: 'up' | 'down' | 'del' | 'copy', dom: MometaHTMLElement) {
     const data = dom.__mometa.getMometaData()
     switch (opType) {
       case 'del': {
@@ -44,13 +44,13 @@ export class ApiServerPack extends ApiCore {
               }
             >
               <Typography>检测到元素在容器头部，请选择具体删除哪个，容器代码如下：</Typography>
-              <CodeEditor readOnly value={data.container.text} />
+              <CodeEditor readOnly value={data.container.text} style={{ marginTop: 10 }} />
             </Modal>
           ))
         } else {
           p = new Promise((res) => {
             Modal.confirm({
-              title: '确认删除吗？',
+              title: '确认删除如下代码片段吗？',
               content: <CodeEditor readOnly value={data.text} style={{ marginTop: 10 }} />,
               okText: '确认',
               cancelText: '取消',
@@ -70,6 +70,7 @@ export class ApiServerPack extends ApiCore {
             type: OpType.DEL,
             preload: {
               ...data.container,
+              relativeFilename: data.relativeFilename,
               filename: data.filename
             }
           })

@@ -52,7 +52,7 @@ export class MometaDomApi extends EventEmitter {
     findClosest(this.dom as MometaHTMLElement, (x) => {
       if (x.__mometa) {
         if ((includeSelf && x === this.dom) || this.dom !== x) {
-          parents.unshift(x)
+          parents.push(x)
         }
       }
       return false
