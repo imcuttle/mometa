@@ -25,14 +25,29 @@ declare module '@@__mometa-external/shared' {
 declare var __mometa_require__ = (path: string) => typeof import(path)
 
 interface MometaData {
-  start: any
-  end: any
+  start: {
+    line: number
+    column: number
+  }
+  end: {
+    line: number
+    column: number
+  }
   name: string
   text: string
   filename: string
   emptyChildren: boolean
   hash: string
   container?: {
+    start: {
+      line: number
+      column: number
+    }
+    end: {
+      line: number
+      column: number
+    }
+    isFirstElement: boolean
     text: string
     hash: string
   }

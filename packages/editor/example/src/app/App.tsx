@@ -14,12 +14,17 @@ export default function App(props: Props) {
         <Tabs.TabPane key={'tool'} tab={'物料'}>
           <p className="empty"></p>
           <p>simple 66xxxxxasdasdas6</p>
+
           <p>
             nested
             <strong>hahahax</strong>
           </p>
+
           {array.map((x, i) => (
-            <p key={i}>物料_{i}</p>
+            <p key={i}>
+              <div>物料_a_{i}</div>
+              <div>物料_b_{i}</div>
+            </p>
           ))}
         </Tabs.TabPane>
         <Tabs.TabPane key={'attr'} tab={'属性'}></Tabs.TabPane>

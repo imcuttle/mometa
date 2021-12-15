@@ -99,8 +99,17 @@ const elem = <div __mometa={{
         \\"emptyChildren\\": false,
         \\"hash\\": \\"2b0f9cc473c7ca71ecfd489080ecdaea4c14a48d\\",
         \\"container\\": {
+          \\"isFirstElement\\": true,
           \\"text\\": \\"{arr.map((x, i) => (\\\\n          <p key={i}>content_{i}</p>\\\\n        ))}\\",
-          \\"hash\\": \\"1d5880cc7915b0342f6612b135f882e92afec0c1\\"
+          \\"start\\": {
+            \\"line\\": 8,
+            \\"column\\": 8
+          },
+          \\"end\\": {
+            \\"line\\": 10,
+            \\"column\\": 11
+          },
+          \\"hash\\": \\"8908318532474e6f75108ddbb02fec3f16bf09ee\\"
         }
       }}>content_{i}</p>)}
         <p className='empty' __mometa={{

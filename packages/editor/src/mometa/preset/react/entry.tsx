@@ -2,6 +2,7 @@
 
 // 是 iframe 环境
 import { addUpdateCallbackListener } from '../../../shared/hot'
+import { injectGlobal } from '../../utils/emotion-css'
 
 if (require('@@__mometa-external/shared')) {
   const { refresh } = require('../../utils/emotion-css')
@@ -38,7 +39,15 @@ if (require('@@__mometa-external/shared')) {
       // Update selectedNodeSubject for render
       const prev = selectedNodeSubject.value
       selectedNodeSubject.next(null)
-      selectedNodeSubject.next(prev)
+      if (prev?.parentElement) {
+        selectedNodeSubject.next(prev)
+      }
     })
+
+    injectGlobal(`
+    body {
+    padding: 20px 10px;
+    }
+  `)
   }
 }

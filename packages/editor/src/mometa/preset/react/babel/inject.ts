@@ -4,9 +4,11 @@
 import { PluginObj, PluginPass } from '@babel/core'
 import templateBuilder from '@babel/template'
 import { addDefault } from '@babel/helper-module-imports'
-import { createLineContentsByContent, EMPTY } from '@mometa/fs-handler'
+import { createLineContentsByContent } from '@mometa/fs-handler'
 import { sha1 as hash } from 'object-hash'
 import * as nps from 'path'
+
+const scopePath = nps.resolve(__dirname, '../../../../')
 
 export default function babelPluginMometaReactInject(api) {
   const { types: t } = api
@@ -22,6 +24,10 @@ export default function babelPluginMometaReactInject(api) {
     visitor: {
       Program: {
         enter(path, state: any) {
+          if (!this.filename || this.filename.startsWith(scopePath)) {
+            return
+          }
+
           const rawCode = this.file.code
           const lineContents = createLineContentsByContent(rawCode, { filename: this.filename })
           const getText = ({ start, end }) => {
@@ -66,9 +72,18 @@ export default function babelPluginMometaReactInject(api) {
                 mometaData.hash = hash(mometaData)
                 if (jsxExpContainerPath) {
                   const container = {
-                    text: getText(jsxExpContainerPath.node.loc)
+                    text: getText(jsxExpContainerPath.node.loc),
+                    ...jsxExpContainerPath.node.loc
                   }
+                  let isFirstElement = false
+                  jsxExpContainerPath.traverse({
+                    JSXElement(_path) {
+                      isFirstElement = _path.node === path.node
+                      _path.stop()
+                    }
+                  })
                   mometaData.container = {
+                    isFirstElement,
                     ...container,
                     hash: hash(container)
                   }

@@ -24,6 +24,8 @@
   },
   "dependencies": {
     "chalk": "^2.4.2",
+    "@monaco-editor/react": "^4.3.1",
+    "monaco-editor": "^0.31.1",
     "@rcp/c.preventfastop": "^1.2.0",
     "shell-quote": "^1.7.2",
     "@babel/helper-module-imports": "^7.16.0",

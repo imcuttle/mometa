@@ -80,9 +80,9 @@ export const DndUndropableNode = React.memo(({ dom }: { dom: HTMLElement }) => {
   )
 })
 
-function DndNode({ dom }) {
+const DndNode = React.memo(function ({ dom }: any) {
   return isDropableDom(dom) ? <DndDropableNode dom={dom} /> : <DndUndropableNode dom={dom} />
-}
+})
 
 function useMometaDomInject(dom: MometaHTMLElement) {
   React.useLayoutEffect(() => {
@@ -182,7 +182,9 @@ export const DndDropableNode = React.memo(({ dom }: { dom: MometaHTMLElement }) 
 
   return (
     <>
-      {(isEnter || isSelected) && <OveringFloat onSelect={() => setSelNode(dom)} isSelected={isSelected} dom={dom} />}
+      {(isEnter || isSelected) && !!dom && (
+        <OveringFloat onSelect={() => setSelNode(dom)} isSelected={isSelected} dom={dom} />
+      )}
       <DndUndropableNode dom={dom} />
     </>
   )

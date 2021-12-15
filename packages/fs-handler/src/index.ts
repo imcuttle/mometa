@@ -8,7 +8,6 @@ import pify from 'pify'
 import { robust } from 'memoize-fn'
 import { createLineContentsByContent, LineContents, Range } from './utils/line-contents'
 import { OpType } from './const'
-import { normalizeContent } from './utils/normalize-content'
 export * from './const'
 
 export { default as reactMiddlewares } from './react'
@@ -16,7 +15,7 @@ export { default as reactMiddlewares } from './react'
 export interface CommonPreload extends Range {
   filename: string
   relativeFilename?: string
-  name: string
+  name?: string
   text: string
 }
 

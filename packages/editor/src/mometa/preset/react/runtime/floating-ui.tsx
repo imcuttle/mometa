@@ -2,12 +2,18 @@ import React from '@@__mometa-external/react'
 import { createPortal } from '@@__mometa-external/react-dom'
 import c from 'classnames'
 import { getScrollParents } from '@floating-ui/dom'
+
 import { ArrowUpOutlined, ArrowDownOutlined, InfoCircleOutlined, DeleteOutlined } from '@ant-design/icons'
+import { Modal, Button, Typography } from 'antd'
 import { css } from '../../../utils/emotion-css'
 import usePersistFn from '@rcp/use.persistfn'
 import { api } from '@@__mometa-external/shared'
 import { OpType } from '../../../const'
 import { MometaHTMLElement, useProxyEvents } from './dom-api'
+import MoreButton from './components/more-button'
+import { PreventFastClick } from '@rcp/c.preventfastop'
+import { openReactStandalone } from '../../../utils/open-react-element'
+import { CodeEditor } from '../../../../shared/code-editor'
 
 function useForceUpdate() {
   const [v, setV] = React.useState(1)
@@ -158,49 +164,6 @@ function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
-const PreventFastClick = ({ onClick, children, loading, ...props }: any) => {
-  // React.useImperativeHandle(ref, () => ({}), []);
-  const canClickRef = React.useRef(true)
-  const [loadingState, setLoading] = React.useState(loading)
-  const _onClickFn = usePersistFn(onClick)
-
-  const onClickFn = React.useCallback(
-    async (evt) => {
-      if (!canClickRef.current) {
-        return
-      }
-      if (_onClickFn) {
-        canClickRef.current = false
-        const res = await Promise.race([
-          Promise.resolve(_onClickFn(evt))
-            .then(() =>
-              // 防止同步 onClick
-              delay(100)
-            )
-            .finally(() => {
-              setLoading(false)
-              canClickRef.current = true
-            }),
-          new Promise((resolve) => {
-            setTimeout(resolve, 300, '$timeout')
-          })
-        ])
-        if (res === '$timeout') {
-          setLoading(true)
-          canClickRef.current = false
-        }
-      }
-    },
-    [_onClickFn, setLoading]
-  )
-
-  return React.cloneElement(children, {
-    loading: loadingState,
-    onClick: onClickFn,
-    ...props
-  })
-}
-
 type OveringFloatProps = FloatingUiProps & {
   isSelected?: boolean
   onSelect?: () => void
@@ -211,7 +174,9 @@ export function OveringFloat({ isSelected, onDeselect, onSelect, dom, getContain
   React.useEffect(() => {
     dom.__mometa.preventEvent = false
     return () => {
-      dom.__mometa.preventEvent = true
+      if (dom?.__mometa) {
+        dom.__mometa.preventEvent = true
+      }
     }
   }, [dom])
 
@@ -232,24 +197,20 @@ export function OveringFloat({ isSelected, onDeselect, onSelect, dom, getContain
     font-size: 12px;
     pointer-events: auto;
   `
-  const iconCss = css`
+  const btnCss = css`
     display: inline-flex;
     cursor: pointer;
     margin-left: 2px;
     margin-right: 2px;
   `
 
-  const opHandler = usePersistFn((opType: string) => {
-    switch (opType) {
-      case 'del': {
-        api.submitOperation({
-          type: OpType.DEL,
-          preload: data
-        })
-        break
-      }
-    }
+  const opHandler = usePersistFn(async (opType: string) => {
+    return api.handleViewOp(opType, dom)
   })
+
+  if (!dom || !data) {
+    return null
+  }
 
   return (
     <FloatingUi
@@ -263,17 +224,18 @@ export function OveringFloat({ isSelected, onDeselect, onSelect, dom, getContain
         isSelected && (
           <div className={c(commonCss)}>
             <PreventFastClick onClick={() => opHandler('info')}>
-              <InfoCircleOutlined className={c(iconCss)} />
+              <InfoCircleOutlined className={c(btnCss)} />
             </PreventFastClick>
             <PreventFastClick onClick={() => opHandler('up')}>
-              <ArrowUpOutlined className={c(iconCss)} />
+              <ArrowUpOutlined className={c(btnCss)} />
             </PreventFastClick>
             <PreventFastClick onClick={() => opHandler('down')}>
-              <ArrowDownOutlined className={c(iconCss)} />
+              <ArrowDownOutlined className={c(btnCss)} />
             </PreventFastClick>
             <PreventFastClick onClick={() => opHandler('del')}>
-              <DeleteOutlined className={c(iconCss)} />
+              <DeleteOutlined className={c(btnCss)} />
             </PreventFastClick>
+            <MoreButton className={btnCss} dom={dom} />
           </div>
         )
       }

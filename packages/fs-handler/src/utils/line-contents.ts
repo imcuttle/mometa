@@ -1,6 +1,9 @@
+import { resolveConfig } from 'prettier'
 import { format } from 'prettier/standalone'
 import parserBabel from 'prettier/parser-babel'
 import parserTs from 'prettier/parser-typescript'
+
+const config = resolveConfig && resolveConfig?.sync?.(process.cwd())
 
 export class Line {
   constructor(public content: string | symbol) {}
@@ -96,7 +99,7 @@ export class LineContents {
 
     try {
       return format(content, {
-        semi: false,
+        ...config,
         filepath: this.options.filename,
         parser: isTs ? 'typescript' : 'babel',
         plugins: [isTs ? parserTs : parserBabel]

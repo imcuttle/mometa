@@ -10,6 +10,7 @@ import usePersistFn from '@rcp/use.persistfn'
 import { PreventFastClick } from '@rcp/c.preventfastop'
 import { ApiServerPack } from '../stage/create-api'
 import { OpType } from '@mometa/fs-handler'
+import { CodeEditor } from '../../../../shared/code-editor'
 
 const cn = p('')
 const c = p(`${CLS_PREFIX}-rpanel`)
@@ -56,38 +57,46 @@ const BaseInfoForm = () => {
   })
 
   return !!mometaData ? (
-    <Form
-      layout={'vertical'}
-      form={form}
-      onFieldsChange={() => {
-        !isDirty && setIsDirty(true)
-      }}
-    >
-      <Form.Item label={'类型'}>
-        <Typography.Title level={5}>
-          <Typography.Link
-            onClick={() =>
-              api.openEditor({
-                fileName: mometaData.filename,
-                lineNumber: mometaData.start?.line,
-                colNumber: mometaData.start?.column
-              })
-            }
-          >
-            <NumberOutlined style={{ marginRight: 2 }} />
-            {mometaData.name}
-          </Typography.Link>
-        </Typography.Title>
-      </Form.Item>
-      <Form.Item name={'text'} label={'源代码'}>
-        <Input.TextArea rows={3} placeholder={'输入修改'} />
-      </Form.Item>
-      <div className={c('__btns')}>
-        <PreventFastClick onClick={onUpdate}>
-          <UpdateBtn />
-        </PreventFastClick>
-      </div>
-    </Form>
+    <div>
+      <Form
+        layout={'vertical'}
+        form={form}
+        onFieldsChange={() => {
+          !isDirty && setIsDirty(true)
+        }}
+      >
+        <Form.Item label={'类型'}>
+          <Typography.Title level={5}>
+            <Typography.Link
+              onClick={() =>
+                api.openEditor({
+                  fileName: mometaData.filename,
+                  lineNumber: mometaData.start?.line,
+                  colNumber: mometaData.start?.column
+                })
+              }
+            >
+              <NumberOutlined style={{ marginRight: 2 }} />
+              {mometaData.name}
+            </Typography.Link>
+          </Typography.Title>
+        </Form.Item>
+        <Form.Item name={'text'} label={'源代码'}>
+          <Input.TextArea rows={3} placeholder={'输入修改'} />
+        </Form.Item>
+        <div className={c('__btns')}>
+          <PreventFastClick onClick={onUpdate}>
+            <UpdateBtn />
+          </PreventFastClick>
+        </div>
+      </Form>
+      {process.env.NODE_ENV === 'development' && (
+        <>
+          <p> </p>
+          <CodeEditor readOnly height={'300px'} language={'json'} value={JSON.stringify(mometaData, null, 2)} />
+        </>
+      )}
+    </div>
   ) : (
     <Empty />
   )

@@ -2,9 +2,9 @@ import { EventEmitter } from 'events'
 import React from '@@__mometa-external/react'
 import { parseReactDomNode } from '../../../utils/dom-api'
 
-const findClosest = (
-  from: MometaHTMLElement,
-  isPass: (v: MometaHTMLElement) => boolean
+const findClosest = <T extends HTMLElement>(
+  from: T,
+  isPass: (v: T) => boolean
   // eslint-disable-next-line consistent-return
 ) => {
   let t = from
@@ -41,6 +41,23 @@ export class MometaDomApi extends EventEmitter {
 
   public getMometaData(): MometaData {
     return parseReactDomNode(this.dom)?.props?.__mometa
+  }
+
+  public getKey() {
+    return this.getMometaData()?.hash
+  }
+
+  findParents({ includeSelf = true }: { includeSelf?: boolean } = {}) {
+    const parents = []
+    findClosest(this.dom as MometaHTMLElement, (x) => {
+      if (x.__mometa) {
+        if ((includeSelf && x === this.dom) || this.dom !== x) {
+          parents.unshift(x)
+        }
+      }
+      return false
+    })
+    return parents
   }
 }
 

@@ -54,6 +54,14 @@
         "config": {
           "output": "./packages/editor/src/module/render/components"
         }
+      },
+      "mometa-runtime-component": {
+        "description": "Mometa Runtime 组件",
+        "url": "./packages/editor/__template/component",
+        "type": "file",
+        "config": {
+          "output": "./packages/editor/src/mometa/preset/react/runtime/components"
+        }
       }
     }
   },
