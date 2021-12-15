@@ -86,7 +86,7 @@ export function createFsHandler({ fs, middlewares = [] }: { fs: Fs; middlewares?
     const ctx: MiddlewareContext = {
       fs,
       filename: request.preload.filename,
-      getContent: robust(async () => normalizeContent(await pify(fs.readFile)(request.preload.filename, 'utf8')), {
+      getContent: robust(async () => await pify(fs.readFile)(request.preload.filename, 'utf8'), {
         once: true
       })
     }
@@ -94,3 +94,5 @@ export function createFsHandler({ fs, middlewares = [] }: { fs: Fs; middlewares?
     return await waterFall([apiMiddle].concat(middlewares), [request, ctx])
   }
 }
+
+export * from './utils/line-contents'

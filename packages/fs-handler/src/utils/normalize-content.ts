@@ -3,6 +3,7 @@ import * as babel from '@babel/core'
 export function normalizeContent(code: string) {
   return babel
     .transformAsync(code, {
+      babelrc: false,
       parserOpts: {
         plugins: [
           'asyncDoExpressions',
