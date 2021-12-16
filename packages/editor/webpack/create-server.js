@@ -1,7 +1,7 @@
 const http = require('http')
 const fs = require('fs')
 const nps = require('path')
-const { createFsHandler, reactMiddlewares } = require('@mometa/fs-handler')
+const { createFsHandler, commonMiddlewares } = require('@mometa/fs-handler')
 
 const launchEditor = require('./launchEditor')
 
@@ -41,7 +41,7 @@ exports.createServer = function createServer({
 }) {
   const fsHandler = createFsHandler({
     fs: fileSystem,
-    middlewares: reactMiddlewares()
+    middlewares: commonMiddlewares()
   })
 
   const server = http.createServer(async (req, res) => {

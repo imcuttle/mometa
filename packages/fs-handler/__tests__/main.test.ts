@@ -1,4 +1,4 @@
-import { createFsHandler, OpType, reactMiddlewares } from '../src'
+import { createFsHandler, OpType, commonMiddlewares } from '../src'
 import * as fs from 'fs'
 import { fixture } from './helper'
 
@@ -14,7 +14,7 @@ describe('fsHandler', function () {
   beforeEach(() => {
     fsHandler = createFsHandler({
       fs: mockFs,
-      middlewares: reactMiddlewares()
+      middlewares: commonMiddlewares()
     })
     // @ts-ignore
     Object.defineProperty(mockFs, 'writeFile', {
@@ -48,7 +48,9 @@ describe('fsHandler', function () {
     await fsHandler({
       type: OpType.REPLACE_NODE,
       preload: {
-        newValue: '<span>ppp</span>',
+        data: {
+          newText: '<span>ppp</span>'
+        },
         name: 'p',
         text: '<p>单独 p</p>',
         filename: fixture('react-comp.tsx'),
@@ -68,7 +70,43 @@ describe('fsHandler', function () {
         filename: fixture('nested.tsx'),
         name: 'p',
         text: '<p>\n            nested\n            <strong>hahahax</strong>\n          </p>',
-        newValue: '<p>\n            nested 2\n            <strong>hahahax</strong>\n          </p>'
+        data: {
+          newText: '<p>\n            nested 2\n            <strong>hahahax</strong>\n          </p>'
+        }
+      }
+    })
+    expect(result).toMatchSnapshot()
+  })
+
+  it('MOVE_NODE', async function () {
+    await fsHandler({
+      type: OpType.MOVE_NODE,
+      preload: {
+        text: '<p>单独 p</p>',
+        filename: fixture('react-comp.tsx'),
+        start: { line: 18, column: 10 },
+        end: { line: 18, column: 21 },
+        data: {
+          to: {
+            line: 17,
+            column: 10
+          }
+        }
+      }
+    })
+    expect(result).toMatchSnapshot()
+  })
+
+  it('INSERT_NODE', async function () {
+    await fsHandler({
+      type: OpType.INSERT_NODE,
+      preload: {
+        text: '<p>单独 p</p>',
+        filename: fixture('react-comp.tsx'),
+        to: { line: 18, column: 10 },
+        data: {
+          newText: '<p className="empty-2"></p>'
+        }
       }
     })
     expect(result).toMatchSnapshot()

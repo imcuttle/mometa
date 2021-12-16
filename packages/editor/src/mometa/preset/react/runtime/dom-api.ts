@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events'
 import React from '@@__mometa-external/react'
-import { parseReactDomNode } from '../../../utils/dom-api'
+import { parseReactDomNodeDeep, ReactFiber } from '../../../utils/dom-utils'
 
 const findClosest = <T extends HTMLElement>(
   from: T,
@@ -40,7 +40,11 @@ export class MometaDomApi extends EventEmitter {
   }
 
   public getMometaData(): MometaData {
-    return parseReactDomNode(this.dom)?.props?.__mometa
+    return parseReactDomNodeDeep(this.dom)?.mometa
+  }
+
+  public getMometaReactFiber(): ReactFiber | undefined {
+    return parseReactDomNodeDeep(this.dom)?.fiber
   }
 
   public getKey() {

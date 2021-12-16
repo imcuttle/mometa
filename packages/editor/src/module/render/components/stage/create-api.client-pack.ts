@@ -1,7 +1,7 @@
 import { ApiCore } from './api-core'
 import { message } from 'antd'
 import { EventEmitter } from 'events'
-import { reactMiddlewares, createFsHandler } from '@mometa/fs-handler'
+import { commonMiddlewares, createFsHandler } from '@mometa/fs-handler'
 import React from 'react'
 import { SandpackState } from '@codesandbox/sandpack-react'
 
@@ -47,7 +47,7 @@ class CreateApiClientPack extends ApiCore {
     this.handler = createFsHandler({
       // @ts-ignore
       fs: mockFs,
-      middlewares: reactMiddlewares()
+      middlewares: commonMiddlewares()
     })
     super({
       info: (str) => message.info(str),

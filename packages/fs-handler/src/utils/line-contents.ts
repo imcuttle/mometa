@@ -5,11 +5,17 @@ import parserTs from 'prettier/parser-typescript'
 
 const config = resolveConfig && resolveConfig?.sync?.(process.cwd())
 
-export class Line {
-  constructor(public content: string | symbol) {}
+export class Line<T extends string | typeof EMPTY = string | typeof EMPTY> {
+  constructor(public content: T) {}
+  public isDirty = false
 
   static create(line: string) {
     return new Line(line)
+  }
+
+  setContent(c: T) {
+    this.isDirty = c !== this.content
+    this.content = c
   }
 
   slice(start?: number, end?: number) {
@@ -39,12 +45,17 @@ export interface Range {
 export const EMPTY = Symbol.for('EMPTY')
 
 export class LineContents {
-  constructor(public contents: Line[], public options: ContentParserOptions = {}) {}
+  constructor(protected contents: Line[], public options: ContentParserOptions = {}) {}
   assertPoint(p: Point) {
     if (p.line < 0) {
       throw new Error(`Point is invalid. ${JSON.stringify(p)}`)
     }
   }
+
+  get isDirty() {
+    return this.contents.some((c) => c.isDirty)
+  }
+
   assertRange(r: Range) {
     this.assertPoint(r.start)
     this.assertPoint(r.end)

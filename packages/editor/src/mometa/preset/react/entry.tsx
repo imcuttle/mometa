@@ -11,6 +11,11 @@ if (require('@@__mometa-external/shared')) {
   refresh()
   overingNodeSubject.next(null)
   selectedNodeSubject.next(null)
+  injectGlobal(`
+    body {
+    padding: 30px 10px;
+    }
+  `)
 
   const React = require('@@__mometa-external/react')
   const { RootProvider } = require('@@__mometa-external/shared')
@@ -44,10 +49,22 @@ if (require('@@__mometa-external/shared')) {
       }
     })
 
-    injectGlobal(`
-    body {
-    padding: 30px 10px;
+    if (__mometa_env_react_jsx_runtime__ && process.env.NODE_ENV !== 'production') {
+      const JSXDEVRuntime = require('react/jsx-dev-runtime')
+      const { jsxDEV } = JSXDEVRuntime
+      // 转移 __mometa
+      JSXDEVRuntime.jsxDEV = function _jsxDev() {
+        let [type, props, key, isStaticChildren, source, ...rest] = arguments
+        if (props?.__mometa) {
+          const __mometa = props?.__mometa
+          delete props?.__mometa
+          source = {
+            ...source,
+            __mometa
+          }
+        }
+        return jsxDEV.apply(this, [type, props, key, isStaticChildren, source, ...rest])
+      }
     }
-  `)
   }
 }

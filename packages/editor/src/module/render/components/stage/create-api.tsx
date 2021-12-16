@@ -6,6 +6,7 @@ import React from 'react'
 import { CodeEditor } from '../../../../shared/code-editor'
 import { MometaHTMLElement } from '../../../../mometa/preset/react/runtime/dom-api'
 import { openReactStandalone } from '../../../../shared/open-react-element'
+import { createPreload } from '../../utils/utils'
 
 export class ApiServerPack extends ApiCore {
   constructor(apiBaseURL: string = '') {
@@ -22,6 +23,10 @@ export class ApiServerPack extends ApiCore {
 
   async handleViewOp(opType: 'up' | 'down' | 'del' | 'copy', dom: MometaHTMLElement) {
     const data = dom.__mometa.getMometaData()
+    let locationData = data
+    if (data.container?.isFirstElement) {
+      locationData = data.container as any
+    }
     switch (opType) {
       case 'del': {
         let p
@@ -68,14 +73,36 @@ export class ApiServerPack extends ApiCore {
         } else if (result === 'container') {
           return this.submitOperation({
             type: OpType.DEL,
-            preload: {
-              ...data.container,
-              relativeFilename: data.relativeFilename,
-              filename: data.filename
-            }
+            preload: createPreload(data, data.container)
           })
         }
         break
+      }
+      case 'up':
+      case 'down': {
+        let to = opType === 'up' ? data.previousSibling.start : data.nextSibling.end
+
+        return this.submitOperation({
+          type: OpType.MOVE_NODE,
+          preload: createPreload(locationData, {
+            ...locationData,
+            // @ts-ignore
+            data: {
+              to
+            }
+          })
+        })
+      }
+      case 'copy': {
+        return this.submitOperation({
+          type: OpType.INSERT_NODE,
+          preload: createPreload(locationData, {
+            to: locationData.end,
+            data: {
+              newText: locationData.text
+            }
+          })
+        })
       }
     }
   }

@@ -1,11 +1,11 @@
 export default function ({ __mometa }) {
   const React = require('@@__mometa-external/react')
-  const { useHeaderStatus } = require('@@__mometa-external/shared')
-
-  const [{ canSelect }] = useHeaderStatus()
-  if (!React) {
+  if (!React || !require('@@__mometa-external/shared')) {
     return null
   }
+
+  const { useHeaderStatus } = require('@@__mometa-external/shared')
+  const [{ canSelect }] = useHeaderStatus()
 
   return React.createElement(
     'mometa-empty-placeholder',

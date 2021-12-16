@@ -1,6 +1,7 @@
 const fs = require('fs')
 const nps = require('path')
 const { createServer } = require('./create-server')
+const injectEntry = require('./injectEntry')
 const ReactRefreshWebpackPlugin = require('@mometa/react-refresh-webpack-plugin')
 
 const resolvePath = (moduleName) => nps.dirname(require.resolve(`${moduleName}/package.json`))
@@ -22,6 +23,24 @@ module.exports = class MometaEditorPlugin {
       new ReactRefreshWebpackPlugin({
         library: compiler.options.name,
         overlay: false
+      }).apply(compiler)
+    }
+
+    const webpack = compiler.webpack || require('webpack')
+    const { DefinePlugin } = webpack
+
+    if (this.options.react) {
+      compiler.options.entry = injectEntry(compiler.options.entry, {
+        prependEntries: [require.resolve('./react-runtime-entry')]
+      })
+
+      let hasJsxDevRuntime = false
+      try {
+        hasJsxDevRuntime = !!require.resolve('react/jsx-dev-runtime')
+      } catch (e) {}
+
+      new DefinePlugin({
+        __mometa_env_react_jsx_runtime__: hasJsxDevRuntime
       }).apply(compiler)
     }
 

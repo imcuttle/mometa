@@ -6,22 +6,38 @@
 import { waterFall } from 'run-seq'
 import pify from 'pify'
 import { robust } from 'memoize-fn'
-import { createLineContentsByContent, LineContents, Range } from './utils/line-contents'
+import { createLineContentsByContent, LineContents, Range, Point } from './utils/line-contents'
 import { OpType } from './const'
 export * from './const'
 
-export { default as reactMiddlewares } from './react'
+export { default as commonMiddlewares } from './common'
 
 export interface CommonPreload extends Range {
   filename: string
-  relativeFilename?: string
-  name?: string
   text: string
 }
 
 export interface DelPreload extends CommonPreload {}
 export interface ReplacePreload extends CommonPreload {
-  newValue: string
+  data: {
+    newText: string
+  }
+}
+export interface MoveNodePreload extends CommonPreload {
+  data: {
+    to: Point
+  }
+}
+
+export interface InsertNodePreload {
+  filename: string
+  to: Point
+  data: {
+    newText: string
+    anotherTo?: Point
+    wrapStart?: string
+    wrapEnd?: string
+  }
 }
 
 export type RequestData =
@@ -33,6 +49,14 @@ export type RequestData =
       type: OpType.REPLACE_NODE
       preload: ReplacePreload
     }
+  | {
+      type: OpType.MOVE_NODE
+      preload: MoveNodePreload
+    }
+  | {
+      type: OpType.INSERT_NODE
+      preload: InsertNodePreload
+    }
 
 type Fs = Pick<typeof import('fs'), 'readFile' | 'writeFile'>
 
@@ -43,38 +67,53 @@ export interface MiddlewareContext {
 
   assertLocateByRange: () => Promise<{
     lineContents: LineContents
-    lines: ReturnType<LineContents['locateByRange']>
+    lines?: ReturnType<LineContents['locateByRange']>
   }>
+
+  lineContents: LineContents
+  lines?: ReturnType<LineContents['locateByRange']>
 
   writeFile: (data: any) => Promise<void>
 }
 
 export type Middleware = (request: RequestData, ctx: MiddlewareContext, next: () => any) => any
 
-const apiMiddle: Middleware = (data, ctx, next) => {
+const apiMiddle: Middleware = async (data, ctx, next) => {
   ctx.assertLocateByRange = async () => {
     const content = await ctx.getContent()
     const lineContents = createLineContentsByContent(content, { filename: ctx.filename })
-    const lines = lineContents.locateByRange(data.preload)
+    // @ts-ignore
+    if (data.preload.start && data.preload.end) {
+      // @ts-ignore
+      const lines = lineContents.locateByRange(data.preload)
 
-    const string = new LineContents(
-      lines.map((x) => x.line),
-      { filename: ctx.filename }
-    ).toString(false)
+      const string = new LineContents(
+        lines.map((x) => x.line),
+        { filename: ctx.filename }
+      ).toString(false)
 
-    if (string !== data.preload.text) {
-      throw new Error(`匹配错误
-${JSON.stringify(string)} !== ${JSON.stringify(data.preload.text)}`)
+      // @ts-ignore
+      if (string !== data.preload.text) {
+        throw new Error(`匹配错误
+${JSON.stringify(string)} !== ${JSON.stringify((data.preload as any).text)}`)
+      }
+
+      return {
+        lineContents,
+        lines
+      }
     }
     return {
-      lineContents,
-      lines
+      lineContents
     }
   }
 
   ctx.writeFile = async (data) => {
     return pify(ctx.fs.writeFile)(ctx.filename, data)
   }
+  const { lineContents, lines } = await ctx.assertLocateByRange()
+  ctx.lineContents = lineContents
+  ctx.lines = lines
 
   return next()
 }
@@ -90,7 +129,14 @@ export function createFsHandler({ fs, middlewares = [] }: { fs: Fs; middlewares?
       })
     }
 
-    return await waterFall([apiMiddle].concat(middlewares), [request, ctx])
+    return await waterFall(
+      [apiMiddle].concat(middlewares).concat((data, ctx) => {
+        if (ctx.lineContents.isDirty) {
+          return ctx.writeFile(ctx.lineContents.toString())
+        }
+      }),
+      [request, ctx]
+    )
   }
 }
 

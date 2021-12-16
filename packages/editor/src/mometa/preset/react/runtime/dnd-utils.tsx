@@ -1,13 +1,20 @@
 import React from '@@__mometa-external/react'
 import { css } from '../../../utils/emotion-css'
 import { useDragDropManager, useDrop } from '@@__mometa-external/react-dnd'
-import { addCss, parseReactDomNode, setStyle } from '../../../utils/dom-api'
+import { addCss, parseReactDomNode, parseReactDomNodeDeep, setStyle } from '../../../utils/dom-utils'
 import { useHeaderStatus, useSelectedNode, useOveringNode } from '@@__mometa-external/shared'
 import { OveringFloat } from './floating-ui'
 import { MometaHTMLElement, MometaDomApi } from './dom-api'
 
 function isDropableDom(dom: HTMLElement) {
-  return !!parseReactDomNode(dom)?.props?.__mometa
+  const res = parseReactDomNodeDeep(dom)
+  // return !!res?.mometa
+  // 寻找第一个 fiber 节点 (stateNode === dom)
+  let f = res?.fiber
+  while (f && f.stateNode !== dom) {
+    f = f.child
+  }
+  return !!f
 }
 
 const EMPTY_PLACEHOLDER_NAME = 'mometa-empty-placeholder'
@@ -18,10 +25,14 @@ function useDfsDom(dom: HTMLElement) {
   domChildrenRef.current = domChildren
 
   const getDomChildren = React.useCallback(() => {
-    return Array.from(dom.children)
+    return Array.from(dom?.children || [])
   }, [dom])
 
   React.useLayoutEffect(() => {
+    if (!dom) {
+      setDomChildren(getDomChildren())
+      return
+    }
     const ob = new MutationObserver((records) => {
       const newChildren = domChildrenRef.current.slice()
       let isUpdate = false
@@ -86,6 +97,9 @@ const DndNode = React.memo(function ({ dom }: any) {
 
 function useMometaDomInject(dom: MometaHTMLElement) {
   React.useLayoutEffect(() => {
+    // if (dom.classList.contains('ant-tabs-tabpane')) {
+    //   console.log('dom', dom, new MometaDomApi(dom).getMometaData())
+    // }
     const mometaApi = (dom.__mometa = new MometaDomApi(dom))
     dom.removeAttribute('__mometa')
     dom.dataset.mometaKey = mometaApi.getKey()

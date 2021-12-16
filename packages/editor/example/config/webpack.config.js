@@ -739,7 +739,7 @@ module.exports = function getConfig(webpackEnv) {
     getSingleConfig(webpackEnv, {
       name: 'app',
       htmlName: 'bundler.html',
-      entry: [require.resolve('../../webpack/react-runtime-entry'), paths.resolveApp('src/app/index.tsx')],
+      entry: paths.resolveApp('src/app/index.tsx'),
       babelPresets: [],
       babelPlugins: [require.resolve('../../babel/plugin-react-runtime')],
       plugins: [

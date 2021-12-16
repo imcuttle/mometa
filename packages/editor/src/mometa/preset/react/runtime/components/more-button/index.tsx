@@ -5,6 +5,7 @@ import { CLS_PREFIX } from '../../../config/const'
 
 import './style.scss'
 import { Dropdown, Menu, Typography } from 'antd'
+import { uniqBy } from 'lodash-es'
 import { MometaHTMLElement } from '../../dom-api'
 import { useSelectedNode, api } from '@@__mometa-external/shared'
 
@@ -25,7 +26,12 @@ const MoreButton: React.FC<MoreButtonProps> = React.memo(({ className, dom }) =>
       className={c('__dropdown')}
       onVisibleChange={(v) => {
         if (v && !paths.length) {
-          setPaths(dom.__mometa.findParents({ includeSelf: false }))
+          const key = dom.__mometa.getKey()
+          setPaths(
+            uniqBy(dom.__mometa.findParents({ includeSelf: false }), (x) => x.__mometa.getKey()).filter(
+              (x) => x.__mometa.getKey() !== key
+            )
+          )
         }
       }}
       overlay={
@@ -43,19 +49,7 @@ const MoreButton: React.FC<MoreButtonProps> = React.memo(({ className, dom }) =>
                     setSelectedNode(node)
                   }}
                 >
-                  {isActive ? (
-                    <Typography.Link>
-                      {'<'}
-                      {data.name}
-                      {'/>'}
-                    </Typography.Link>
-                  ) : (
-                    <span>
-                      {'<'}
-                      {data.name}
-                      {'/>'}
-                    </span>
-                  )}
+                  {isActive ? <Typography.Link>{data.name}</Typography.Link> : <span>{data.name}</span>}
                 </Menu.Item>
               )
             })}

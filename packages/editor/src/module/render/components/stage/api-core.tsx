@@ -1,8 +1,9 @@
 import type { RequestData } from '@mometa/fs-handler'
 import axios, { AxiosInstance } from 'axios'
-import { addUpdateCallbackListener } from '../../../../shared/hot'
+import { addExecuteRuntimeListener, addUpdateCallbackListener } from '../../../../shared/hot'
 import { OpType } from '@mometa/fs-handler'
 import { ReactNode } from 'react'
+import { pick } from 'lodash-es'
 import React from 'react'
 
 export interface Toast {
@@ -63,6 +64,15 @@ export abstract class ApiCore {
   }
 
   public async submitOperation(requestData: RequestData): Promise<boolean> {
+    requestData.preload = pick(requestData.preload, [
+      'filename',
+      'relativeFilename',
+      'start',
+      'end',
+      'text',
+      'data',
+      'to'
+    ])
     const p = new Promise((resolve, reject) => {
       let updated
       let received
@@ -79,7 +89,7 @@ export abstract class ApiCore {
         }
       }
 
-      let dispose = addUpdateCallbackListener((exports, id) => {
+      let dispose = addExecuteRuntimeListener((exports, id) => {
         if (`./${requestData.preload.relativeFilename}` === id) {
           updated = true
           resolveMaybe()
@@ -95,7 +105,9 @@ export abstract class ApiCore {
 
     const stringType = {
       [OpType.DEL]: '删除',
-      [OpType.REPLACE_NODE]: '替换节点'
+      [OpType.REPLACE_NODE]: '替换节点',
+      [OpType.MOVE_NODE]: '移动节点',
+      [OpType.INSERT_NODE]: '插入节点'
     }[requestData.type]
 
     return this.doAsync(p, {

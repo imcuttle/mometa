@@ -43,6 +43,13 @@ export default function babelPluginMometaReactInject(api) {
           }
 
           const visitor = {
+            JSXExpressionContainer() {
+              /**
+               * <div>
+               *   {element}
+               * </div>
+               */
+            },
             JSXElement: {
               enter(path) {
                 if (this.cache.has(path.node)) {
@@ -96,7 +103,10 @@ export default function babelPluginMometaReactInject(api) {
                  * </div>
                  *
                  * <Render>
-                 *   {() => <p>1</p>}
+                 *   {() => <p>
+                 *     <div>1</div>
+                 *     <div>2</div>
+                 *   </p>}
                  *   {<p>2</p>}
                  *   <p>3</p>
                  *   123
@@ -106,14 +116,12 @@ export default function babelPluginMometaReactInject(api) {
                   (pPath) => pPath !== path && (pPath.isJSXElement() || pPath.isJSXFragment())
                 )
                 if (parentPath) {
-                  const childrenPath = parentPath
-                    .get('children')
-                    .filter(
-                      (p: NodePath) =>
-                        p.isJSXElement() ||
-                        p.isJSXExpressionContainer() ||
-                        (p.isJSXText() && !!(p.node.extra.raw as string).trim())
-                    ) as NodePath[]
+                  const childrenPath = ((parentPath.get('children') as NodePath[]) ?? []).filter(
+                    (p: NodePath) =>
+                      p.isJSXElement() ||
+                      p.isJSXExpressionContainer() ||
+                      (p.isJSXText() && !!(p.node.extra.raw as string).trim())
+                  ) as NodePath[]
                   const index = childrenPath.findIndex((childPath) => {
                     if (childPath === path) return true
                     let f = false
@@ -175,7 +183,7 @@ export default function babelPluginMometaReactInject(api) {
                 }
               }
             }
-          }
+          } as PluginObj<PluginPass & { cache: WeakSet<any> }>['visitor']
 
           path.traverse(visitor, state)
         }

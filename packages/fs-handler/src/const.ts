@@ -1,5 +1,6 @@
 export const enum OpType {
   DEL,
   REPLACE_NODE,
-  SWITCH
+  MOVE_NODE,
+  INSERT_NODE
 }
