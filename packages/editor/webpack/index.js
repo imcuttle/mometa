@@ -2,36 +2,39 @@ const fs = require('fs')
 const nps = require('path')
 const { createServer } = require('./create-server')
 const injectEntry = require('./injectEntry')
+const EditorPlugin = require('./editor-plugin')
 const ReactRefreshWebpackPlugin = require('@mometa/react-refresh-webpack-plugin')
 
 const resolvePath = (moduleName) => nps.dirname(require.resolve(`${moduleName}/package.json`))
 
 const WHITE_MODULES = ['react', 'react-dom']
 
+const NAME = 'MometaEditorPlugin'
+
 module.exports = class MometaEditorPlugin {
   constructor(options = {}) {
     this.options = Object.assign(
       {
-        react: true
+        react: true,
+        serverOptions: {}
       },
       options
     )
     this.server = null
   }
-  apply(compiler) {
-    if (this.options.react && this.options.react.refresh !== false) {
-      new ReactRefreshWebpackPlugin({
-        library: compiler.options.name,
-        overlay: false
-      }).apply(compiler)
-    }
+
+  applyForEditor(compiler) {
+    // new EditorPlugin(this.options).apply(compiler)
+  }
+
+  applyForReactRuntime(compiler) {
+    if (!this.options.react) return
 
     const webpack = compiler.webpack || require('webpack')
     const { DefinePlugin } = webpack
-
     if (this.options.react) {
       compiler.options.entry = injectEntry(compiler.options.entry, {
-        prependEntries: [require.resolve('./react-runtime-entry')]
+        prependEntries: [require.resolve('./assets/react-runtime-entry')]
       })
 
       let hasJsxDevRuntime = false
@@ -44,12 +47,43 @@ module.exports = class MometaEditorPlugin {
       }).apply(compiler)
     }
 
+    if (this.options.react && this.options.react.refresh !== false) {
+      new ReactRefreshWebpackPlugin({
+        library: compiler.options.name,
+        overlay: false
+      }).apply(compiler)
+    }
+  }
+
+  applyForServer(compiler) {
+    const beforeCompile = async (params, cb) => {
+      if (this.server) {
+        return cb()
+      }
+      this.server = await createServer({
+        ...this.options.serverOptions,
+        context: compiler.context,
+        fileSystem: {
+          readFile: compiler.inputFileSystem.readFile,
+          writeFile: fs.writeFile
+        }
+      })
+
+      cb()
+    }
+    compiler.hooks.beforeCompile.tapAsync(NAME, beforeCompile)
+  }
+
+  apply(compiler) {
+    this.applyForReactRuntime(compiler)
+    this.applyForEditor(compiler)
+    this.applyForServer(compiler)
+
     let externals = compiler.options.externals || []
     if (!Array.isArray(externals)) {
       externals = [externals]
     }
     compiler.options.externals = externals
-
     externals.unshift(({ request, context = '', contextInfo = {} }, callback) => {
       const issuer = contextInfo.issuer || ''
       const whiteList = [...WHITE_MODULES.map((module) => resolvePath(module)), /__mometa_require__\.(js|jsx|ts|tsx)$/]
@@ -76,28 +110,5 @@ module.exports = class MometaEditorPlugin {
       }
       callback()
     })
-
-    const beforeCompile = async (params, cb) => {
-      if (this.server) {
-        return cb()
-      }
-      this.server = await createServer({
-        ...this.options,
-        context: compiler.context,
-        fileSystem: {
-          readFile: compiler.inputFileSystem.readFile,
-          writeFile: fs.writeFile
-        }
-      })
-
-      cb()
-    }
-    if (compiler.hooks) {
-      compiler.hooks.beforeCompile.tapAsync('mometa', beforeCompile)
-    } else {
-      compiler.plugin('beforeCompile', beforeCompile)
-    }
-
-    // createServer
   }
 }

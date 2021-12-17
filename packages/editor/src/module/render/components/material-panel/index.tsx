@@ -30,6 +30,15 @@ export interface Asset {
   name: string
   key: any
   cover?: string
+
+  data: {
+    code: string // '<Button></Button>'
+    dependencies?: Array<{
+      source: string // "antd"
+      mode: 'default' | 'named' | 'namespace' // named
+      nameHint: string // "Button"
+    }>
+  }
 }
 
 const AssetUI = React.memo<Asset>(({ cover, name }) => {

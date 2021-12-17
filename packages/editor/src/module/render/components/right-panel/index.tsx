@@ -10,7 +10,7 @@ import { useShared } from '@rcp/use.shared'
 import usePersistFn from '@rcp/use.persistfn'
 import { PreventFastClick } from '@rcp/c.preventfastop'
 import { ApiServerPack } from '../stage/create-api'
-import { OpType } from '@mometa/fs-handler'
+import { OpType } from '@mometa/fs-handler/const'
 import { CodeEditor } from '../../../../shared/code-editor'
 import { createPreload } from '../../utils/utils'
 

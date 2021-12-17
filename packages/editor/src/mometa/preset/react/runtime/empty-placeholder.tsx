@@ -1,4 +1,4 @@
-export default function ({ __mometa }) {
+export default function EmptyPlaceholder({ __mometa }) {
   const React = require('@@__mometa-external/react')
   if (!React || !require('@@__mometa-external/shared')) {
     return null

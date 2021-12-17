@@ -5,9 +5,10 @@ import { CLS_PREFIX } from '../../../config/const'
 
 import './style.scss'
 import { Dropdown, Menu, Typography } from 'antd'
-import { uniqBy } from 'lodash-es'
+import { uniqBy, groupBy } from 'lodash-es'
 import { MometaHTMLElement } from '../../dom-api'
 import { useSelectedNode, api } from '@@__mometa-external/shared'
+import { getDomName } from '../../../../../utils/dom-utils'
 
 const cn = p('')
 const c = p(`${CLS_PREFIX}-more-button`)
@@ -19,40 +20,49 @@ export interface MoreButtonProps {
 
 const MoreButton: React.FC<MoreButtonProps> = React.memo(({ className, dom }) => {
   const [, setSelectedNode] = useSelectedNode()
-  const [paths, setPaths] = React.useState([])
+  const [paths, setPaths] = React.useState(null)
+
+  const renderMenuItem = ({ mometa: data, dom: _dom }, i = 0) => {
+    const isActive = dom.__mometa.getKey() === data.hash
+    return (
+      <Menu.Item
+        key={`${data.hash}-${i}`}
+        className={c({ '-active': isActive })}
+        disabled={isActive}
+        onClick={() => {
+          setSelectedNode(null)
+          _dom.__mometa.selectedKey = data.hash
+          setSelectedNode(_dom)
+        }}
+      >
+        <span>{data.name}</span>
+        {!!isActive && <span> (自己)</span>}
+      </Menu.Item>
+    )
+  }
 
   return (
     <Dropdown
       className={c('__dropdown')}
-      onVisibleChange={(v) => {
-        if (v && !paths.length) {
-          const key = dom.__mometa.getKey()
-          setPaths(
-            uniqBy(dom.__mometa.findParents({ includeSelf: false }), (x) => x.__mometa.getKey()).filter(
-              (x) => x.__mometa.getKey() !== key
-            )
-          )
-        }
-      }}
       overlay={
         <Menu>
           <Menu.SubMenu title={'选中层级'} popupOffset={[0, 0]}>
-            {paths.map((node, i) => {
-              const data = node.__mometa.getMometaData()
-              const isActive = dom.__mometa.getKey() === node.__mometa.getKey()
-              return (
-                <Menu.Item
-                  key={node.__mometa.getKey()}
-                  className={c({ '-active': isActive })}
-                  disabled={isActive}
-                  onClick={() => {
-                    setSelectedNode(node)
-                  }}
-                >
-                  {isActive ? <Typography.Link>{data.name}</Typography.Link> : <span>{data.name}</span>}
-                </Menu.Item>
-              )
-            })}
+            {!!paths &&
+              Array.from(paths.keys()).map((groupDom, i) => {
+                const list = paths.get(groupDom)
+                if (!list.length) {
+                  return null
+                }
+                if (list.length > 1) {
+                  return (
+                    <Menu.ItemGroup key={`group-${i}`} title={`${getDomName(groupDom as any)} (DOM)`}>
+                      {list.map(renderMenuItem)}
+                    </Menu.ItemGroup>
+                  )
+                }
+
+                return renderMenuItem(list[0])
+              })}
           </Menu.SubMenu>
           <Menu.Item
             onClick={() => {
@@ -71,6 +81,20 @@ const MoreButton: React.FC<MoreButtonProps> = React.memo(({ className, dom }) =>
           </Menu.Item>
         </Menu>
       }
+      onVisibleChange={(v) => {
+        if (v && !paths) {
+          const paths = new Map()
+          dom.__mometa.findParents().forEach((data) => {
+            if (data.dom) {
+              const arr = paths.get(data.dom) || []
+              arr.push(data)
+              paths.set(data.dom, arr)
+            }
+          })
+
+          setPaths(paths)
+        }
+      }}
     >
       <MenuOutlined className={cn(c(), className)} />
     </Dropdown>

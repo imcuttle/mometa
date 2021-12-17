@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events'
 import React from '@@__mometa-external/react'
-import { parseReactDomNodeDeep, ReactFiber } from '../../../utils/dom-utils'
+import { parseReactDomNode, parseReactDomNodeDeep, ReactFiber } from '../../../utils/dom-utils'
 
 const findClosest = <T extends HTMLElement>(
   from: T,
@@ -16,10 +16,30 @@ const findClosest = <T extends HTMLElement>(
   }
 }
 
+const findClosestFiber = <T extends ReactFiber = ReactFiber>(
+  from: T,
+  isPass: (v: T) => boolean | T
+  // eslint-disable-next-line consistent-return
+) => {
+  let t = from
+  while (t) {
+    const res = isPass(t)
+    if (res === true) {
+      return t
+    }
+    if (res) {
+      t = res
+    }
+    t = t.return as any
+  }
+}
+
 export class MometaDomApi extends EventEmitter {
   constructor(public dom: HTMLElement) {
     super()
   }
+
+  public selectedKey: string = null
 
   protected _preventDefault = (evt) => {
     const closestPass = findClosest(evt.target, (x) => x.__mometa && !x.__mometa.preventEvent)
@@ -39,28 +59,61 @@ export class MometaDomApi extends EventEmitter {
     }
   }
 
-  public getMometaData(): MometaData {
-    return parseReactDomNodeDeep(this.dom)?.mometa
+  public getMometaList() {
+    const parents = []
+    const data = parseReactDomNodeDeep(this.dom)
+    if (data?.fiber) {
+      findClosestFiber(data.fiber, (f) => {
+        while (f && !f._debugSource?.__mometa) {
+          f = f.return
+        }
+        let t = f
+        while (t && !(t.stateNode instanceof HTMLElement)) {
+          t = t.child
+        }
+        if (t) {
+          if (t.stateNode !== this.dom) {
+            return true
+          }
+          parents.push(f._debugSource?.__mometa)
+        }
+        return f
+      })
+    }
+    return parents
   }
 
-  public getMometaReactFiber(): ReactFiber | undefined {
-    return parseReactDomNodeDeep(this.dom)?.fiber
+  public getMometaData(): MometaData {
+    const list = this.getMometaList()
+    return list.find((x) => x.hash === this.selectedKey) ?? list[0]
   }
 
   public getKey() {
     return this.getMometaData()?.hash
   }
 
-  findParents({ includeSelf = true }: { includeSelf?: boolean } = {}) {
+  findParents() {
     const parents = []
-    findClosest(this.dom as MometaHTMLElement, (x) => {
-      if (x.__mometa) {
-        if ((includeSelf && x === this.dom) || this.dom !== x) {
-          parents.push(x)
+    const data = parseReactDomNodeDeep(this.dom)
+    if (data?.fiber) {
+      findClosestFiber(data.fiber, (f) => {
+        while (f && !f._debugSource?.__mometa) {
+          f = f.return
         }
-      }
-      return false
-    })
+        let t = f
+        while (t && !(t.stateNode instanceof HTMLElement)) {
+          t = t.child
+        }
+        if (t) {
+          parents.push({
+            dom: t.stateNode,
+            mometa: f._debugSource?.__mometa
+          })
+        }
+        return f
+      })
+    }
+
     return parents
   }
 }

@@ -8,6 +8,7 @@ export default function insertNodeMiddleware(): Middleware {
         return next()
       }
 
+      // TODO
       const { newText = '', anotherTo, wrapStart = '', wrapEnd = '' } = data.preload.data || {}
       const line = ctx.lineContents.locateLineByPos(toPos.line)
       line.setContent(line.slice(0, toPos.column).content + newText + line.slice(toPos.column ?? Infinity).content)

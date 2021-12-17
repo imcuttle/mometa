@@ -21,12 +21,13 @@ const c = p(`${CLS_PREFIX}`)
 export interface EditorProps {
   className?: string
   apiBaseURL?: string
+  bundlerURL?: StageProps['bundlerURL']
   stageProps?: StageProps
   leftPanelProps?: LeftPanelProps
   rightPanelProps?: RightPanelProps
 }
 
-const Body = ({ className, apiBaseURL, leftPanelProps, rightPanelProps, stageProps }: EditorProps) => {
+const Body = ({ className, apiBaseURL, leftPanelProps, rightPanelProps, stageProps, bundlerURL }: EditorProps) => {
   const api = React.useMemo(() => createApi(apiBaseURL), [apiBaseURL])
   useSharedProvider(api, { key: 'api' })
 
@@ -35,7 +36,7 @@ const Body = ({ className, apiBaseURL, leftPanelProps, rightPanelProps, stagePro
       <Header />
       <div className={c('__main-content')}>
         <LeftPanel {...leftPanelProps} className={c('__l-panel')} />
-        <Stage {...stageProps} className={c('__stage')} />
+        <Stage bundlerURL={bundlerURL} {...stageProps} className={c('__stage')} />
         <RightPanel {...rightPanelProps} className={c('__r-panel')} />
       </div>
     </div>

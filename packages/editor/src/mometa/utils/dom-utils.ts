@@ -23,7 +23,7 @@ export interface ReactFiber {
   return?: ReactFiber
   child?: ReactFiber
   sibling?: ReactFiber
-  stateNode: HTMLElement | null
+  stateNode: HTMLElement | any | null
   _debugSource?: {
     __mometa: MometaData
   }
@@ -99,4 +99,15 @@ export function parseReactDomNode(dom: HTMLElement) {
       fiber: dom[fiberName] as ReactFiber
     }
   }
+}
+
+export function getDomName(dom: HTMLElement) {
+  let name = dom.localName
+  if (dom.id) {
+    name += `#${dom.id}`
+  }
+  if (dom.getAttribute('class')) {
+    name += `.${dom.getAttribute('class')}`
+  }
+  return name
 }

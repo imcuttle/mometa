@@ -99,7 +99,7 @@ checkBrowsers(paths.appPath, isInteractive)
       }
 
       console.log(chalk.cyan('Starting the development server...\n'))
-      openBrowser(urls.localUrlForBrowser)
+      openBrowser(urls.localUrlForBrowser + '/mometa-editor.html')
     })
     ;['SIGINT', 'SIGTERM'].forEach(function (sig) {
       process.on(sig, function () {

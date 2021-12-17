@@ -1,6 +1,7 @@
 import React from '@@__mometa-external/react'
 import { createPortal } from '@@__mometa-external/react-dom'
 import c from 'classnames'
+import { debounce } from 'lodash-es'
 import { getScrollParents } from '@floating-ui/dom'
 
 import { ArrowUpOutlined, ArrowDownOutlined, DragOutlined, DeleteOutlined } from '@ant-design/icons'
@@ -22,14 +23,26 @@ function useForceUpdate() {
 
 function usePosition(dom: HTMLElement) {
   const [data, setData] = React.useState({ isReady: false, rect: null })
-  const [v, update] = useForceUpdate()
+  const [shouldHide, setShouldHide] = React.useState(false)
 
   React.useEffect(() => {
-    const rect = dom.getBoundingClientRect()
-    setData({ rect, isReady: true })
+    const updatePos = () => {
+      const rect = dom.getBoundingClientRect()
+      setData({ rect, isReady: true })
+    }
+
+    updatePos()
     const parents = getScrollParents(dom)
 
-    const debouncedUpdate: any = update
+    const reset = debounce(() => {
+      setShouldHide(false)
+      updatePos()
+    }, 500)
+    const debouncedUpdate: any = () => {
+      setShouldHide(true)
+      reset()
+    }
+
     parents.forEach((par) => {
       par.addEventListener('resize', debouncedUpdate)
       par.addEventListener('scroll', debouncedUpdate)
@@ -41,9 +54,9 @@ function usePosition(dom: HTMLElement) {
         par.removeEventListener('scroll', debouncedUpdate)
       })
     }
-  }, [v, dom, update])
+  }, [dom])
 
-  return data
+  return { shouldHide, ...data }
 }
 
 let gDiv
@@ -81,7 +94,7 @@ export function FloatingUi({
   onClick,
   ...props
 }: FloatingUiProps) {
-  const { isReady, rect } = usePosition(dom)
+  const { isReady, shouldHide, rect } = usePosition(dom)
   const events = React.useMemo(() => ({ onClick }), [onClick])
   useProxyEvents(dom, events)
 
@@ -94,7 +107,8 @@ export function FloatingUi({
           left: rect.x,
           top: rect.y,
           width: rect.width,
-          height: rect.height
+          height: rect.height,
+          display: shouldHide ? 'none' : ''
         }}
         {...props}
       >

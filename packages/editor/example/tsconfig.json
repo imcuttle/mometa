@@ -26,7 +26,7 @@
     "baseUrl": ".",
     "paths": {
       "@mometa/fs-handler": ["../../fs-handler/src"],
-      "@mometa/fs-handler/*": ["../../fs-handler/*"],
+      "@mometa/fs-handler/*": ["../../fs-handler/src/*"],
       "@mometa/editor": ["../src"],
       "@mometa/editor/*": ["../src/*"]
     }

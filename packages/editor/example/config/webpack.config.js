@@ -82,6 +82,11 @@ const hasJsxRuntime = (() => {
   }
 })()
 
+const __MOMETA_LOCAL__ = process.env.__MOMETA_LOCAL__
+const resolvePath = (moduleName) => nps.dirname(require.resolve(`${moduleName}/package.json`))
+
+const WHITE_PATHS = ['react', 'react-dom'].map(resolvePath)
+
 // This is the production and development configuration.
 // It is focused on developer experience, fast rebuilds, and a minimal bundle.
 function getSingleConfig(
@@ -99,7 +104,7 @@ function getSingleConfig(
   // as %PUBLIC_URL% in `index.html` and `process.env.PUBLIC_URL` in JavaScript.
   // Omit trailing slash as %PUBLIC_URL%/xyz looks better than %PUBLIC_URL%xyz.
   // Get environment variables to inject into our app.
-  const env = getClientEnvironment(paths.publicUrlOrPath.slice(0, -1))
+  const env = getClientEnvironment(paths.publicUrlOrPath)
 
   const shouldUseReactRefresh = refresh === false ? false : env.raw.FAST_REFRESH
 
@@ -171,6 +176,9 @@ function getSingleConfig(
   const basename = `${name}/`
   const DATETIME = moment().utcOffset(8, false).format('YYYYMMDD_HHmm')
 
+  let entries = entry || paths.appIndexJs
+  entries = Array.isArray(entries) ? entries : [entries]
+
   return {
     ignoreWarnings: [/Failed to parse source map/],
     target: ['browserslist'],
@@ -184,7 +192,7 @@ function getSingleConfig(
       : isEnvDevelopment && 'cheap-module-source-map',
     // These are the "entry points" to our application.
     // This means they will be the "root" imports that are included in JS bundle.
-    entry: entry || paths.appIndexJs,
+    entry: entries,
     name,
     output: {
       // The build folder.
@@ -541,41 +549,40 @@ function getSingleConfig(
         }
       ].filter(Boolean)
     },
+    externals: !__MOMETA_LOCAL__
+      ? ({ request, context, contextInfo }, cb) => {
+          const issuer = contextInfo.issuer || ''
+          if (
+            /^(react|react-dom)$/.test(request) &&
+            ![nps.resolve(__dirname, 'entry/__mometa_outer_vendor__.js')]
+              .concat(WHITE_PATHS)
+              .find((x) => issuer.startsWith(x))
+          ) {
+            return cb(null, `__mometa_outer_vendor_require__(${JSON.stringify(request)})`)
+          }
+          return cb()
+        }
+      : undefined,
     plugins: [
       ...plugins,
       new webpack.DefinePlugin({
-        __CLIENT__: process.env.MOMETA_MODE === 'client'
+        __CLIENT__: process.env.MOMETA_MODE === 'client',
+        __MOMETA_LOCAL__: !!__MOMETA_LOCAL__
       }),
       new FilterWarningsPlugin({
         exclude: /Critical dependency: the request of a dependency is an expression/
       }),
-      new NodePolyfillPlugin(),
+      // new NodePolyfillPlugin(),
       // Generates an `index.html` file with the <script> injected.
       opts.htmlName &&
         new HtmlWebpackPlugin(
-          Object.assign(
-            {
-              inject: true,
-              template: paths.appHtml,
-              filename: opts.htmlName
-            },
-            isEnvProduction
-              ? {
-                  minify: {
-                    removeComments: true,
-                    collapseWhitespace: true,
-                    removeRedundantAttributes: true,
-                    useShortDoctype: true,
-                    removeEmptyAttributes: true,
-                    removeStyleLinkTypeAttributes: true,
-                    keepClosingSlash: true,
-                    minifyJS: true,
-                    minifyCSS: true,
-                    minifyURLs: true
-                  }
-                }
-              : undefined
-          )
+          Object.assign({
+            inject: true,
+            template: paths.appHtml,
+            filename: opts.htmlName,
+            minify: false
+            // chunks: [name, 'main']
+          })
         ),
       // Inlines the webpack runtime script. This script is too small to warrant
       // a network request.
@@ -735,41 +742,30 @@ function getSingleConfig(
 }
 
 module.exports = function getConfig(webpackEnv) {
-  return [
-    getSingleConfig(webpackEnv, {
-      name: 'app',
-      htmlName: 'bundler.html',
-      entry: paths.resolveApp('src/app/index.tsx'),
-      babelPresets: [],
-      babelPlugins: [require.resolve('../../babel/plugin-react-runtime')],
-      plugins: [
-        new MometaEditorPlugin({
-          editorServe: false,
-          react: true
+  return __MOMETA_LOCAL__
+    ? [
+        getSingleConfig(webpackEnv, {
+          name: 'app',
+          htmlName: 'bundler.html',
+          entry: paths.resolveApp('src/app/index.tsx'),
+          babelPlugins: [require.resolve('../../babel/plugin-react-runtime')],
+          plugins: [
+            new MometaEditorPlugin({
+              react: true
+            })
+          ],
+          refresh: false
+        }),
+        getSingleConfig(webpackEnv, {
+          refresh: false,
+          name: 'editor',
+          htmlName: 'index.html'
         })
-      ],
-      refresh: false
-    }),
-    getSingleConfig(webpackEnv, {
-      refresh: false,
-      name: 'editor',
-      htmlName: 'index.html'
-    })
-    // getSingleConfig(webpackEnv, {
-    //   name: 'preview',
-    //   htmlName: 'preview.html',
-    //   entry: paths.resolveApp('src/preview.tsx')
-    // }),
-    // getSingleConfig(webpackEnv, {
-    //   name: 'status-embed',
-    //   htmlName: 'status-embed.html',
-    //   entry: paths.resolveApp('src/status-embed.tsx')
-    // })
-    // getSingleConfig(webpackEnv, {
-    //   name: 'pack-worker',
-    //   filename: 'pack-worker.js',
-    //   htmlName: null,
-    //   entry: paths.resolveApp('src/pack.ts')
-    // })
-  ]
+      ]
+    : getSingleConfig(webpackEnv, {
+        entry: [nps.resolve(__dirname, 'entry/__mometa_outer_vendor__.js'), paths.appIndexJs],
+        refresh: false,
+        name: 'editor',
+        htmlName: 'index.html'
+      })
 }

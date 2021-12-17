@@ -1,6 +1,6 @@
 import { Button, message, Modal, Typography } from 'antd'
 import { ApiCore } from './api-core'
-import { OpType } from '@mometa/fs-handler'
+import { OpType } from '@mometa/fs-handler/const'
 import React from 'react'
 
 import { CodeEditor } from '../../../../shared/code-editor'

@@ -1,4 +1,4 @@
-import { RequestData } from '@mometa/fs-handler'
+import type { RequestData } from '@mometa/fs-handler'
 
 export function createPreload(data: any, other?: Omit<RequestData['preload'], 'relativeFilename' | 'filename'>) {
   return {

@@ -16,11 +16,15 @@
   ],
   "scripts": {
     "test": "../../scripts/run test",
-    "build": "../../scripts/run babel-build",
+    "build": "cd example && npm run build",
+    "__build": "../../scripts/run build",
     "packlimit": "../../scripts/run packlimit",
     "dev": "npm run build -- --watch",
     "prepublishOnly": "npm run build && npm run packlimit",
     "version": "npm test && npm run packlimit"
+  },
+  "peerDependencies": {
+    "html-webpack-plugin": "*"
   },
   "dependencies": {
     "chalk": "^2.4.2",

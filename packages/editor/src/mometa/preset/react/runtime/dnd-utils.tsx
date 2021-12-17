@@ -7,6 +7,9 @@ import { OveringFloat } from './floating-ui'
 import { MometaHTMLElement, MometaDomApi } from './dom-api'
 
 function isDropableDom(dom: HTMLElement) {
+  if (dom.localName === EMPTY_PLACEHOLDER_NAME) {
+    return false
+  }
   const res = parseReactDomNodeDeep(dom)
   // return !!res?.mometa
   // 寻找第一个 fiber 节点 (stateNode === dom)

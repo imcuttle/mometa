@@ -1,7 +1,7 @@
 import type { RequestData } from '@mometa/fs-handler'
 import axios, { AxiosInstance } from 'axios'
 import { addExecuteRuntimeListener, addUpdateCallbackListener } from '../../../../shared/hot'
-import { OpType } from '@mometa/fs-handler'
+import { OpType } from '@mometa/fs-handler/const'
 import { ReactNode } from 'react'
 import { pick } from 'lodash-es'
 import React from 'react'
@@ -90,6 +90,7 @@ export abstract class ApiCore {
       }
 
       let dispose = addExecuteRuntimeListener((exports, id) => {
+        // @ts-ignore
         if (`./${requestData.preload.relativeFilename}` === id) {
           updated = true
           resolveMaybe()
