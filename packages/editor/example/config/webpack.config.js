@@ -57,6 +57,20 @@ const disableESLintPlugin = process.env.DISABLE_ESLINT_PLUGIN === 'true'
 
 const imageInlineSizeLimit = parseInt(process.env.IMAGE_INLINE_SIZE_LIMIT || '10000')
 
+const lessLoader = {
+  loader: 'less-loader',
+  options: {
+    lessOptions: {
+      modifyVars: {
+        'ant-prefix': 'mmt-ant'
+      },
+      javascriptEnabled: true,
+      strictMath: false,
+      noIeCompat: true
+    }
+  }
+}
+
 // Check if TypeScript is setup
 const useTypeScript = fs.existsSync(paths.appTsConfig)
 
@@ -83,7 +97,7 @@ const hasJsxRuntime = (() => {
 })()
 
 const __MOMETA_LOCAL__ = process.env.__MOMETA_LOCAL__
-const resolvePath = (moduleName) => nps.dirname(require.resolve(`${moduleName}/package.json`))
+const resolvePath = (moduleName) => nps.join(nps.dirname(require.resolve(`${moduleName}/package.json`)), '/')
 
 const WHITE_PATHS = ['react', 'react-dom'].map(resolvePath)
 
@@ -91,7 +105,17 @@ const WHITE_PATHS = ['react', 'react-dom'].map(resolvePath)
 // It is focused on developer experience, fast rebuilds, and a minimal bundle.
 function getSingleConfig(
   webpackEnv,
-  { entry, name, plugins = [], babelPresets = [], babelPlugins = [], refresh, ...opts }
+  {
+    entry,
+    name,
+    plugins = [],
+    outputPath,
+    babelPresets = [],
+    cssExtract = webpackEnv === 'production',
+    babelPlugins = [],
+    refresh,
+    ...opts
+  }
 ) {
   const isEnvDevelopment = webpackEnv === 'development'
   const isEnvProduction = webpackEnv === 'production'
@@ -112,7 +136,7 @@ function getSingleConfig(
   const getStyleLoaders = (cssOptions, preProcessor) => {
     const loaders = [
       isEnvDevelopment && require.resolve('style-loader'),
-      isEnvProduction && {
+      cssExtract && {
         loader: MiniCssExtractPlugin.loader,
         // css is located in `static/css`, use '../../' to locate index.html folder
         // in production `paths.publicUrlOrPath` can be a relative path
@@ -162,12 +186,14 @@ function getSingleConfig(
             root: paths.appSrc
           }
         },
-        {
-          loader: require.resolve(preProcessor),
-          options: {
-            sourceMap: true
-          }
-        }
+        typeof preProcessor === 'string'
+          ? {
+              loader: require.resolve(preProcessor),
+              options: {
+                sourceMap: true
+              }
+            }
+          : preProcessor
       )
     }
     return loaders
@@ -196,7 +222,7 @@ function getSingleConfig(
     name,
     output: {
       // The build folder.
-      path: paths.appBuild,
+      path: outputPath || paths.appBuild,
       // Add /* filename */ comments to generated require()s in the output.
       pathinfo: isEnvDevelopment,
       // There will be one main bundle, and one file per asynchronous chunk.
@@ -235,7 +261,7 @@ function getSingleConfig(
       level: 'none'
     },
     optimization: {
-      minimize: isEnvProduction,
+      minimize: false,
       minimizer: [
         // This is only used in production mode
         new TerserPlugin({
@@ -422,7 +448,7 @@ function getSingleConfig(
 
                 plugins: [
                   ...babelPlugins,
-                  ['babel-plugin-import', { libraryName: 'antd', style: 'css' }],
+                  ['babel-plugin-import', { libraryName: 'antd', style: true }],
                   isEnvDevelopment && shouldUseReactRefresh && require.resolve('react-refresh/babel')
                 ].filter(Boolean),
                 // This is a feature of `babel-loader` for webpack (not Babel itself).
@@ -491,6 +517,25 @@ function getSingleConfig(
                   getLocalIdent: getCSSModuleLocalIdent
                 }
               })
+            },
+
+            {
+              test: /\.less$/,
+              use: getStyleLoaders(
+                {
+                  importLoaders: 3,
+                  sourceMap: isEnvProduction ? shouldUseSourceMap : isEnvDevelopment,
+                  modules: {
+                    mode: 'icss'
+                  }
+                },
+                lessLoader
+              ),
+              // Don't consider CSS imports dead code even if the
+              // containing package claims to have no side effects.
+              // Remove this when webpack adds a warning or an error for this.
+              // See https://github.com/webpack/webpack/issues/6571
+              sideEffects: true
             },
             // Opt-in support for SASS (using .scss or .sass extensions).
             // By default we support SASS Modules with the
@@ -618,7 +663,7 @@ function getSingleConfig(
       // a plugin that prints an error when you attempt to do this.
       // See https://github.com/facebook/create-react-app/issues/240
       isEnvDevelopment && new CaseSensitivePathsPlugin(),
-      isEnvProduction &&
+      cssExtract &&
         new MiniCssExtractPlugin({
           // Options similar to the same options in webpackOptions.output
           // both options are optional
@@ -762,10 +807,21 @@ module.exports = function getConfig(webpackEnv) {
           htmlName: 'index.html'
         })
       ]
-    : getSingleConfig(webpackEnv, {
-        entry: [nps.resolve(__dirname, 'entry/__mometa_outer_vendor__.js'), paths.appIndexJs],
-        refresh: false,
-        name: 'editor',
-        htmlName: 'index.html'
-      })
+    : [
+        getSingleConfig('production', {
+          entry: [nps.resolve(__dirname, 'entry/__mometa_outer_vendor__.js'), paths.appIndexJs],
+          refresh: false,
+          name: 'editor',
+          outputPath: nps.join(paths.appBuild, 'production'),
+          htmlName: 'index.html'
+        }),
+        getSingleConfig('development', {
+          cssExtract: true,
+          entry: [nps.resolve(__dirname, 'entry/__mometa_outer_vendor__.js'), paths.appIndexJs],
+          refresh: false,
+          name: 'editor',
+          outputPath: nps.join(paths.appBuild, 'development'),
+          htmlName: 'index.html'
+        })
+      ]
 }

@@ -123,7 +123,7 @@ const BaseInfoForm = () => {
       )}
     </div>
   ) : (
-    <Empty />
+    <Empty description={'请选中编辑元素'} style={{ marginTop: 20 }} />
   )
 }
 

@@ -43,10 +43,14 @@ const Body = ({ className, apiBaseURL, leftPanelProps, rightPanelProps, stagePro
   )
 }
 
+ConfigProvider.config({
+  prefixCls: 'mmt-ant'
+})
+
 const Editor: React.FC<EditorProps> = React.memo((props) => {
   return (
     <SharedProvider>
-      <ConfigProvider locale={zhCN}>
+      <ConfigProvider locale={zhCN} prefixCls={'mmt-ant'}>
         <DndProvider backend={HTML5Backend}>
           <Body {...props} />
         </DndProvider>

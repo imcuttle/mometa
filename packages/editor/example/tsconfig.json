@@ -27,6 +27,8 @@
     "paths": {
       "@mometa/fs-handler": ["../../fs-handler/src"],
       "@mometa/fs-handler/*": ["../../fs-handler/src/*"],
+      "@mometa/materials-generator": ["../../materials-generator/src"],
+      "@mometa/materials-generator/*": ["../../materials-generator/src/*"],
       "@mometa/editor": ["../src"],
       "@mometa/editor/*": ["../src/*"]
     }

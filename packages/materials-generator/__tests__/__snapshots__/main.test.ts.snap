@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`materialsGenerator spec case 1`] = `
+Array [
+  Object {
+    "assetGroups": Array [
+      Object {
+        "key": "groups-b",
+        "name": "groups-b",
+      },
+      Object {
+        "key": "groups-a",
+        "name": "groups-a",
+      },
+    ],
+    "key": "a",
+    "name": "a",
+  },
+]
+`;

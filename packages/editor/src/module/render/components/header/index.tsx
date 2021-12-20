@@ -16,7 +16,7 @@ interface Data {
 }
 
 const { useSubject, subject } = createReactBehaviorSubject<Data>({
-  canSelect: false
+  canSelect: true
 })
 
 export const useHeaderStatus = useSubject

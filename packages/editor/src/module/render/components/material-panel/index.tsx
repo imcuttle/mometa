@@ -5,6 +5,7 @@ import { useDrag } from 'react-dnd'
 import { CLS_PREFIX } from '../../../config/const'
 
 import './style.scss'
+import type { Material, Asset, AssetGroup } from '@mometa/materials-generator/types'
 
 const cn = p('')
 const c = p(`${CLS_PREFIX}-material-panel`)
@@ -12,33 +13,6 @@ const c = p(`${CLS_PREFIX}-material-panel`)
 export interface MaterialPanelProps {
   className?: string
   materials: Material[]
-}
-
-export interface Material {
-  name: string
-  key: any
-  assetGroups: AssetGroup[]
-}
-
-export interface AssetGroup {
-  name: string
-  key: any
-  assets: Asset[]
-}
-
-export interface Asset {
-  name: string
-  key: any
-  cover?: string
-
-  data: {
-    code: string // '<Button></Button>'
-    dependencies?: Array<{
-      source: string // "antd"
-      mode: 'default' | 'named' | 'namespace' // named
-      nameHint: string // "Button"
-    }>
-  }
 }
 
 const AssetUI = React.memo<Asset>(({ cover, name }) => {
@@ -73,7 +47,7 @@ const AssetUI = React.memo<Asset>(({ cover, name }) => {
   return <>{renderComp({ ref: drag, opacity, className: isDragging && '-dragging' })}</>
 })
 
-const AssetGroup: React.FC<{ assetGroup: AssetGroup }> = React.memo(({ assetGroup }) => {
+const AssetGroupComp: React.FC<{ assetGroup: AssetGroup }> = React.memo(({ assetGroup }) => {
   return (
     <div className={c('__asset-group')}>
       <h5>{assetGroup.name}</h5>
@@ -94,7 +68,7 @@ const MaterialPanel: React.FC<MaterialPanelProps> = React.memo(({ className, mat
       <div key={mat.key} className={c('__mp', mat.key === materialValue && '__map-active')}>
         {mat.assetGroups.map((group, index, { length }) => (
           <div key={group.key}>
-            <AssetGroup assetGroup={group} />
+            <AssetGroupComp assetGroup={group} />
             {index !== length - 1 && <Divider type={'horizontal'} />}
           </div>
         ))}
@@ -104,7 +78,7 @@ const MaterialPanel: React.FC<MaterialPanelProps> = React.memo(({ className, mat
 
   return (
     <div className={cn(c(), className)}>
-      {!materials?.length && <Empty />}
+      {!materials?.length && <Empty description={'暂无物料'} style={{ marginTop: 20 }} />}
       {!!materials?.length && (
         <>
           {materials?.length > 1 && (

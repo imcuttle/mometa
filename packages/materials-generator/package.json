@@ -1,0 +1,40 @@
+{
+  "name": "@mometa/materials-generator",
+  "version": "0.0.0",
+  "publishConfig": {
+    "access": "public"
+  },
+  "author": "余聪 <yucong@yuanfudao.com>",
+  "description": "物料生成器",
+  "main": "lib",
+  "types": "types",
+  "module": "es",
+  "files": [
+    "lib",
+    "es",
+    "types"
+  ],
+  "scripts": {
+    "test": "../../scripts/run test",
+    "build": "../../scripts/run build",
+    "packlimit": "../../scripts/run packlimit",
+    "dev": "npm run build -- --watch",
+    "prepublishOnly": "npm run build && npm run packlimit",
+    "version": "npm test && npm run packlimit"
+  },
+  "dependencies": {
+    "globby": "^12.0.2",
+    "p-queue": "^7.1.0",
+    "cosmiconfig": "^7.0.1"
+  },
+  "keywords": [
+    "余聪",
+    "materials-generator",
+    "mometa"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/imcuttle/mometa.git",
+    "directory": "packages/materials-generator"
+  }
+}

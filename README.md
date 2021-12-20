@@ -12,6 +12,7 @@
 
 - [@mometa/editor](packages/editor) - 编辑器
 - [@mometa/fs-handler](packages/fs-handler) - file updator
+- [@mometa/materials-generator](packages/materials-generator) - 物料生成器
 - [@mometa/react-refresh-webpack-plugin](packages/react-refresh-webpack-plugin) - An **EXPERIMENTAL** Webpack plugin to enable "Fast Refresh" (also previously known as _Hot Reloading_) for React components.
 
 ## Contributing

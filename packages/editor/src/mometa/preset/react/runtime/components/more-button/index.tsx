@@ -5,7 +5,6 @@ import { CLS_PREFIX } from '../../../config/const'
 
 import './style.scss'
 import { Dropdown, Menu, Typography } from 'antd'
-import { uniqBy, groupBy } from 'lodash-es'
 import { MometaHTMLElement } from '../../dom-api'
 import { useSelectedNode, api } from '@@__mometa-external/shared'
 import { getDomName } from '../../../../../utils/dom-utils'

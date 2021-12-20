@@ -52,7 +52,7 @@ const StageContent: React.FC<StageProps> = React.memo(({ className, externalModu
           RootProvider: (props) => {
             return (
               <SharedProvider _internal={{ valuesMap: _sharedMap, updateMap: _sharedUpdateMap }}>
-                <ConfigProvider locale={zhCN}>
+                <ConfigProvider locale={zhCN} prefixCls={'mmt-ant'}>
                   <Dnd.DndProvider {...props} manager={ddManager} />
                 </ConfigProvider>
               </SharedProvider>

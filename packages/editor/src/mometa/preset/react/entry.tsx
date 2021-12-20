@@ -3,6 +3,8 @@
 // 是 iframe 环境
 import { addUpdateCallbackListener } from '../../../shared/hot'
 import { injectGlobal } from '../../utils/emotion-css'
+import { ConfigProvider } from 'antd'
+import zhCN from 'antd/lib/locale/zh_CN'
 
 if (require('@@__mometa-external/shared')) {
   const { refresh } = require('../../utils/emotion-css')
@@ -30,9 +32,11 @@ if (require('@@__mometa-external/shared')) {
     require('@@__mometa-external/react-dom').render = function _render(...argv) {
       const [elem, dom, cb] = argv
       return rawRender.apply(this, [
-        <RootProvider>
-          <DndLayout dom={dom}>{elem}</DndLayout>
-        </RootProvider>,
+        <ConfigProvider locale={zhCN} prefixCls={'mmt-ant'}>
+          <RootProvider>
+            <DndLayout dom={dom}>{elem}</DndLayout>
+          </RootProvider>
+        </ConfigProvider>,
         dom,
         cb
       ])
