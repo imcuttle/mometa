@@ -42,7 +42,7 @@ LeftPanel.defaultProps = {
                     key: '@antd/button',
                     cover: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
                     data: {
-                      code: '<$ANT_BUTTON$></$ANT_BUTTON$>',
+                      code: '<ANT_BUTTON type="default">按钮</ANT_BUTTON>',
                       dependencies: {
                         ANT_BUTTON: {
                           source: 'antd',
@@ -57,7 +57,7 @@ LeftPanel.defaultProps = {
                     key: 'input',
                     cover: 'https://gw.alipayobjects.com/zos/antfincdn/aPkFc8Sj7n/method-draw-image.svg',
                     data: {
-                      code: '<$ANT_INPUT$ placeholder="请输入" />',
+                      code: '<ANT_INPUT placeholder="请输入" />',
                       dependencies: {
                         ANT_INPUT: {
                           source: 'antd',

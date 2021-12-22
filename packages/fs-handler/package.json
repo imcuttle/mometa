@@ -24,10 +24,11 @@
     "version": "npm test && npm run packlimit"
   },
   "dependencies": {
-    "run-seq": "^1.0.4",
+    "@mometa/materials-generator": "^0.0.0",
+    "memoize-fn": "^2.0.1",
     "pify": "^4.0.1",
     "prettier": "^2.5.1",
-    "memoize-fn": "^2.0.1"
+    "run-seq": "^1.0.4"
   },
   "keywords": [
     "余聪",
