@@ -1,3 +1,6 @@
+import { Material } from '../types'
+import * as nps from 'path'
+
 const isObject = (value) => typeof value === 'object' && value !== null
 
 // Customized for this use-case
@@ -85,4 +88,37 @@ export async function resolveAsyncConfig<T = any>(config: T): Promise<T> {
   await Promise.all(tasks)
 
   return newConfig
+}
+
+const myRequire = (p) => {
+  const mod = require(p)
+  if (mod.__esModule) {
+    return mod.default ?? mod
+  }
+  return mod
+}
+
+const exists = (p) => {
+  try {
+    return !!require.resolve(p)
+  } catch (e) {
+    if (e.code === 'MODULE_NOT_FOUND') {
+      return false
+    }
+    throw e
+  }
+}
+
+export async function resolveLibMatConfig<T extends Material | Material[] = Material>(path: string): Promise<T> {
+  let config: T
+  if (nps.isAbsolute(path) || path.startsWith('.')) {
+    config = myRequire(nps.resolve(path))
+  } else if (path.startsWith('@')) {
+    config = myRequire(path)
+  } else if (exists(`@mometa-mat/${path}`)) {
+    config = myRequire(`@mometa-mat/${path}`)
+  } else {
+    config = myRequire(path)
+  }
+  return resolveAsyncConfig(config)
 }
