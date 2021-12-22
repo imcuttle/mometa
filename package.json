@@ -81,7 +81,17 @@
     "testMatch": [
       "**/__test{s,}__/*.(spec|test).{t,j}s{x,}",
       "**/*.test{s,}.{t,j}s{x,}"
-    ]
+    ],
+    "moduleNameMapper": {
+      "@mometa/react-docgen-typescript$": [
+        "<rootDir>/packages/react-docgen-typescript/src",
+        "<rootDir>/../react-docgen-typescript/src"
+      ],
+      "@mometa/react-docgen-typescript/lib/(.*)$": [
+        "<rootDir>/packages/react-docgen-typescript/src/$1",
+        "<rootDir>/../react-docgen-typescript/src/$1"
+      ]
+    }
   },
   "packagePrefix": "@mometa/",
   "commitlint": {

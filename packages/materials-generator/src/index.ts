@@ -4,6 +4,7 @@ export * from './utils/resolve-async-config'
 export * from './utils/search-core'
 
 export * from './plugins/create'
+// export * from './plugins/react-component-asset'
 
 import { assets } from './plugins/assets'
 import { groups } from './plugins/groups'

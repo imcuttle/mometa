@@ -7,3 +7,15 @@ export function toArray(v: any) {
   }
   return [v]
 }
+
+export function flatten(v: any[]) {
+  const newArr = []
+  toArray(v).forEach((x) => {
+    if (Array.isArray(x)) {
+      newArr.push(...flatten(x))
+    } else {
+      newArr.push(x)
+    }
+  })
+  return newArr
+}

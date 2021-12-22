@@ -1,18 +1,19 @@
 import { Asset, Material } from '../types'
-import { toArray } from '../utils/to-array'
-import { assetsExplorer } from '../utils/search-core'
+import { flatten, toArray } from '../utils/to-array'
+import { assetExplorer } from '../utils/search-core'
 import { resolveAsyncConfig } from '../utils/resolve-async-config'
 import { resolve } from 'path'
+import { sortedGlobby } from '../utils/sorted-globby'
 
 export async function assets(findDirs: string[] | string, cwd?: string): Promise<Asset[]> {
   const list = []
-
+  const dirs = await sortedGlobby(findDirs, cwd)
   await Promise.all(
-    toArray(findDirs).map(async (dir) => {
+    dirs.map(async (dir) => {
       dir = resolve(cwd || '', dir)
-      const d = await assetsExplorer.search(dir)
+      const d = await assetExplorer.search(dir)
       if (!d.isEmpty) {
-        list.push(await resolveAsyncConfig(d.config))
+        list.push(...flatten(await resolveAsyncConfig(d.config)))
       }
     })
   )

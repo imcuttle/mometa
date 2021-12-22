@@ -1,18 +1,19 @@
 import { AssetGroup, Material } from '../types'
-import { toArray } from '../utils/to-array'
-import { groupsExplorer } from '../utils/search-core'
+import { flatten, toArray } from '../utils/to-array'
+import { groupExplorer } from '../utils/search-core'
 import { resolveAsyncConfig } from '../utils/resolve-async-config'
 import { resolve } from 'path'
+import { sortedGlobby } from '../utils/sorted-globby'
 
 export async function groups(findDirs: string[] | string, cwd?: string): Promise<AssetGroup[]> {
   const list = []
-
+  const dirs = await sortedGlobby(findDirs, cwd)
   await Promise.all(
-    toArray(findDirs).map(async (dir) => {
+    dirs.map(async (dir) => {
       dir = resolve(cwd || '', dir)
-      const d = await groupsExplorer.search(dir)
+      const d = await groupExplorer.search(dir)
       if (!d.isEmpty) {
-        list.push(await resolveAsyncConfig(d.config))
+        list.push(...flatten(await resolveAsyncConfig(d.config)))
       }
     })
   )

@@ -5,8 +5,9 @@ Array [
   Object {
     "assetGroups": Array [
       Object {
-        "key": "groups-b",
-        "name": "groups-b",
+        "assets": Array [],
+        "key": "group-b",
+        "name": "group-b",
       },
       Object {
         "key": "groups-a",
