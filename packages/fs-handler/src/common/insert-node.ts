@@ -9,7 +9,7 @@ export default function insertNodeMiddleware(): Middleware {
       }
 
       // TODO
-      const { newText = '', anotherTo, wrapStart = '', wrapEnd = '', material } = data.preload.data || {}
+      const { newText = '', wrap, material } = data.preload.data || {}
       const line = ctx.lineContents.locateLineByPos(toPos.line)
 
       line.setContent(line.slice(0, toPos.column).content + newText + line.slice(toPos.column ?? Infinity).content)

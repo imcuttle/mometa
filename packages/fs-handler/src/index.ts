@@ -36,9 +36,11 @@ export interface InsertNodePreload {
   to: Point
   data: {
     newText: string
-    anotherTo?: Point
-    wrapStart?: string
-    wrapEnd?: string
+    wrap?: {
+      anotherTo: Point
+      startStr: string
+      endStr: string
+    }
     material?: Asset['data']
   }
 }
