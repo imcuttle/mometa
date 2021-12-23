@@ -1,6 +1,7 @@
 import { Middleware, OpType } from '../index'
-import { EMPTY } from '../utils/line-contents'
 import replaceNodeMiddleware from './replace-node'
+
+import './add-material'
 
 export default function delMiddleware(): Middleware {
   return async (data, ctx, next) => {

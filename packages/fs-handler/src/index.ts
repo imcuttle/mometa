@@ -35,7 +35,7 @@ export interface InsertNodePreload {
   filename: string
   to: Point
   data: {
-    newText: string
+    newText?: string
     wrap?: {
       anotherTo: Point
       startStr: string
@@ -78,49 +78,64 @@ export interface MiddlewareContext {
   lineContents: LineContents
   lines?: ReturnType<LineContents['locateByRange']>
 
+  runLoop: (request: RequestData | RequestData[], ctx: MiddlewareContext) => Promise<any>
+
   writeFile: (data: any) => Promise<void>
 }
 
 export type Middleware = (request: RequestData, ctx: MiddlewareContext, next: () => any) => any
 
-const apiMiddle: Middleware = async (data, ctx, next) => {
-  ctx.assertLocateByRange = async () => {
-    const content = await ctx.getContent()
-    const lineContents = createLineContentsByContent(content, { filename: ctx.filename })
-    // @ts-ignore
-    if (data.preload.start && data.preload.end) {
-      // @ts-ignore
-      const lines = lineContents.locateByRange(data.preload)
+const apiMiddle = (middlewares) => {
+  return async (data, ctx, next) => {
+    ctx.runLoop = async function runLoop(req = data, context = ctx) {
+      if (Array.isArray(req)) {
+        for (const reqElement of req) {
+          await runLoop(reqElement, context)
+        }
+        return
+      }
 
-      const string = new LineContents(
-        lines.map((x) => x.line),
-        { filename: ctx.filename }
-      ).toString(false)
+      return await waterFall(middlewares, [req, context])
+    }
 
+    ctx.assertLocateByRange = async () => {
+      const content = await ctx.getContent()
+      const lineContents = createLineContentsByContent(content, { filename: ctx.filename })
       // @ts-ignore
-      if (string !== data.preload.text) {
-        throw new Error(`匹配错误
+      if (data.preload.start && data.preload.end) {
+        // @ts-ignore
+        const lines = lineContents.locateByRange(data.preload)
+
+        const string = new LineContents(
+          lines.map((x) => x.line),
+          { filename: ctx.filename }
+        ).toString(false)
+
+        // @ts-ignore
+        if (string !== data.preload.text) {
+          throw new Error(`匹配错误
 ${JSON.stringify(string)} !== ${JSON.stringify((data.preload as any).text)}`)
-      }
+        }
 
+        return {
+          lineContents,
+          lines
+        }
+      }
       return {
-        lineContents,
-        lines
+        lineContents
       }
     }
-    return {
-      lineContents
+
+    ctx.writeFile = async (data) => {
+      return pify(ctx.fs.writeFile)(ctx.filename, data)
     }
-  }
+    const { lineContents, lines } = await ctx.assertLocateByRange()
+    ctx.lineContents = lineContents
+    ctx.lines = lines
 
-  ctx.writeFile = async (data) => {
-    return pify(ctx.fs.writeFile)(ctx.filename, data)
+    return next()
   }
-  const { lineContents, lines } = await ctx.assertLocateByRange()
-  ctx.lineContents = lineContents
-  ctx.lines = lines
-
-  return next()
 }
 
 export function createFsHandler({ fs, middlewares = [] }: { fs: Fs; middlewares?: Middleware[] }) {
@@ -135,7 +150,7 @@ export function createFsHandler({ fs, middlewares = [] }: { fs: Fs; middlewares?
     }
 
     return await waterFall(
-      [apiMiddle].concat(middlewares).concat((data, ctx) => {
+      [apiMiddle(middlewares)].concat(middlewares).concat((data, ctx) => {
         if (ctx.lineContents.isDirty) {
           return ctx.writeFile(ctx.lineContents.toString())
         }

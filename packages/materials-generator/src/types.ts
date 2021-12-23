@@ -10,10 +10,12 @@ export interface AssetGroup {
   assets: Asset[]
 }
 
+// import { Button as AntButton } from 'antd'
 export interface AssetImport {
   source: string // "antd"
   mode: 'default' | 'named' | 'namespace' // named
-  name?: string // "Button"
+  imported?: string // "Button"
+  local?: string // "AntButton"
 }
 
 export interface Asset {
@@ -24,6 +26,6 @@ export interface Asset {
   data: {
     code: string // '<$ANT_BUTTON$></$ANT_BUTTON$>'
     dependencies?: Record<string, AssetImport> // { ANT_BUTTON: { name: 'Button', mode: 'named', source: 'antd' } }
-    sideEffectDependencies?: Array<AssetImport>
+    sideEffectDependencies?: Array<string>
   }
 }

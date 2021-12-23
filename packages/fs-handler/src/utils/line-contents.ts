@@ -5,6 +5,16 @@ import parserTs from 'prettier/parser-typescript'
 
 const config = resolveConfig && resolveConfig?.sync?.(process.cwd())
 
+export class Chars {
+  constructor(public chars: string[]) {}
+  insert(index: number, text: string) {
+    this.chars[index] = `${text}${this.chars[index] ?? ''}`
+  }
+  toString() {
+    return this.chars.join('')
+  }
+}
+
 export class Line<T extends string | typeof EMPTY = string | typeof EMPTY> {
   constructor(public content: T) {}
   public isDirty = false
@@ -14,8 +24,17 @@ export class Line<T extends string | typeof EMPTY = string | typeof EMPTY> {
   }
 
   setContent(c: T) {
-    this.isDirty = c !== this.content
-    this.content = c
+    if (c !== this.content) {
+      this.isDirty = true
+      this.content = c
+    }
+  }
+
+  toChars() {
+    if (typeof this.content !== 'string') {
+      throw new Error('toChars requires `this.content` is string')
+    }
+    return new Chars(this.content.split(''))
   }
 
   slice(start?: number, end?: number) {

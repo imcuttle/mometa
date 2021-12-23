@@ -24,6 +24,9 @@
     "version": "npm test && npm run packlimit"
   },
   "dependencies": {
+    "@babel/core": "^7.16.5",
+    "escape-string-regexp": "^4.0.0",
+    "lodash.groupby": "^4.6.0",
     "@mometa/materials-generator": "^0.0.0",
     "memoize-fn": "^2.0.1",
     "pify": "^4.0.1",
