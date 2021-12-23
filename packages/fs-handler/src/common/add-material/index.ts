@@ -27,7 +27,10 @@ const importPlugin = ({ t }) =>
       Program(path, state) {
         const { material, pos, ops } = state.opts
 
-        const sideEffectImportVisitorState = { result: new Map() } as SideEffectImportVisitorState
+        const sideEffectImportVisitorState = {
+          result: new Map(),
+          endImportLoc: { end: { line: 1, column: 0 }, start: { line: 1, column: 0 } }
+        } as SideEffectImportVisitorState
         path.traverse(sideEffectImportVisitor, sideEffectImportVisitorState)
         if (material.sideEffectDependencies) {
           material.sideEffectDependencies.forEach((depName) => {
