@@ -5,13 +5,13 @@ Array [
   Object {
     "assetGroups": Array [
       Object {
+        "key": "groups-a",
+        "name": "groups-a",
+      },
+      Object {
         "assets": Array [],
         "key": "group-b",
         "name": "group-b",
-      },
-      Object {
-        "key": "groups-a",
-        "name": "groups-a",
       },
     ],
     "key": "a",
