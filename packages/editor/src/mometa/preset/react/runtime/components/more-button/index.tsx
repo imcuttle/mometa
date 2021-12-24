@@ -4,6 +4,7 @@ import { NodeIndexOutlined, MenuOutlined } from '@ant-design/icons'
 import { CLS_PREFIX } from '../../../config/const'
 
 import './style.scss'
+// FIXME 动态加载 style，因为加载是在外部环境，渲染是在内部环境；需要静态构建 entry.js
 import { Dropdown, Menu, Typography } from 'antd'
 import { MometaHTMLElement } from '../../dom-api'
 import { useSelectedNode, api } from '@@__mometa-external/shared'
