@@ -63,7 +63,7 @@ export abstract class ApiCore {
     return runP
   }
 
-  public async submitOperation(requestData: RequestData): Promise<boolean> {
+  public async submitOperation(requestData: RequestData, label?: string): Promise<boolean> {
     requestData.preload = pick(requestData.preload, [
       'filename',
       'relativeFilename',
@@ -104,12 +104,14 @@ export abstract class ApiCore {
       }, reject)
     })
 
-    const stringType = {
-      [OpType.DEL]: '删除',
-      [OpType.REPLACE_NODE]: '替换节点',
-      [OpType.MOVE_NODE]: '移动节点',
-      [OpType.INSERT_NODE]: '插入节点'
-    }[requestData.type]
+    const stringType =
+      label ??
+      {
+        [OpType.DEL]: '删除',
+        [OpType.REPLACE_NODE]: '替换节点',
+        [OpType.MOVE_NODE]: '移动节点',
+        [OpType.INSERT_NODE]: '插入节点'
+      }[requestData.type]
 
     return this.doAsync(p, {
       beforeMessage: `执行 ${stringType ?? requestData.type} 操作中...`

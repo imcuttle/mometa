@@ -151,14 +151,12 @@ module.exports = class MometaEditorPluginCore {
       })
 
       compilation.hooks.additionalAssets.tapAsync(NAME, (childProcessDone) => {
-        console.log('1')
         const defer = createDefer()
         HtmlWebpackPlugin.getHooks(compilation).alterAssetTags.tapPromise(NAME, async (data) => {
           if (data.outputName === this.options.htmlFilename) {
             console.log('waiting')
             const assets = await defer.p
             const jsFiles = Object.keys(assets).filter((name) => name.endsWith('.js'))
-            console.log('jsFiles', jsFiles)
             jsFiles.forEach((jsFile) => {
               data.assetTags.scripts.push({
                 tagName: 'script',

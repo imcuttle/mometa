@@ -3,12 +3,14 @@ import p from 'prefix-classname'
 import zhCN from 'antd/lib/locale/zh_CN'
 import { ConfigProvider } from 'antd'
 import { CLS_PREFIX } from '../../config/const'
-import Header from '../components/header'
+import Header, { useHeaderStatus } from '../components/header'
 import Stage, { StageProps } from '../components/stage'
 import RightPanel, { RightPanelProps } from '../components/right-panel'
 import LeftPanel, { LeftPanelProps } from '../components/left-panel'
 
 import { SharedProvider, useSharedProvider } from '@rcp/use.shared'
+import { DoubleRightOutlined, DoubleLeftOutlined } from '@ant-design/icons'
+import { Tooltip } from 'antd'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 
@@ -27,17 +29,49 @@ export interface EditorProps {
   rightPanelProps?: RightPanelProps
 }
 
+function CollapseBtn({ hide, dir, onClick }: any) {
+  const title = hide ? '展开' : '收起'
+  const style = {
+    cursor: 'pointer',
+    color: '#1890ff'
+  }
+
+  return (
+    <div onClick={onClick} className={c('__collapse', `-collapse-${dir}`, `-collapse-${hide ? 'hide' : 'show'}`)}>
+      <Tooltip title={title}>
+        {((hide && dir === 'left') || (!hide && dir === 'right')) && <DoubleLeftOutlined style={style} />}
+        {((hide && dir === 'right') || (!hide && dir === 'left')) && <DoubleRightOutlined style={style} />}
+      </Tooltip>
+    </div>
+  )
+}
+
 const Body = ({ className, apiBaseURL, leftPanelProps, rightPanelProps, stageProps, bundlerURL }: EditorProps) => {
   const api = React.useMemo(() => createApi(apiBaseURL), [apiBaseURL])
   useSharedProvider(api, { key: 'api' })
 
+  const [{ canSelect }] = useHeaderStatus()
+
+  const [hideLeft, setHideLeft] = React.useState(false)
+  const [hideRight, setHideRight] = React.useState(false)
+  React.useEffect(() => {
+    setHideLeft(!canSelect)
+    setHideRight(!canSelect)
+  }, [canSelect])
+
   return (
     <div className={cn(c(), className)}>
-      <Header />
+      <Header bundlerURL={bundlerURL} />
       <div className={c('__main-content')}>
-        <LeftPanel {...leftPanelProps} className={c('__l-panel')} />
+        <div className={c('__panel')}>
+          <LeftPanel {...leftPanelProps} className={c('__l-panel', hideLeft && '-hide')} />
+          <CollapseBtn onClick={() => setHideLeft((x) => !x)} hide={hideLeft} dir={'left'} />
+        </div>
         <Stage bundlerURL={bundlerURL} {...stageProps} className={c('__stage')} />
-        <RightPanel {...rightPanelProps} className={c('__r-panel')} />
+        <div className={c('__panel')}>
+          <RightPanel {...rightPanelProps} className={c('__r-panel', hideRight && '-hide')} />
+          <CollapseBtn onClick={() => setHideRight((x) => !x)} hide={hideRight} dir={'right'} />
+        </div>
       </div>
     </div>
   )
@@ -60,7 +94,8 @@ const Editor: React.FC<EditorProps> = React.memo((props) => {
 })
 
 Editor.defaultProps = {
-  apiBaseURL: 'http://localhost:8686/'
+  apiBaseURL: 'http://localhost:8686/',
+  bundlerURL: '/bundler.html'
 }
 
 export default Editor

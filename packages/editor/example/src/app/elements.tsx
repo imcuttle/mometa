@@ -6,9 +6,8 @@ export const body = (
   <>
     <div>
       <p>body element</p>
-      <h3>h3</h3>
-      <h3>h3</h3>
       {<Panel />}
+      <h3>h3</h3>
     </div>
   </>
 )

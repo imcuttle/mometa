@@ -1,4 +1,11 @@
 @import '../../style/_var';
 
 .#{$prefix}-header {
+  height: 35px;
+  display: flex;
+  padding: 0 12px;
+  align-items: center;
+
+  z-index: 1;
+  box-shadow: 0 2px 4px 0 rgb(0 0 0 / 12%), 0 0 6px 0 rgb(0 0 0 / 4%);
 }

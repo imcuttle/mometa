@@ -42,6 +42,18 @@ interface MometaData extends RangeLocation {
   emptyChildren: boolean
   relativeFilename: string
   hash: string
+
+  isFirst: boolean
+  selfClosed: boolean
+  innerStart: {
+    line: number
+    column: number
+  }
+  innerEnd: {
+    line: number
+    column: number
+  }
+
   container?: {
     isFirstElement: boolean
     text: string

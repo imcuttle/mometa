@@ -73,7 +73,11 @@ export default function babelPluginMometaReactInject(api) {
                   text: getText(path.node.loc),
                   filename: this.filename,
                   relativeFilename: nps.relative(state.cwd || '', this.filename),
-                  emptyChildren: !path.node.children?.length
+                  emptyChildren: !path.node.children?.length,
+                  isFirst: !['JSXElement', 'JSXFragment'].includes(path.parentPath.node.type),
+                  selfClosed: !path.node.closingElement,
+                  innerStart: openingElement.node.loc.end,
+                  innerEnd: path.get('closingElement')?.node?.loc?.start
                 } as MometaData
 
                 mometaData.hash = hash(mometaData, { algorithm: 'md5', encoding: 'base64' })
@@ -158,7 +162,7 @@ export default function babelPluginMometaReactInject(api) {
                 const newProp = t.JSXAttribute(t.JSXIdentifier('__mometa'), t.JSXExpressionContainer(objExp))
                 openingElement.node.attributes.push(newProp)
 
-                if (!path.node.children?.length) {
+                if (!path.node.children?.length && path.node.closingElement) {
                   const emptyChildrenPlc =
                     this.emptyChildrenPlc ||
                     (this.emptyChildrenPlc = addDefault(
@@ -168,10 +172,6 @@ export default function babelPluginMometaReactInject(api) {
                         nameHint: 'MometaEmptyPlaceholder'
                       }
                     ))
-                  if (!path.node.closingElement) {
-                    // @ts-ignore
-                    path.node.closingElement = t.JSXClosingElement(t.cloneDeep(path.node.openingElement.name))
-                  }
 
                   const childNode = templateBuilder.expression(`<${emptyChildrenPlc.name} />`, {
                     plugins: ['jsx']

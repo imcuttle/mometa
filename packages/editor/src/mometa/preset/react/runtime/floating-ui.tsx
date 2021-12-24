@@ -9,23 +9,17 @@ import { css } from '../../../utils/emotion-css'
 import usePersistFn from '@rcp/use.persistfn'
 import { api } from '@@__mometa-external/shared'
 import { MometaHTMLElement, useProxyEvents } from './dom-api'
-import MoreButton from './components/more-button'
 import { PreventFastClick } from '@rcp/c.preventfastop'
-
-function useForceUpdate() {
-  const [v, setV] = React.useState(1)
-  const update = React.useCallback(() => {
-    setV((x) => x + 1)
-  }, [setV])
-
-  return [v, update]
-}
+import MoreButton from './components/more-button'
 
 function usePosition(dom: HTMLElement) {
-  const [data, setData] = React.useState({ isReady: false, rect: null })
+  const [data, setData] = React.useState({ isReady: false, rect: { width: 0, height: 0, x: 0, y: 0 } })
   const [shouldHide, setShouldHide] = React.useState(false)
 
   React.useEffect(() => {
+    if (!dom) {
+      return
+    }
     const updatePos = () => {
       const rect = dom.getBoundingClientRect()
       setData({ rect, isReady: true })
@@ -64,6 +58,11 @@ const globalGetContainer = () => {
   if (gDiv && gDiv.parentElement) {
     return gDiv
   }
+
+  if (gDiv) {
+    gDiv.remove()
+  }
+
   const div = document.createElement('div')
   Object.assign(div.style, {
     position: 'fixed',
@@ -84,16 +83,20 @@ type FloatingUiProps = JSX.IntrinsicElements['div'] & {
   centerBottomElement?: React.ReactNode
 }
 
-export function FloatingUi({
-  centerBottomElement,
-  centerTopElement,
-  rightTopElement,
-  leftTopElement,
-  dom,
-  getContainer = globalGetContainer,
-  onClick,
-  ...props
-}: FloatingUiProps) {
+export const FloatingUi = React.forwardRef<HTMLDivElement, FloatingUiProps>(function FloatingUi(
+  {
+    centerBottomElement,
+    centerTopElement,
+    rightTopElement,
+    leftTopElement,
+    children,
+    dom,
+    getContainer = globalGetContainer,
+    onClick,
+    ...props
+  },
+  ref
+) {
   const { isReady, shouldHide, rect } = usePosition(dom)
   const events = React.useMemo(() => ({ onClick }), [onClick])
   useProxyEvents(dom, events)
@@ -102,16 +105,18 @@ export function FloatingUi({
     !!isReady &&
     createPortal(
       <div
+        ref={ref}
         style={{
           position: 'absolute',
           left: rect.x,
           top: rect.y,
           width: rect.width,
-          height: rect.height,
+          minHeight: rect.height,
           display: shouldHide ? 'none' : ''
         }}
         {...props}
       >
+        {children}
         {!!leftTopElement && (
           <div
             className={css`
@@ -142,10 +147,14 @@ export function FloatingUi({
           <div
             className={css`
               display: flex;
-              transform: translateY(-100%, -50%);
+              transform: translate(-50%, -100%);
               position: absolute;
-              top: 1px;
+              top: 0px;
               left: 50%;
+              display: flex;
+              width: 100%;
+              align-items: center;
+              justify-content: center;
             `}
           >
             {centerTopElement}
@@ -155,10 +164,14 @@ export function FloatingUi({
           <div
             className={css`
               display: flex;
-              transform: translateY(-100%, -50%);
+              transform: translate(-50%, 100%);
               position: absolute;
-              bottom: 1px;
+              bottom: 0px;
               left: 50%;
+              display: flex;
+              width: 100%;
+              align-items: center;
+              justify-content: center;
             `}
           >
             {centerBottomElement}
@@ -168,7 +181,7 @@ export function FloatingUi({
       getContainer()
     )
   )
-}
+})
 
 function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms))
@@ -178,9 +191,15 @@ type OveringFloatProps = FloatingUiProps & {
   isSelected?: boolean
   onSelect?: () => void
   onDeselect?: () => void
+  isOverCurrent?: boolean
 }
 
-export function OveringFloat({ isSelected, onDeselect, onSelect, dom, getContainer, ...props }: OveringFloatProps) {
+export const OveringFloat = React.forwardRef<HTMLDivElement, OveringFloatProps>(function OveringFloat(
+  { isOverCurrent, isSelected, onDeselect, onSelect, dom, getContainer, ...props },
+  ref
+) {
+  // const { rect } = usePosition(dom)
+
   React.useEffect(() => {
     dom.__mometa.preventEvent = false
     return () => {
@@ -223,16 +242,36 @@ export function OveringFloat({ isSelected, onDeselect, onSelect, dom, getContain
     return null
   }
 
+  const commonOverCls = css`
+    min-height: 25px;
+    color: rgb(161, 160, 160);
+    font-style: italic;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: rgba(96, 125, 217, 0.3);
+    border: 1px dashed rgba(47, 84, 235, 0.8);
+
+    margin-left: -1px;
+    margin-right: -1px;
+    width: calc(100% + 2px);
+  `
+
+  const widthGte = true //rect.width >= rect.height
   return (
     <FloatingUi
+      ref={ref}
       leftTopElement={
         <div className={c(commonCss)} title={data.text}>
-          {data.name || 'Unknown'}
           {!!data.container && '*'}
+          {data.name || 'Unknown'}
         </div>
       }
       rightTopElement={
-        isSelected && (
+        isSelected &&
+        !isOverCurrent && (
           <div className={c(commonCss)}>
             <PreventFastClick onClick={() => opHandler('moving')}>
               <DragOutlined title={'按住并拖动来进行移动'} className={c(btnCss)} />
@@ -256,11 +295,66 @@ export function OveringFloat({ isSelected, onDeselect, onSelect, dom, getContain
       }
       dom={dom}
       getContainer={getContainer}
-      className={css`
-        pointer-events: none;
-        outline: ${isSelected ? '1px solid ' + color : '1px dashed ' + color};
-      `}
+      className={c(
+        css`
+        pointer-events: none; !important;
+        display: flex;
+        flex-direction: ${widthGte ? 'row' : 'column'};
+      `,
+        !isOverCurrent && css`outline: ${isSelected ? '1px solid ' + color : '1px dashed ' + color}; !important;`
+      )}
       onClick={onClickFn}
-    />
+    >
+      {!!isOverCurrent && (
+        <>
+          <div
+            data-pos={'up'}
+            className={c(
+              commonOverCls,
+              css`
+                background-color: rgba(95, 217, 129, 0.3);
+                flex: 2;
+              `
+            )}
+          >
+            放置上方
+          </div>
+          {!data.selfClosed && (
+            <div
+              data-pos={'child'}
+              className={c(
+                commonOverCls,
+                css`
+                  flex: 3;
+                `,
+                widthGte
+                  ? css`
+                      border-left: none !important;
+                      border-right: none !important;
+                    `
+                  : css`
+                      border-top: none !important;
+                      border-bottom: none !important;
+                    `
+              )}
+            >
+              放置在这
+            </div>
+          )}
+          <div
+            data-pos={'down'}
+            className={c(
+              commonOverCls,
+              css`
+                background-color: rgba(89, 214, 219, 0.3);
+                flex: 2;
+              `
+            )}
+          >
+            放置下方
+          </div>
+        </>
+      )}
+    </FloatingUi>
   )
-}
+})

@@ -2,7 +2,7 @@ import React from '@@__mometa-external/react'
 import { css } from '../../../utils/emotion-css'
 import { useDragDropManager, useDrop } from '@@__mometa-external/react-dnd'
 import { addCss, parseReactDomNode, parseReactDomNodeDeep, setStyle } from '../../../utils/dom-utils'
-import { useHeaderStatus, useSelectedNode, useOveringNode } from '@@__mometa-external/shared'
+import { api, useHeaderStatus, useSelectedNode, useOveringNode } from '@@__mometa-external/shared'
 import { OveringFloat } from './floating-ui'
 import { MometaHTMLElement, MometaDomApi } from './dom-api'
 
@@ -114,11 +114,34 @@ function useMometaDomInject(dom: MometaHTMLElement) {
 }
 
 export const DndDropableNode = React.memo(({ dom }: { dom: MometaHTMLElement }) => {
+  const overingUiRef = React.useRef(null)
   const [str, drop] = useDrop(
     () => ({
       accept: ['asset'],
-      // accept: [Colors.YELLOW, Colors.BLUE],
-      drop(_item, monitor) {},
+      drop(item: any, monitor) {
+        if (monitor.isOver({ shallow: true }) && overingUiRef.current) {
+          const clientOffset = monitor.getClientOffset()
+          const children: HTMLElement[] = overingUiRef.current.children
+          const matchedDom = Array.from(children).find((dom: HTMLElement) => {
+            const rect = dom.getBoundingClientRect()
+            if (
+              clientOffset.x >= rect.x &&
+              clientOffset.x <= rect.x + rect.width &&
+              clientOffset.y >= rect.y &&
+              clientOffset.y <= rect.y + rect.height
+            ) {
+              return true
+            }
+          })
+
+          if (matchedDom?.dataset?.pos) {
+            return api.handleViewOp('insert-asset', dom, {
+              asset: item.data,
+              direction: matchedDom?.dataset?.pos
+            })
+          }
+        }
+      },
       collect: (monitor) => {
         // dnd 在 window.parent 环境中，当前 useDrog 在 iframe 环境中，使用 collect 返回 object，对比会出现不匹配的情况
         // {}.valueOf !== window.parent.Object.prototype.valueOf
@@ -133,16 +156,6 @@ export const DndDropableNode = React.memo(({ dom }: { dom: MometaHTMLElement }) 
 
   const [{ canSelect }] = useHeaderStatus()
   const { isOverCurrent, isOver } = React.useMemo(() => JSON.parse(str), [str])
-  // eslint-disable-next-line consistent-return
-  React.useLayoutEffect(() => {
-    if (isOverCurrent) {
-      const style: any = {
-        outline: '1px dashed red'
-      }
-      return setStyle(dom, style)
-    }
-  }, [isOverCurrent, canSelect, dom])
-
   // eslint-disable-next-line consistent-return
   React.useLayoutEffect(() => {
     if (isOver) {
@@ -201,8 +214,14 @@ export const DndDropableNode = React.memo(({ dom }: { dom: MometaHTMLElement }) 
 
   return (
     <>
-      {(isEnter || isSelected) && !!dom && (
-        <OveringFloat onSelect={() => setSelNode(dom)} isSelected={isSelected} dom={dom} />
+      {(isEnter || isSelected || isOverCurrent) && !!dom && (
+        <OveringFloat
+          ref={overingUiRef}
+          isOverCurrent={isOverCurrent}
+          onSelect={() => setSelNode(dom)}
+          isSelected={isSelected}
+          dom={dom}
+        />
       )}
       <DndUndropableNode dom={dom} />
     </>

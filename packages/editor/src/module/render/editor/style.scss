@@ -1,5 +1,4 @@
 @import '../style/_var';
-@import '~@codesandbox/sandpack-react/dist/index.css';
 
 .#{$prefix} {
   display: flex;
@@ -15,12 +14,47 @@
   &__stage {
     flex: 1;
   }
-  &__l-panel {
-    width: 320px;
-    box-shadow: 0 2px 4px 0 rgb(0 0 0 / 12%), 0 0 6px 0 rgb(0 0 0 / 4%);
+
+  &__panel {
+    position: relative;
   }
+  &__l-panel,
   &__r-panel {
     width: 320px;
+    z-index: 1;
+    opacity: 1;
+    height: 100%;
+    transition: all ease 0.2s;
+  }
+  &__l-panel {
+    box-shadow: 0 0 6px 0 rgb(0 0 0 / 4%), 0 2px 4px 0 rgb(0 0 0 / 12%);
+  }
+  &__r-panel {
     box-shadow: 0 2px 4px 0 rgb(0 0 0 / 12%), 0 0 6px 0 rgb(0 0 0 / 4%);
+  }
+
+  &__collapse {
+    position: absolute;
+    transform: translate(0, -50%);
+  }
+
+  &-collapse-left {
+    right: 0;
+    top: 50%;
+  }
+  &-collapse-right {
+    left: 0;
+    top: 50%;
+  }
+
+  &-collapse-hide {
+    //transform: translate(100%, -50%);
+  }
+  &-collapse-show {
+  }
+
+  &-hide {
+    width: 0;
+    opacity: 0;
   }
 }

@@ -27,7 +27,12 @@ module.exports = class MometaEditorPlugin {
       {
         react: true,
         contentBasePath: 'mometa',
-        editorConfig: {},
+        editorConfig: {
+          bundlerURL: '/',
+          apiBaseURL: `http://localhost:${
+            options.serverOptions && options.serverOptions.port ? options.serverOptions.port : 8686
+          }/`
+        },
         serverOptions: {}
       },
       options

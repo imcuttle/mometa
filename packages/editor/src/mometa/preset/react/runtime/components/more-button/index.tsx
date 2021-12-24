@@ -34,7 +34,10 @@ const MoreButton: React.FC<MoreButtonProps> = React.memo(({ className, dom }) =>
           setSelectedNode(_dom)
         }}
       >
-        <span>{data.name}</span>
+        <span>
+          {!!data.container && '*'}
+          {data.name}
+        </span>
         {!!isActive && <span> (自己)</span>}
       </Menu.Item>
     )

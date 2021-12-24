@@ -115,12 +115,12 @@ const BaseInfoForm = () => {
           </Form.Item>
         </div>
       </Form>
-      {process.env.NODE_ENV === 'development' && (
-        <>
+      {
+        /*process.env.NODE_ENV === 'development' && */ <>
           <p> </p>
           <CodeEditor readOnly height={'300px'} language={'json'} value={JSON.stringify(mometaData, null, 2)} />
         </>
-      )}
+      }
     </div>
   ) : (
     <Empty description={'请选中编辑元素'} style={{ marginTop: 20 }} />

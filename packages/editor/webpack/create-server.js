@@ -62,8 +62,10 @@ exports.createServer = function createServer({
         switch (stripPrefix(apiBaseURL, req.url)) {
           case '/submit-op': {
             const body = await json(req)
+            if (!body.preload.filename) {
+              throw new Error('Requires preload.filename')
+            }
             body.preload.filename = nps.relative(context, body.preload.filename)
-            // console.log('body.preload.filename', body.preload.filename)
             await fsHandler(body)
             res.statusCode = 200
             res.write('true')

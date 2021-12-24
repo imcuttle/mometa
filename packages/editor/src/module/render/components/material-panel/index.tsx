@@ -15,17 +15,12 @@ export interface MaterialPanelProps {
   materials: Material[]
 }
 
-const AssetUI = React.memo<Asset>(({ cover, name }) => {
-  const [{ isDragging }, drag, preview] = useDrag(
+const AssetUI = React.memo<Asset>(({ cover, name, data }) => {
+  const [{ isDragging }, drag] = useDrag(
     () => ({
       type: 'asset',
-      item: { name },
-      end: (item, monitor) => {
-        // const dropResult = monitor.getDropResult()
-        // if (item && dropResult) {
-        //   alert(`You dropped ${item.name} into ${dropResult.name}!`)
-        // }
-      },
+      item: { cover, name, data },
+      end: (item, monitor) => {},
       collect: (monitor) => ({
         isDragging: monitor.isDragging()
       })
