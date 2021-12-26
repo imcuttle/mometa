@@ -32,7 +32,7 @@
     "run-seq": "^1.0.4"
   },
   "devDependencies": {
-    "@mometa/materials-generator": "^0.0.0"
+    "@mometa/materials-generator": "^0.0.2"
   },
   "keywords": [
     "余聪",
