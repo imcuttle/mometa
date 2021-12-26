@@ -6,7 +6,7 @@
 import { waterFall } from 'run-seq'
 import pify from 'pify'
 import { robust } from 'memoize-fn'
-import type { Asset } from '@mometa/materials-generator/types/types'
+// import type { Asset } from '@mometa/materials-generator/types/types'
 import { createLineContentsByContent, LineContents, Range, Point } from './utils/line-contents'
 import { OpType } from './const'
 
@@ -41,7 +41,8 @@ export interface InsertNodePreload {
       startStr: string
       endStr: string
     }
-    material?: Asset['data']
+    // material?: Asset['data']
+    material?: any
   }
 }
 
