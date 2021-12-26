@@ -19,7 +19,6 @@
     "build": "../../scripts/run build",
     "packlimit": "../../scripts/run packlimit",
     "dev": "npm run build -- --watch",
-    "prepare": "npm run build",
     "prepublishOnly": "npm run build && npm run packlimit",
     "version": "npm test && npm run packlimit"
   },
