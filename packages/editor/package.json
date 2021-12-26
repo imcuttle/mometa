@@ -9,11 +9,6 @@
   "main": "lib",
   "types": "types",
   "module": "es",
-  "files": [
-    "lib",
-    "es",
-    "types"
-  ],
   "scripts": {
     "test": "../../scripts/run test",
     "build:app": "cd example && npm run build",
