@@ -12,7 +12,7 @@
   "scripts": {
     "test": "../../scripts/run test",
     "build:app": "cd example && npm run build",
-    "build:lib": "../../scripts/run build",
+    "build:runtime": "echo \"runtime \"",
     "build": "run-p -l 'build:*'",
     "packlimit": "../../scripts/run packlimit",
     "prepublishOnly": "npm run build && npm run packlimit",

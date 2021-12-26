@@ -12,6 +12,7 @@
     },
     "bootstrap": {
       "hoist": true,
+      "nohoist": ["webpack-manifest-plugin"],
       "npmClientArgs": []
     }
   },

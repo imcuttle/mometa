@@ -55,7 +55,7 @@ module.exports = class MometaEditorPlugin {
 
   applyForEditor(compiler) {
     const webpack = compiler.webpack || require('webpack')
-    const { EntryPlugin, ExternalsPlugin, optimize } = webpack
+    const { EntryPlugin, ExternalsPlugin, optimize, LibraryTemplatePlugin } = webpack
     const { SplitChunksPlugin, RuntimeChunkPlugin } = optimize || {}
     const mode = compiler.options.mode || 'production'
 
