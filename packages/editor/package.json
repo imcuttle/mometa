@@ -16,11 +16,11 @@
   ],
   "scripts": {
     "test": "../../scripts/run test",
-    "build": "cd example && npm run build",
+    "build:app": "cd example && npm run build",
     "prepare": "npm run build",
-    "__build": "../../scripts/run build",
+    "build:lib": "../../scripts/run build",
+    "build": "run-p -l 'build:*'",
     "packlimit": "../../scripts/run packlimit",
-    "dev": "npm run build -- --watch",
     "prepublishOnly": "npm run build && npm run packlimit",
     "version": "npm test && npm run packlimit"
   },
@@ -67,6 +67,7 @@
     "directory": "packages/editor"
   },
   "devDependencies": {
+    "npm-run-all": "^4.1.5",
     "@mometa/materials-generator": "^0.0.0",
     "moment": "^2.29.1",
     "react": "^17.0.2",

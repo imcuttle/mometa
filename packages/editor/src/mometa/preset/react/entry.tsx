@@ -3,8 +3,6 @@
 // 是 iframe 环境
 import { addUpdateCallbackListener } from '../../../shared/hot'
 import { injectGlobal } from '../../utils/emotion-css'
-import { ConfigProvider } from 'antd'
-import zhCN from 'antd/lib/locale/zh_CN'
 
 if (require('@@__mometa-external/shared')) {
   const { refresh } = require('../../utils/emotion-css')

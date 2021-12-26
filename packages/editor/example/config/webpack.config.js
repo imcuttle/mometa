@@ -796,7 +796,10 @@ module.exports = function getConfig(webpackEnv) {
           babelPlugins: [require.resolve('../../babel/plugin-react-runtime')],
           plugins: [
             new MometaEditorPlugin({
-              react: true
+              react: true,
+              editorConfig: {
+                bundlerURL: '/bundler.html'
+              }
             })
           ],
           refresh: false

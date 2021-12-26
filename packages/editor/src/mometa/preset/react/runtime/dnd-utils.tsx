@@ -5,6 +5,8 @@ import { addCss, parseReactDomNode, parseReactDomNodeDeep, setStyle } from '../.
 import { api, useHeaderStatus, useSelectedNode, useOveringNode } from '@@__mometa-external/shared'
 import { OveringFloat } from './floating-ui'
 import { MometaHTMLElement, MometaDomApi } from './dom-api'
+import { ConfigProvider } from 'antd'
+import zhCN from 'antd/lib/locale/zh_CN'
 
 function isDropableDom(dom: HTMLElement) {
   if (dom.localName === EMPTY_PLACEHOLDER_NAME) {
@@ -240,7 +242,9 @@ export function DndLayout({ dom, children }) {
 
   return (
     <>
-      <DndNode dom={dom} />
+      <ConfigProvider locale={zhCN} prefixCls={'mmt-ant'}>
+        <DndNode dom={dom} />
+      </ConfigProvider>
       {children}
     </>
   )

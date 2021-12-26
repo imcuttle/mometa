@@ -1,15 +1,11 @@
 {
-  "extends": "../../tsconfig.json",
-  "type": "module",
+  "extends": "./tsconfig.build.json",
   "compilerOptions": {
-    "module": "ESNext",
     "baseUrl": ".",
     "paths": {
       "@mometa/fs-handler": ["../fs-handler/src"],
       "@mometa/materials-generator": ["../materials-generator/src"],
       "@mometa/materials-generator/*": ["../materials-generator/src/*"]
     }
-  },
-  "exclude": ["node_modules"],
-  "include": ["./src"]
+  }
 }

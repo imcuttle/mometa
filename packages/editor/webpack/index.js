@@ -2,7 +2,6 @@ const fs = require('fs')
 const nps = require('path')
 const { createServer } = require('./create-server')
 const injectEntry = require('./injectEntry')
-const EditorPlugin = require('./editor-plugin')
 const ReactRefreshWebpackPlugin = require('@mometa/react-refresh-webpack-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
 const LibraryTemplatePlugin = require('webpack/lib/LibraryTemplatePlugin')
@@ -23,17 +22,30 @@ const replaceTpl = (string, flag, data) => {
 
 module.exports = class MometaEditorPlugin {
   constructor(options = {}) {
+    options = options || {}
+    options.serverOptions = Object.assign(
+      {
+        host: 'localhost',
+        port: 8686,
+        apiBaseURL: ''
+      },
+      options.serverOptions
+    )
+    options.editorConfig = Object.assign(
+      {
+        bundlerURL: '/',
+        apiBaseURL: `http://${options.serverOptions.host}:${
+          options.serverOptions.port
+        }${`/${options.serverOptions.apiBaseURL}`.replace(/\/+/g, '/')}`
+      },
+      options.editorConfig
+    )
     this.options = Object.assign(
       {
         react: true,
         contentBasePath: 'mometa',
-        editorConfig: {
-          bundlerURL: '/',
-          apiBaseURL: `http://localhost:${
-            options.serverOptions && options.serverOptions.port ? options.serverOptions.port : 8686
-          }/`
-        },
-        serverOptions: {}
+        serverOptions: {},
+        editorConfig: {}
       },
       options
     )
@@ -136,7 +148,7 @@ module.exports = class MometaEditorPlugin {
     const { DefinePlugin } = webpack
     if (this.options.react) {
       compiler.options.entry = injectEntry(compiler.options.entry, {
-        prependEntries: [require.resolve('./assets/react-runtime-entry')]
+        prependEntries: [require.resolve('./assets/runtime-entry')]
       })
 
       let hasJsxDevRuntime = false
@@ -145,7 +157,9 @@ module.exports = class MometaEditorPlugin {
       } catch (e) {}
 
       new DefinePlugin({
-        __mometa_env_react_jsx_runtime__: hasJsxDevRuntime
+        __mometa_env_which__: JSON.stringify(this.options.react ? 'react' : ''),
+        __mometa_env_react_jsx_runtime__: hasJsxDevRuntime,
+        __mometa_env_is_local__: !!process.env.__MOMETA_LOCAL__
       }).apply(compiler)
     }
 
