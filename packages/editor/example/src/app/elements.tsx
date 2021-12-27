@@ -5,7 +5,7 @@ import Tabs from 'antd/es/tabs'
 export const body = (
   <>
     <div>
-      <p>body element</p>
+      <p>body </p>
       {<Panel />}
       <h3>h3</h3>
     </div>

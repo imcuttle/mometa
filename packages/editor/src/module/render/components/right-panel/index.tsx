@@ -23,7 +23,7 @@ export interface RightPanelProps {
 
 const BaseInfoForm = () => {
   const [selectedNode] = useSelectedNode()
-  const mometaData = selectedNode?.__mometa.getMometaData()
+  const mometaData = selectedNode?.__mometa?.getMometaData()
   const [form] = Form.useForm()
   const [api] = useShared<ApiServerPack>('api' as any)
 

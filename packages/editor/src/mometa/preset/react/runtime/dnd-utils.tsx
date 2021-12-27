@@ -102,14 +102,16 @@ const DndNode = React.memo(function ({ dom }: any) {
 
 function useMometaDomInject(dom: MometaHTMLElement) {
   React.useLayoutEffect(() => {
-    // if (dom.classList.contains('ant-tabs-tabpane')) {
-    //   console.log('dom', dom, new MometaDomApi(dom).getMometaData())
-    // }
+    if (!dom) {
+      return
+    }
     const mometaApi = (dom.__mometa = new MometaDomApi(dom))
-    dom.removeAttribute('__mometa')
-    dom.dataset.mometaKey = mometaApi.getKey()
+    dom.removeAttribute?.('__mometa')
+    if (dom.dataset) {
+      dom.dataset.mometaKey = mometaApi.getKey()
+    }
     return () => {
-      delete dom.dataset.mometaKey
+      delete dom.dataset?.mometaKey
       delete dom.__mometa
     }
   }, [dom])
@@ -179,6 +181,9 @@ export const DndDropableNode = React.memo(({ dom }: { dom: MometaHTMLElement }) 
 
   // eslint-disable-next-line consistent-return
   React.useEffect(() => {
+    if (!dom) {
+      return
+    }
     if (canSelect) {
       setIsEnter(overingNode === dom)
       const enterHandler = (evt) => {
@@ -209,6 +214,9 @@ export const DndDropableNode = React.memo(({ dom }: { dom: MometaHTMLElement }) 
   const dropRef = React.useRef<any>()
   dropRef.current = drop
   React.useLayoutEffect(() => {
+    if (!dom) {
+      return
+    }
     dropRef.current(dom)
   }, [dom])
 
@@ -225,7 +233,7 @@ export const DndDropableNode = React.memo(({ dom }: { dom: MometaHTMLElement }) 
           dom={dom}
         />
       )}
-      <DndUndropableNode dom={dom} />
+      {!!dom && <DndUndropableNode dom={dom} />}
     </>
   )
 })

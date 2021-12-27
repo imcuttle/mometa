@@ -51,7 +51,7 @@ if (require('@@__mometa-external/shared')) {
       }
     })
 
-    if (__mometa_env_react_jsx_runtime__ && process.env.NODE_ENV !== 'production') {
+    if (__mometa_env_react_jsx_runtime__ && __mometa_env_is_dev__) {
       const JSXDEVRuntime = require('react/jsx-dev-runtime')
       const { jsxDEV } = JSXDEVRuntime
       // 转移 __mometa

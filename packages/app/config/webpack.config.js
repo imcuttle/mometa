@@ -398,9 +398,10 @@ module.exports = function (webpackEnv) {
                   ]
                 ],
 
-                plugins: [isEnvDevelopment && shouldUseReactRefresh && require.resolve('react-refresh/babel')].filter(
-                  Boolean
-                ),
+                plugins: [
+                  isEnvDevelopment && require.resolve('@mometa/editor/babel/plugin-react-runtime'),
+                  isEnvDevelopment && shouldUseReactRefresh && require.resolve('react-refresh/babel')
+                ].filter(Boolean),
                 // This is a feature of `babel-loader` for webpack (not Babel itself).
                 // It enables caching results in ./node_modules/.cache/babel-loader/
                 // directory for faster rebuilds.
@@ -526,7 +527,12 @@ module.exports = function (webpackEnv) {
       ].filter(Boolean)
     },
     plugins: [
-      new MometaEditorPlugin(),
+      isEnvDevelopment &&
+        new MometaEditorPlugin({
+          serverOptions: {
+            port: 8787
+          }
+        }),
       // Generates an `index.html` file with the <script> injected.
       new HtmlWebpackPlugin(
         Object.assign(

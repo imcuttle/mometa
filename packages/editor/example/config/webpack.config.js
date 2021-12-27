@@ -107,6 +107,7 @@ function getSingleConfig(
   webpackEnv,
   {
     entry,
+    target,
     name,
     plugins = [],
     outputPath,
@@ -114,11 +115,14 @@ function getSingleConfig(
     cssExtract = webpackEnv === 'production',
     babelPlugins = [],
     refresh,
+    externals,
     ...opts
   }
 ) {
   const isEnvDevelopment = webpackEnv === 'development'
   const isEnvProduction = webpackEnv === 'production'
+
+  process.env.BABEL_ENV = process.env.NODE_ENV = webpackEnv
 
   // Variable used for enabling profiling in Production
   // passed into alias object. Uses a flag if passed into the build command
@@ -207,7 +211,7 @@ function getSingleConfig(
 
   return {
     ignoreWarnings: [/Failed to parse source map/],
-    target: ['browserslist'],
+    target: target || ['browserslist'],
     mode: isEnvProduction ? 'production' : isEnvDevelopment && 'development',
     // Stop compilation early in production
     bail: isEnvProduction,
@@ -594,20 +598,7 @@ function getSingleConfig(
         }
       ].filter(Boolean)
     },
-    externals: !__MOMETA_LOCAL__
-      ? ({ request, context, contextInfo }, cb) => {
-          const issuer = contextInfo.issuer || ''
-          if (
-            /^(react|react-dom)$/.test(request) &&
-            ![nps.resolve(__dirname, 'entry/__mometa_outer_vendor__.js')]
-              .concat(WHITE_PATHS)
-              .find((x) => issuer.startsWith(x))
-          ) {
-            return cb(null, `__mometa_outer_vendor_require__(${JSON.stringify(request)})`)
-          }
-          return cb()
-        }
-      : undefined,
+    externals,
     plugins: [
       ...plugins,
       new webpack.DefinePlugin({
@@ -649,7 +640,8 @@ function getSingleConfig(
       // Otherwise React will be compiled in the very slow development mode.
       new webpack.DefinePlugin({
         ...env.stringified,
-        __DATETIME__: DATETIME
+        __DATETIME__: DATETIME,
+        __mometa_env_is_local__: !!__MOMETA_LOCAL__
       }),
       // Experimental hot reloading for React .
       // https://github.com/facebook/react/tree/main/packages/react-refresh
@@ -676,22 +668,22 @@ function getSingleConfig(
       //   `index.html`
       // - "entrypoints" key: Array of files which are included in `index.html`,
       //   can be used to reconstruct the HTML if necessary
-      new WebpackManifestPlugin({
-        fileName: basename + 'asset-manifest.json',
-        publicPath: paths.publicUrlOrPath,
-        generate: (seed, files, entrypoints) => {
-          const manifestFiles = files.reduce((manifest, file) => {
-            manifest[file.name] = file.path
-            return manifest
-          }, seed)
-          const entrypointFiles = entrypoints.main.filter((fileName) => !fileName.endsWith('.map'))
-
-          return {
-            files: manifestFiles,
-            entrypoints: entrypointFiles
-          }
-        }
-      }),
+      // new WebpackManifestPlugin({
+      //   fileName: basename + 'asset-manifest.json',
+      //   publicPath: paths.publicUrlOrPath,
+      //   generate: (seed, files, entrypoints) => {
+      //     const manifestFiles = files.reduce((manifest, file) => {
+      //       manifest[file.name] = file.path
+      //       return manifest
+      //     }, seed)
+      //     const entrypointFiles = entrypoints.main.filter((fileName) => !fileName.endsWith('.map'))
+      //
+      //     return {
+      //       files: manifestFiles,
+      //       entrypoints: entrypointFiles
+      //     }
+      //   }
+      // }),
       // Moment.js is an extremely popular library that bundles large locale files
       // by default due to how webpack interprets its code. This is a practical
       // solution that requires the user to opt into importing specific locales.
@@ -787,44 +779,81 @@ function getSingleConfig(
 }
 
 module.exports = function getConfig(webpackEnv) {
-  return __MOMETA_LOCAL__
-    ? [
-        getSingleConfig(webpackEnv, {
-          name: 'app',
-          htmlName: 'bundler.html',
-          entry: paths.resolveApp('src/app/index.tsx'),
-          babelPlugins: [require.resolve('../../babel/plugin-react-runtime')],
-          plugins: [
-            new MometaEditorPlugin({
-              react: true,
-              editorConfig: {
-                bundlerURL: '/bundler.html'
-              }
-            })
-          ],
-          refresh: false
-        }),
-        getSingleConfig(webpackEnv, {
-          refresh: false,
-          name: 'editor',
-          htmlName: 'index.html'
+  if (process.env.BUILD_MOD === 'runtime') {
+    return getSingleConfig('development', {
+      cssExtract: false,
+      refresh: false,
+      entry: [nps.resolve(__dirname, '../../webpack/assets/runtime-entry.js')],
+      name: 'runtime-entry',
+      outputPath: nps.join(paths.appBuild, 'runtime-entry'),
+      target: 'node',
+      filename: 'index.js',
+      plugins: [
+        new MometaEditorPlugin({
+          react: {
+            refresh: false
+          },
+          __runtime_build: true
         })
-      ]
-    : [
-        getSingleConfig('production', {
-          entry: [nps.resolve(__dirname, 'entry/__mometa_outer_vendor__.js'), paths.appIndexJs],
-          refresh: false,
-          name: 'editor',
-          outputPath: nps.join(paths.appBuild, 'production'),
-          htmlName: 'index.html'
-        }),
-        getSingleConfig('development', {
-          cssExtract: true,
-          entry: [nps.resolve(__dirname, 'entry/__mometa_outer_vendor__.js'), paths.appIndexJs],
-          refresh: false,
-          name: 'editor',
-          outputPath: nps.join(paths.appBuild, 'development'),
-          htmlName: 'index.html'
+      ],
+      htmlName: false
+    })
+  }
+
+  if (process.env.BUILD_MOD === 'app') {
+    const externals = ({ request, context, contextInfo }, cb) => {
+      const issuer = contextInfo.issuer || ''
+      if (
+        /^(react|react-dom)$/.test(request) &&
+        ![nps.resolve(__dirname, 'entry/__mometa_outer_vendor__.js')]
+          .concat(WHITE_PATHS)
+          .find((x) => issuer.startsWith(x))
+      ) {
+        return cb(null, `__mometa_outer_vendor_require__(${JSON.stringify(request)})`)
+      }
+      return cb()
+    }
+    return [
+      getSingleConfig('production', {
+        entry: [nps.resolve(__dirname, 'entry/__mometa_outer_vendor__.js'), paths.appIndexJs],
+        refresh: false,
+        name: 'editor',
+        outputPath: nps.join(paths.appBuild, 'standalone/production'),
+        htmlName: 'index.html',
+        externals
+      }),
+      getSingleConfig('development', {
+        cssExtract: true,
+        entry: [nps.resolve(__dirname, 'entry/__mometa_outer_vendor__.js'), paths.appIndexJs],
+        refresh: false,
+        name: 'editor',
+        outputPath: nps.join(paths.appBuild, 'standalone/development'),
+        htmlName: 'index.html',
+        externals
+      })
+    ]
+  }
+
+  return [
+    getSingleConfig(webpackEnv, {
+      name: 'app',
+      htmlName: 'bundler.html',
+      entry: paths.resolveApp('src/app/index.tsx'),
+      babelPlugins: [require.resolve('../../babel/plugin-react-runtime')],
+      plugins: [
+        new MometaEditorPlugin({
+          react: true,
+          editorConfig: {
+            bundlerURL: '/bundler.html'
+          }
         })
-      ]
+      ],
+      refresh: false
+    }),
+    getSingleConfig(webpackEnv, {
+      refresh: false,
+      name: 'editor',
+      htmlName: 'index.html'
+    })
+  ]
 }

@@ -16,16 +16,17 @@ export interface MaterialPanelProps {
 }
 
 const AssetUI = React.memo<Asset>(({ cover, name, data }) => {
+  const item = React.useMemo(() => ({ cover, name, data }), [cover, name, data])
   const [{ isDragging }, drag] = useDrag(
     () => ({
       type: 'asset',
-      item: { cover, name, data },
+      item,
       end: (item, monitor) => {},
       collect: (monitor) => ({
         isDragging: monitor.isDragging()
       })
     }),
-    [name]
+    [item]
   )
   const opacity = isDragging ? 0.4 : 1
 
@@ -39,7 +40,7 @@ const AssetUI = React.memo<Asset>(({ cover, name, data }) => {
   }
 
   // preview
-  return <>{renderComp({ ref: drag, opacity, className: isDragging && '-dragging' })}</>
+  return renderComp({ ref: drag, opacity, className: isDragging && '-dragging' })
 })
 
 const AssetGroupComp: React.FC<{ assetGroup: AssetGroup }> = React.memo(({ assetGroup }) => {

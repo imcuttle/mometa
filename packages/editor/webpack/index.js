@@ -4,10 +4,18 @@ const { createServer } = require('./create-server')
 const injectEntry = require('./injectEntry')
 const ReactRefreshWebpackPlugin = require('@mometa/react-refresh-webpack-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
-const LibraryTemplatePlugin = require('webpack/lib/LibraryTemplatePlugin')
 
-const BUILD_PATH = nps.resolve(__dirname, '../build')
-const resolvePath = (moduleName) => nps.join(nps.dirname(require.resolve(`${moduleName}/package.json`)), '/')
+const safeResolve = (path) => {
+  try {
+    return require.resolve(path)
+  } catch (e) {
+    return null
+  }
+}
+
+const BUILD_PATH = nps.resolve(__dirname, '../build/standalone')
+const resolvePath = (moduleName) =>
+  nps.join(nps.dirname(safeResolve(`${moduleName}/package.json`) || safeResolve(moduleName)), '/')
 const WHITE_MODULES = ['react', 'react-dom']
 const NAME = 'MometaEditorPlugin'
 
@@ -19,6 +27,8 @@ const replaceTpl = (string, flag, data) => {
     }
   )
 }
+
+const isLocal = !!process.env.__MOMETA_LOCAL__
 
 module.exports = class MometaEditorPlugin {
   constructor(options = {}) {
@@ -45,7 +55,8 @@ module.exports = class MometaEditorPlugin {
         react: true,
         contentBasePath: 'mometa',
         serverOptions: {},
-        editorConfig: {}
+        editorConfig: {},
+        __runtime_build: false
       },
       options
     )
@@ -55,7 +66,7 @@ module.exports = class MometaEditorPlugin {
 
   applyForEditor(compiler) {
     const webpack = compiler.webpack || require('webpack')
-    const { EntryPlugin, ExternalsPlugin, optimize, LibraryTemplatePlugin } = webpack
+    const { EntryPlugin, optimize } = webpack
     const { SplitChunksPlugin, RuntimeChunkPlugin } = optimize || {}
     const mode = compiler.options.mode || 'production'
 
@@ -95,19 +106,14 @@ module.exports = class MometaEditorPlugin {
           filename: `${this.options.contentBasePath}${BUDLER_FILENAME}`,
           chunkFilename: `${this.options.contentBasePath}mometa-outer-vendor.chunk.[id].js`,
           publicPath: compiler.options.publicPath,
-          library: 'MOMETA_OUTER_VENDOR'
+          library: {
+            type: 'var',
+            name: 'MOMETA_OUTER_VENDOR'
+          }
         }
-        const childCompiler = compilation.createChildCompiler(NAME, outputOptions, [])
-
-        new LibraryTemplatePlugin(
-          outputOptions.library
-          // 'window',
-          // outputOptions.library,
-          // outputOptions.libraryTarget,
-          // options.output.umdNamedDefine,
-          // options.output.auxiliaryComment || "",
-          // options.output.libraryExport
-        ).apply(childCompiler)
+        const childCompiler = compilation.createChildCompiler(NAME, outputOptions, [
+          new webpack.library.EnableLibraryPlugin('var')
+        ])
 
         const entries = {
           [this.options.name]: [require.resolve('./assets/vendor-entry')]
@@ -141,26 +147,85 @@ module.exports = class MometaEditorPlugin {
     })
   }
 
-  applyForReactRuntime(compiler) {
-    if (!this.options.react) return
+  applyForRuntime(compiler) {
+    let externals = compiler.options.externals || []
+    if (!Array.isArray(externals)) {
+      externals = [externals]
+    }
+    compiler.options.externals = externals
+    externals.unshift(({ request, context = '', contextInfo = {} }, callback) => {
+      const issuer = contextInfo.issuer || ''
+      const whiteList = [
+        ...WHITE_MODULES.map((module) => resolvePath(module)),
+        nps.join(__dirname, '../build/runtime-entry'),
+        /\/__mometa_require__\.(js|jsx|ts|tsx)$/
+      ]
 
-    const webpack = compiler.webpack || require('webpack')
-    const { DefinePlugin } = webpack
-    if (this.options.react) {
-      compiler.options.entry = injectEntry(compiler.options.entry, {
-        prependEntries: [require.resolve('./assets/runtime-entry')]
+      const isMatched = whiteList.find((rule) => {
+        if (rule instanceof RegExp) {
+          return rule.test(issuer)
+        }
+        return issuer.startsWith(rule)
       })
 
-      let hasJsxDevRuntime = false
-      try {
-        hasJsxDevRuntime = !!require.resolve('react/jsx-dev-runtime')
-      } catch (e) {}
+      if (
+        this.options.__runtime_build &&
+        ['react/jsx-dev-runtime', '@mometa/react-refresh-webpack-plugin/lib/runtime/RefreshUtils'].includes(request)
+      ) {
+        return callback(null, `commonjs ${request}`)
+      }
 
+      if (isMatched) {
+        if (this.options.__runtime_build && WHITE_MODULES.includes(request)) {
+          return callback(null, `commonjs ${request}`)
+        }
+        return callback()
+      }
+
+      if (this.options.react) {
+        if (WHITE_MODULES.includes(request)) {
+          return callback(null, `__mometa_require__(${JSON.stringify(request)})`)
+        }
+      }
+
+      if (/^(@@__mometa-external\/(.+))$/.test(request)) {
+        return callback(null, `__mometa_require__(${JSON.stringify(RegExp.$2)})`)
+      }
+      callback()
+    })
+
+    this.applyForReactRuntime(compiler)
+  }
+
+  applyForReactRuntime(compiler) {
+    const webpack = compiler.webpack || require('webpack')
+    const { DefinePlugin } = webpack
+
+    compiler.options.entry = injectEntry(compiler.options.entry, {
+      prependEntries: [require.resolve('./assets/runtime-entry')]
+    })
+
+    new DefinePlugin({
+      __mometa_env_is_local__: isLocal,
+      __mometa_env_is_runtime_build__: !!this.options.__runtime_build
+    }).apply(compiler)
+
+    if (!this.options.__runtime_build) {
       new DefinePlugin({
-        __mometa_env_which__: JSON.stringify(this.options.react ? 'react' : ''),
-        __mometa_env_react_jsx_runtime__: hasJsxDevRuntime,
-        __mometa_env_is_local__: !!process.env.__MOMETA_LOCAL__
+        __mometa_env_is_dev__: compiler.options.mode === 'development',
+        __mometa_env_which__: JSON.stringify(this.options.react ? 'react' : '')
       }).apply(compiler)
+
+      if (this.options.react) {
+        let hasJsxDevRuntime = false
+        try {
+          hasJsxDevRuntime = !!require.resolve('react/jsx-dev-runtime')
+        } catch (e) {}
+
+        new DefinePlugin({
+          __mometa_env_react_jsx_runtime__: hasJsxDevRuntime
+        }).apply(compiler)
+      }
     }
 
     if (this.options.react && this.options.react.refresh !== false) {
@@ -191,43 +256,13 @@ module.exports = class MometaEditorPlugin {
   }
 
   apply(compiler) {
-    this.applyForReactRuntime(compiler)
+    isLocal && console.log(`${NAME} in local mode`)
+
+    this.applyForRuntime(compiler)
+    if (this.options.__runtime_build) {
+      return
+    }
     this.applyForEditor(compiler)
     this.applyForServer(compiler)
-
-    let externals = compiler.options.externals || []
-    if (!Array.isArray(externals)) {
-      externals = [externals]
-    }
-    compiler.options.externals = externals
-    externals.unshift(({ request, context = '', contextInfo = {} }, callback) => {
-      const issuer = contextInfo.issuer || ''
-      const whiteList = [
-        ...WHITE_MODULES.map((module) => resolvePath(module)),
-        /\/__mometa_require__\.(js|jsx|ts|tsx)$/
-      ]
-
-      const isMatched = whiteList.find((rule) => {
-        if (rule instanceof RegExp) {
-          return rule.test(issuer)
-        }
-        return issuer.startsWith(rule)
-      })
-
-      if (isMatched) {
-        return callback()
-      }
-
-      if (this.options.react) {
-        if (WHITE_MODULES.includes(request)) {
-          return callback(null, `__mometa_require__(${JSON.stringify(request)})`)
-        }
-      }
-
-      if (/^(@@__mometa-external\/(.+))$/.test(request)) {
-        return callback(null, `__mometa_require__(${JSON.stringify(RegExp.$2)})`)
-      }
-      callback()
-    })
   }
 }

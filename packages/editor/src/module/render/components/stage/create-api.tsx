@@ -121,6 +121,7 @@ export class ApiServerPack extends ApiCore {
             type: OpType.INSERT_NODE,
             preload: {
               filename: data.filename,
+              relativeFilename: data.relativeFilename,
               to: direction === 'up' ? data.start : data.end,
               data: {
                 material: asset,
@@ -132,6 +133,7 @@ export class ApiServerPack extends ApiCore {
           return this.submitOperation({
             type: OpType.INSERT_NODE,
             preload: {
+              relativeFilename: data.relativeFilename,
               filename: data.filename,
               to: data.innerEnd,
               data: {
@@ -192,7 +194,7 @@ export class ApiServerPack extends ApiCore {
           return this.submitOperation(
             {
               type: OpType.INSERT_NODE,
-              preload: createPreload(locationData, {
+              preload: createPreload(data, {
                 to: locationData.end,
                 data: {
                   newText: locationData.text

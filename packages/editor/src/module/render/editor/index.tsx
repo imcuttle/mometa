@@ -16,6 +16,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend'
 
 import './style.scss'
 import createApi from '../components/stage/create-api'
+import { createClientConnection } from './sse'
 
 const cn = p('')
 const c = p(`${CLS_PREFIX}`)
@@ -47,9 +48,24 @@ function CollapseBtn({ hide, dir, onClick }: any) {
 }
 
 const Body = ({ className, apiBaseURL, leftPanelProps, rightPanelProps, stageProps, bundlerURL }: EditorProps) => {
+  const [mats, setMats] = React.useState([])
+  React.useEffect(() => {
+    const conn = createClientConnection(apiBaseURL + 'sse')
+    conn.addHandler((data) => {
+      switch (data.type) {
+        case 'set-materials': {
+          setMats(data.data ?? [])
+        }
+      }
+    })
+    //
+    return () => {
+      conn.close()
+    }
+  }, [apiBaseURL])
+
   const api = React.useMemo(() => createApi(apiBaseURL), [apiBaseURL])
   useSharedProvider(api, { key: 'api' })
-
   const [{ canSelect }] = useHeaderStatus()
 
   const [hideLeft, setHideLeft] = React.useState(false)
@@ -64,7 +80,7 @@ const Body = ({ className, apiBaseURL, leftPanelProps, rightPanelProps, stagePro
       <Header bundlerURL={bundlerURL} />
       <div className={c('__main-content')}>
         <div className={c('__panel')}>
-          <LeftPanel {...leftPanelProps} className={c('__l-panel', hideLeft && '-hide')} />
+          <LeftPanel {...leftPanelProps} className={c('__l-panel', hideLeft && '-hide')} materials={mats} />
           <CollapseBtn onClick={() => setHideLeft((x) => !x)} hide={hideLeft} dir={'left'} />
         </div>
         <Stage bundlerURL={bundlerURL} {...stageProps} className={c('__stage')} />

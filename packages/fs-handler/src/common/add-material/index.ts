@@ -21,11 +21,27 @@ type DeepPartial<T> = {
   [P in keyof T]?: DeepPartial<T[P]>
 }
 
-const importPlugin = ({ t }) =>
+const importPlugin = ({ types: t }) =>
   ({
     visitor: {
       Program(path, state) {
         const { material, pos, ops } = state.opts
+
+        // @ts-ignore
+        const rawCode = this.file.code
+        // @ts-ignore
+        const lineContents = createLineContentsByContent(rawCode, { filename: this.filename })
+        const getText = ({ start, end }) => {
+          const arr = lineContents.locateByRange({
+            start,
+            end
+          })
+          return arr
+            .map(({ lineNumber, line, start, end }) => {
+              return line.toString()
+            })
+            .join('\n')
+        }
 
         const sideEffectImportVisitorState = {
           result: new Map(),
@@ -49,7 +65,8 @@ const importPlugin = ({ t }) =>
         }
 
         if (material.dependencies && Object.keys(material.dependencies)?.length) {
-          const map = new Map<string, { path?: NodePath; name: any; op?: any }>()
+          const map = new Map<string, { path?: NodePath; name: any }>()
+          const namedUnionMap = new Map<string, NodePath[]>()
           for (const [name, binding] of Object.entries(path.scope.bindings)) {
             if (binding.kind === 'module') {
               const importDecPath = binding.path.findParent((x) => x.isImportDeclaration())
@@ -62,6 +79,10 @@ const importPlugin = ({ t }) =>
                     name: binding.path.node.local.name,
                     path: importDecPath
                   })
+                  namedUnionMap.set(
+                    source,
+                    namedUnionMap.get(source) ? namedUnionMap.get(source).concat(importDecPath) : [importDecPath]
+                  )
                 } else if (
                   binding.path.isImportDefaultSpecifier() ||
                   (imported?.name ?? imported?.value) === 'default'
@@ -142,27 +163,59 @@ const importPlugin = ({ t }) =>
                   })
                 }
               } else if (mode === 'named') {
-                const newNamedList = []
+                const newNamedPathSet = new Set<NodePath>()
+                const newNamedSet = new Set<string>()
                 ;(dataList as any).forEach((data) => {
                   const key = `${cachedKey}:${data.imported}`
                   const cached = map.get(key)
                   if (cached?.name) {
                     tplData[data.tplName] = cached?.name
                   } else {
+                    let importPath
+                    if (namedUnionMap.get(source)?.length) {
+                      importPath = namedUnionMap.get(source)[namedUnionMap.get(source)?.length - 1]
+                    }
                     const name = getValidName(data.local ?? data.imported)
-                    map.set(key, { name })
+
+                    if (importPath) {
+                      importPath.node.specifiers.push(
+                        t.importSpecifier(t.identifier(name), t.identifier(data.imported))
+                      )
+                    }
+
+                    map.set(key, { name, path: importPath })
                     tplData[data.tplName] = name
-                    newNamedList.push(name)
+                    if (importPath) {
+                      newNamedPathSet.add(importPath)
+                    } else {
+                      newNamedSet.add(name)
+                    }
                   }
                 })
 
-                if (newNamedList.length) {
+                if (newNamedPathSet.size) {
+                  for (const importPath of newNamedPathSet.values()) {
+                    ops.insertDeps.push({
+                      type: OpType.REPLACE_NODE,
+                      preload: {
+                        ...importPath.node.loc,
+                        text: getText(importPath.node.loc),
+                        data: {
+                          newText: `;${importPath.toString()};`.replace(/;+$/, ';')
+                        }
+                      }
+                    })
+                  }
+                }
+                if (newNamedSet.size) {
                   ops.insertDeps.push({
                     type: OpType.INSERT_NODE,
                     preload: {
                       to: sideEffectImportVisitorState.endImportLoc.end,
                       data: {
-                        newText: `;import { ${newNamedList.join(', ')} } from ${JSON.stringify(source)};`
+                        newText: `;import { ${Array.from(newNamedSet.values()).join(',')} } from ${JSON.stringify(
+                          source
+                        )};`
                       }
                     }
                   })

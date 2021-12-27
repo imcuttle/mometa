@@ -12,8 +12,10 @@
   "scripts": {
     "test": "../../scripts/run test",
     "build:app": "cd example && npm run build",
-    "build:runtime": "echo \"runtime \"",
+    "build:lib": "../../scripts/run build",
+    "build:runtime": "cd example && npm run build:runtime",
     "build": "run-p -l 'build:*'",
+    "start": "cd example && npm start",
     "packlimit": "../../scripts/run packlimit",
     "prepublishOnly": "npm run build && npm run packlimit",
     "version": "npm test && npm run packlimit"
@@ -22,6 +24,8 @@
     "html-webpack-plugin": "*"
   },
   "dependencies": {
+    "hot-module-require": "^4.0.0",
+    "@mometa/materials-generator": "^0.0.2",
     "p-queue": "^7.1.0",
     "@babel/helper-module-imports": "^7.16.0",
     "@emotion/css": "^11.7.1",
@@ -62,7 +66,6 @@
   },
   "devDependencies": {
     "npm-run-all": "^4.1.5",
-    "@mometa/materials-generator": "^0.0.2",
     "moment": "^2.29.1",
     "react": "^17.0.2",
     "sass": "^1.43.4",

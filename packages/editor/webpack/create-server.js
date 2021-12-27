@@ -2,8 +2,12 @@ const http = require('http')
 const fs = require('fs')
 const nps = require('path')
 const { createFsHandler, commonMiddlewares } = require('@mometa/fs-handler')
+const { resolveAsyncConfig, materialExplorer } = require('@mometa/materials-generator')
+const makeHotRequire = require('hot-module-require')
+const hotRequire = makeHotRequire(__dirname)
 
 const launchEditor = require('./launchEditor')
+const createEventStream = require('./event-stream/createEventStream')
 
 const joinUrl = (a, b) => (a + b).replace(/\/+/g, '/')
 const stripPrefix = (prefix, path) => {
@@ -36,7 +40,7 @@ exports.createServer = function createServer({
   port = '8686',
   apiBaseURL = '',
   fileSystem = fs,
-  context = '',
+  context = process.cwd(),
   react
 }) {
   const fsHandler = createFsHandler({
@@ -57,38 +61,86 @@ exports.createServer = function createServer({
       return
     }
 
-    try {
-      if (req.method.toUpperCase() === 'POST') {
-        switch (stripPrefix(apiBaseURL, req.url)) {
-          case '/submit-op': {
-            const body = await json(req)
-            if (!body.preload.filename) {
-              throw new Error('Requires preload.filename')
+    const handlerHttp = async () => {
+      try {
+        if (req.method.toUpperCase() === 'POST') {
+          switch (stripPrefix(apiBaseURL, req.url)) {
+            case '/submit-op': {
+              const body = await json(req)
+              if (!body.preload.filename) {
+                throw new Error('Requires preload.filename')
+              }
+              body.preload.filename = nps.relative(context, body.preload.filename)
+              await fsHandler(body)
+              res.statusCode = 200
+              res.write('true')
+              return
             }
-            body.preload.filename = nps.relative(context, body.preload.filename)
-            await fsHandler(body)
-            res.statusCode = 200
-            res.write('true')
-            return
-          }
 
-          case '/open-editor': {
-            const body = await json(req)
-            launchEditor(body.fileName, body.lineNumber, body.colNumber)
-            res.statusCode = 200
-            res.write('true')
-            return
+            case '/open-editor': {
+              const body = await json(req)
+              launchEditor(body.fileName, body.lineNumber, body.colNumber)
+              res.statusCode = 200
+              res.write('true')
+              return
+            }
           }
         }
+        res.statusCode = 404
+      } catch (err) {
+        console.error('[MMS]', err)
+        res.statusCode = 501
+        res.write(JSON.stringify({ error: String(err) }))
+      } finally {
+        res.end()
       }
+    }
 
-      res.statusCode = 404
-    } catch (err) {
-      console.error('[MMS]', err)
-      res.statusCode = 501
-      res.write(JSON.stringify({ error: String(err) }))
-    } finally {
-      res.end()
+    if (req.method.toUpperCase() === 'GET') {
+      switch (stripPrefix(apiBaseURL, req.url)) {
+        case '/sse': {
+          let onCloseHandlers = []
+          const es = createEventStream(6000, {
+            onClose: () => {
+              onCloseHandlers.forEach((x) => x())
+            }
+          })
+          es.handler(req, res)
+
+          const data = await materialExplorer.search(context)
+          if (data && data.filepath) {
+            const setConfig = async (path) => {
+              let config = require(path)
+              config = await resolveAsyncConfig(config)
+              es.publish({
+                type: 'set-materials',
+                data: Array.isArray(config) ? config : [config]
+              })
+            }
+
+            const listener = (oldModule, path) => {
+              console.log('updated', path)
+              setConfig(path)
+            }
+            hotRequire.accept([data.filepath], listener)
+
+            onCloseHandlers.push(() => {
+              hotRequire.refuse([data.filepath], listener)
+            })
+
+            await setConfig(data.filepath)
+          } else {
+            throw new Error('[MMS] please set "mometa-material.config.js" in your dev root directory.')
+          }
+
+          return
+        }
+        default: {
+          await handlerHttp()
+        }
+      }
+    } else {
+      await handlerHttp()
     }
   })
 

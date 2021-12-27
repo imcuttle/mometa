@@ -200,6 +200,107 @@ export default function App(props: Props) {
 }"
 `;
 
+exports[`fsHandler getAddMaterialOps spec 1`] = `
+Object {
+  "insertCode": Object {
+    "preload": Object {
+      "data": Object {
+        "newText": "<>
+      <Antd />
+      <Button type=\\"default\\">按钮</Button>
+    </>",
+      },
+      "filename": "/a.js",
+      "to": Object {
+        "column": 3,
+        "line": 6,
+      },
+    },
+    "type": 3,
+  },
+  "insertDeps": Array [
+    Object {
+      "preload": Object {
+        "data": Object {
+          "newText": ";import \\"antd/lib/button/style\\";",
+        },
+        "filename": "/a.js",
+        "to": Position {
+          "column": 20,
+          "line": 2,
+        },
+      },
+      "type": 3,
+    },
+    Object {
+      "preload": Object {
+        "data": Object {
+          "newText": ";import \\"antd/lib/button/style/css\\";",
+        },
+        "filename": "/a.js",
+        "to": Position {
+          "column": 20,
+          "line": 2,
+        },
+      },
+      "type": 3,
+    },
+    Object {
+      "preload": Object {
+        "data": Object {
+          "newText": ";import { Input, Button } from 'antd';",
+        },
+        "end": Position {
+          "column": 28,
+          "line": 1,
+        },
+        "filename": "/a.js",
+        "identifierName": undefined,
+        "start": Position {
+          "column": 0,
+          "line": 1,
+        },
+        "text": "import { Input } from 'antd'",
+      },
+      "type": 1,
+    },
+    Object {
+      "preload": Object {
+        "data": Object {
+          "newText": ";import Antd from \\"antd\\";",
+        },
+        "filename": "/a.js",
+        "to": Position {
+          "column": 20,
+          "line": 2,
+        },
+      },
+      "type": 3,
+    },
+  ],
+}
+`;
+
+exports[`fsHandler getAddMaterialOps spec fsHandler 1`] = `
+"import { Input, Button } from 'antd'
+import 'side-effect'
+import Antd from 'antd'
+import 'antd/lib/button/style/css'
+import 'antd/lib/button/style'
+
+const elem = (
+  <div>
+    <>
+      <Antd />
+      <Button type=\\"default\\">按钮</Button>
+    </>
+    abc
+  </div>
+)
+
+export { Button } from 'antd'"
+`;
+
 exports[`fsHandler nest REPLACE_NODE 1`] = `
 "import React, { StrictMode } from 'react'
 import Tabs from 'antd/es/tabs'

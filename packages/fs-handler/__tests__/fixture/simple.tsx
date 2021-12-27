@@ -1,4 +1,4 @@
-import { Button } from 'antd'
+import { Input } from 'antd'
 import 'side-effect'
 
 const elem = <div>abc</div>

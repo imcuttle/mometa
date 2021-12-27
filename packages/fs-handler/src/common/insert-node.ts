@@ -10,7 +10,6 @@ export default function insertNodeMiddleware(): Middleware {
         return next()
       }
 
-      // TODO
       const { newText = '', wrap, material } = data.preload.data || {}
       const line = ctx.lineContents.locateLineByPos(toPos.line)
       let lineChars = line.toChars()

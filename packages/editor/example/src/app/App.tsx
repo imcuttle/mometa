@@ -3,8 +3,6 @@ import Tabs from 'antd/es/tabs'
 import 'antd/es/tabs/style/index.css'
 import { body, panel } from './elements'
 import { Panel } from './Panel'
-import { Button } from 'antd'
-import { Input } from 'antd'
 
 type Props = {}
 
@@ -13,11 +11,7 @@ const array = new Array(100).fill(1)
 export default function App(props: Props) {
   return (
     <div>
-      <h1 title={'abc'}>
-        Hello World👌
-        <Input placeholder="请输入" />
-        <Button type="default">按钮</Button>
-      </h1>
+      <h1 title={'abc'}>Hello World👌</h1>
       <Tabs>
         <Tabs.TabPane key={'tool'} tab={'物料'}>
           {body}

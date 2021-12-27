@@ -12,7 +12,7 @@ export async function assets(findDirs: string[] | string, cwd?: string): Promise
     dirs.map(async (dir) => {
       dir = resolve(cwd || '', dir)
       const d = await assetExplorer.search(dir)
-      if (!d.isEmpty) {
+      if (!d?.isEmpty) {
         list.push(...flatten(await resolveAsyncConfig(d.config)))
       }
     })

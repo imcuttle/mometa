@@ -63,7 +63,10 @@ export abstract class ApiCore {
     return runP
   }
 
-  public async submitOperation(requestData: RequestData, label?: string): Promise<boolean> {
+  public async submitOperation(
+    requestData: RequestData & { preload: RequestData['preload'] & { relativeFilename: string } },
+    label?: string
+  ): Promise<boolean> {
     requestData.preload = pick(requestData.preload, [
       'filename',
       'relativeFilename',
@@ -90,6 +93,7 @@ export abstract class ApiCore {
       }
 
       let dispose = addExecuteRuntimeListener((exports, id) => {
+        console.log('addExecuteRuntimeListener id', id)
         // @ts-ignore
         if (`./${requestData.preload.relativeFilename}` === id) {
           updated = true

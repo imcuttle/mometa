@@ -57,7 +57,9 @@ configList.forEach((config) => {
     .then(() => {
       // First, read the current file sizes in build directory.
       // This lets us display how much they changed later.
-      return measureFileSizesBeforeBuild(config.output.path)
+      return measureFileSizesBeforeBuild(config.output.path).catch((e) => {
+        console.error(e)
+      })
     })
     .then((previousFileSizes) => {
       // Remove all content but keep the directory so that

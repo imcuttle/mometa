@@ -86,6 +86,26 @@ export interface MiddlewareContext {
 
 export type Middleware = (request: RequestData, ctx: MiddlewareContext, next: () => any) => any
 
+const matchLines = (data, lineContents, ctx) => {
+  const lines = lineContents.locateByRange(data.preload)
+
+  const string = new LineContents(
+    lines.map((x) => x.line),
+    { filename: ctx.filename }
+  ).toString(false)
+
+  // @ts-ignore
+  if (string !== data.preload.text) {
+    throw new Error(`匹配错误
+${JSON.stringify(string)} !== ${JSON.stringify((data.preload as any).text)}`)
+  }
+
+  return {
+    lineContents,
+    lines
+  }
+}
+
 const apiMiddle = (middlewares) => {
   return async (data, ctx, next) => {
     ctx.runLoop = async function runLoop(req = data, context = ctx) {
@@ -96,6 +116,10 @@ const apiMiddle = (middlewares) => {
         return
       }
 
+      if (req.preload?.start && req.preload?.end) {
+        Object.assign(context, matchLines(req, context.lineContents, ctx))
+      }
+
       return await waterFall(middlewares, [req, context])
     }
 
@@ -104,24 +128,7 @@ const apiMiddle = (middlewares) => {
       const lineContents = createLineContentsByContent(content, { filename: ctx.filename })
       // @ts-ignore
       if (data.preload.start && data.preload.end) {
-        // @ts-ignore
-        const lines = lineContents.locateByRange(data.preload)
-
-        const string = new LineContents(
-          lines.map((x) => x.line),
-          { filename: ctx.filename }
-        ).toString(false)
-
-        // @ts-ignore
-        if (string !== data.preload.text) {
-          throw new Error(`匹配错误
-${JSON.stringify(string)} !== ${JSON.stringify((data.preload as any).text)}`)
-        }
-
-        return {
-          lineContents,
-          lines
-        }
+        return matchLines(data, lineContents, ctx)
       }
       return {
         lineContents
