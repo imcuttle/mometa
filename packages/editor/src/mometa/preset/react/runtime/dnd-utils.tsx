@@ -7,7 +7,6 @@ import { OveringFloat } from './floating-ui'
 import { MometaHTMLElement, MometaDomApi } from './dom-api'
 import { ConfigProvider } from 'antd'
 import zhCN from 'antd/lib/locale/zh_CN'
-import { Button } from '../../../../../../fs-handler/__tests__/fixture/simple'
 
 function isDropableDom(dom: HTMLElement) {
   if (dom.localName === EMPTY_PLACEHOLDER_NAME) {

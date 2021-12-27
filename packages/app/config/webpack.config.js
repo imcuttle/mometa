@@ -399,6 +399,7 @@ module.exports = function (webpackEnv) {
                 ],
 
                 plugins: [
+                  [require.resolve('babel-plugin-import'), { libraryName: 'antd', style: 'css' }],
                   isEnvDevelopment && require.resolve('@mometa/editor/babel/plugin-react-runtime'),
                   isEnvDevelopment && shouldUseReactRefresh && require.resolve('react-refresh/babel')
                 ].filter(Boolean),

@@ -20,24 +20,26 @@ const rootBin = nps.join(__dirname, '../node_modules/.bin')
 const hasBuildJson = fs.existsSync(nps.join(process.cwd(), 'tsconfig.build.json'))
 const buildArgStr = hasBuildJson ? '--project tsconfig.build.json' : '--project tsconfig.json'
 
-try {
-  execSync(`${rootBin}/rimraf es lib types`, { stdio: 'inherit' })
-  const { exitCode } = concurrently([
-    {
-      command: `${rootBin}/tsc ${buildArgStr} --outDir es --module es6 ` + restArgs.join(' '),
-      prefix: 'build:es'
-    },
-    {
-      command: `${rootBin}/tsc ${buildArgStr} --outDir lib --module commonjs ` + restArgs.join(' '),
-      prefix: 'build:cjs'
-    },
-    {
-      command: `${rootBin}/tsc ${buildArgStr} --outDir types --emitDeclarationOnly -d ` + restArgs.join(' '),
-      prefix: 'build:tds'
-    }
-  ])
-  process.exitCode = exitCode
-} catch (ex) {
-  console.error(ex)
-  process.exitCode = ex.status
-}
+;(async () => {
+  try {
+    execSync(`${rootBin}/rimraf es lib types`, { stdio: 'inherit' })
+    const { exitCode, ...data } = await concurrently([
+      {
+        command: `${rootBin}/tsc ${buildArgStr} --outDir es --module es6 ` + restArgs.join(' '),
+        prefix: 'build:es'
+      },
+      {
+        command: `${rootBin}/tsc ${buildArgStr} --outDir lib --module commonjs ` + restArgs.join(' '),
+        prefix: 'build:cjs'
+      },
+      {
+        command: `${rootBin}/tsc ${buildArgStr} --outDir types --emitDeclarationOnly -d ` + restArgs.join(' '),
+        prefix: 'build:tds'
+      }
+    ])
+    process.exitCode = exitCode
+  } catch (ex) {
+    console.error(ex)
+    process.exitCode = ex.status
+  }
+})()

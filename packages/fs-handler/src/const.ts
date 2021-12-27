@@ -1,4 +1,4 @@
-export const enum OpType {
+export enum OpType {
   DEL,
   REPLACE_NODE,
   MOVE_NODE,
