@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { IframeHTMLAttributes } from 'react'
 import p from 'prefix-classname'
 import { useDragDropManager } from 'react-dnd'
 import {
@@ -6,7 +6,9 @@ import {
   useOveringNode,
   useSelectedNode,
   overingNodeSubject,
-  selectedNodeSubject
+  selectedNodeSubject,
+  useLocationAction,
+  locationActionSubject
 } from '../../../config/const'
 import { addModules } from '../../utils/externals-modules'
 import { useSharedMap, useSharedUpdateMap, SharedProvider, useShared, useSharedProvider } from '@rcp/use.shared'
@@ -21,6 +23,7 @@ import './style.scss'
 import { headerStatusSubject, useHeaderStatus } from '../header'
 import { ConfigProvider } from 'antd'
 import zhCN from 'antd/lib/locale/zh_CN'
+import LocationWidget from '../location-widget'
 
 export interface StageProps {
   className?: string
@@ -30,7 +33,14 @@ export interface StageProps {
 
 const StageContent: React.FC<StageProps> = React.memo(({ className, externalModules, bundlerURL }) => {
   React.useLayoutEffect(() => !!externalModules && addModules(externalModules), [externalModules])
+  const [action, setAction] = useLocationAction()
+  React.useLayoutEffect(() => {
+    setAction({ action: 'PUSH', url: bundlerURL })
+  }, [bundlerURL])
 
+  const iframeRef = React.useRef<HTMLIFrameElement>(null)
+
+  const [{ showLocation }] = useHeaderStatus()
   const [api] = useShared('api')
   const ddManager = useDragDropManager()
   const _sharedMap = useSharedMap()
@@ -49,6 +59,8 @@ const StageContent: React.FC<StageProps> = React.memo(({ className, externalModu
           useSelectedNode,
           useHeaderStatus,
           headerStatusSubject,
+          useLocationAction,
+          locationActionSubject,
           RootProvider: (props) => {
             return (
               <SharedProvider _internal={{ valuesMap: _sharedMap, updateMap: _sharedUpdateMap }}>
@@ -65,7 +77,8 @@ const StageContent: React.FC<StageProps> = React.memo(({ className, externalModu
 
   return (
     <div className={cn(c(), className)}>
-      <iframe src={bundlerURL} className={c('__iframe')} />
+      {!!showLocation && <LocationWidget iframeRef={iframeRef} />}
+      <iframe ref={iframeRef} src={action?.url} className={c('__iframe')} />
     </div>
   )
 })

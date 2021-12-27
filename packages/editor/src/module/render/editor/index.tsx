@@ -83,7 +83,11 @@ const Body = ({ className, apiBaseURL, leftPanelProps, rightPanelProps, stagePro
           <LeftPanel {...leftPanelProps} className={c('__l-panel', hideLeft && '-hide')} materials={mats} />
           <CollapseBtn onClick={() => setHideLeft((x) => !x)} hide={hideLeft} dir={'left'} />
         </div>
-        <Stage bundlerURL={bundlerURL} {...stageProps} className={c('__stage')} />
+        <Stage
+          bundlerURL={bundlerURL}
+          {...stageProps}
+          className={c('__stage', hideLeft && `-stage-left-hide`, hideRight && '-stage-right-hide')}
+        />
         <div className={c('__panel')}>
           <RightPanel {...rightPanelProps} className={c('__r-panel', hideRight && '-hide')} />
           <CollapseBtn onClick={() => setHideRight((x) => !x)} hide={hideRight} dir={'right'} />

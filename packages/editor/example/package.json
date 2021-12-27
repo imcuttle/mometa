@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "react-router": "^6.2.1",
+    "react-router-dom": "^6.2.1",
     "@babel/core": "^7.14.2",
     "@mometa/editor": "^0.0.0",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.1",

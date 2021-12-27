@@ -19,6 +19,7 @@ declare module '@@__mometa-external/shared' {
   export const useHeaderStatus: any
   export const useOveringNode: any
   export const useSelectedNode: any
+  export const locationActionSubject: any
   export const api: any
 }
 

@@ -16,17 +16,19 @@ export interface HeaderProps {
 
 interface Data {
   canSelect: boolean
+  showLocation: boolean
 }
 
 const { useSubject, subject } = createReactBehaviorSubject<Data>({
-  canSelect: true
+  canSelect: true,
+  showLocation: true
 })
 
 export const useHeaderStatus = useSubject
 export const headerStatusSubject = subject
 
 const Header: React.FC<HeaderProps> = React.memo(({ className, bundlerURL }) => {
-  const [{ canSelect }, setValue] = useHeaderStatus()
+  const [{ canSelect, showLocation }, setValue] = useHeaderStatus()
 
   return (
     <div className={cn(c(), className)}>
@@ -37,8 +39,15 @@ const Header: React.FC<HeaderProps> = React.memo(({ className, bundlerURL }) => 
         checkedChildren={'编辑'}
       />
 
+      <Switch
+        checked={showLocation}
+        onChange={(checked) => setValue((x) => ({ ...x, showLocation: checked }))}
+        unCheckedChildren={'隐藏路由'}
+        checkedChildren={'展示路由'}
+      />
+
       <Button type="link" href={bundlerURL} target={'_blank'}>
-        在新窗口打开
+        在新窗口预览
       </Button>
     </div>
   )

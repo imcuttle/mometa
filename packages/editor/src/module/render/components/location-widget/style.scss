@@ -1,0 +1,29 @@
+@import '../../style/_var';
+
+.#{$prefix}-location-widget {
+  display: flex;
+  height: 45px;
+  align-items: center;
+  padding: 0 10px;
+
+  &__btns {
+    margin-right: 10px;
+  }
+
+  &__url {
+    flex: 1;
+  }
+  &__input {
+    width: 100%;
+    background-color: #f1f3f4;
+    border-radius: 15px;
+
+    &:hover,
+    &:focus {
+      background-color: #e6e9ea;
+    }
+    &:focus {
+      outline: 1px solid #1890ff;
+    }
+  }
+}

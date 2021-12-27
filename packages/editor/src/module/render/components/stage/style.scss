@@ -1,6 +1,9 @@
 @import '../../style/_var';
 
 .#{$prefix}-stage {
+  display: flex;
+  flex-direction: column;
+
   &__sandpack {
     &,
     .sp-wrapper,
@@ -12,6 +15,7 @@
   }
 
   &__iframe {
+    flex: 1;
     display: flex;
     width: 100%;
     height: 100%;
