@@ -3,7 +3,7 @@ import p from 'prefix-classname'
 import { NodeIndexOutlined, MenuOutlined } from '@ant-design/icons'
 import { CLS_PREFIX } from '../../../config/const'
 
-import { Dropdown, Menu } from 'antd'
+import { Button, Dropdown, Menu } from 'antd'
 import { MometaHTMLElement } from '../../dom-api'
 import { getDomName } from '../../../../../utils/dom-utils'
 import { useSelectedNode, api } from '@@__mometa-external/shared'
@@ -99,7 +99,7 @@ const MoreButton: React.FC<MoreButtonProps> = React.memo(({ className, dom }) =>
         }
       }}
     >
-      <MenuOutlined className={cn(c(), className)} />
+      <Button type="text" size={'small'} className={cn(c(), className)} icon={<MenuOutlined />} />
     </Dropdown>
   )
 })

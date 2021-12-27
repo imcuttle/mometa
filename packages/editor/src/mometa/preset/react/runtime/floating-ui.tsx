@@ -7,10 +7,12 @@ import { getScrollParents } from '@floating-ui/dom'
 import { ArrowUpOutlined, ArrowDownOutlined, DragOutlined, DeleteOutlined } from '@ant-design/icons'
 import { css } from '../../../utils/emotion-css'
 import usePersistFn from '@rcp/use.persistfn'
+import { Button, Tooltip } from 'antd'
 import { api } from '@@__mometa-external/shared'
 import { MometaHTMLElement, useProxyEvents } from './dom-api'
 import { PreventFastClick } from '@rcp/c.preventfastop'
 import MoreButton from './components/more-button'
+import { useDrag } from '@@__mometa-external/react-dnd'
 
 function usePosition(dom: HTMLElement) {
   const [data, setData] = React.useState({ isReady: false, rect: { width: 0, height: 0, x: 0, y: 0 } })
@@ -198,8 +200,6 @@ export const OveringFloat = React.forwardRef<HTMLDivElement, OveringFloatProps>(
   { isOverCurrent, isSelected, onDeselect, onSelect, dom, getContainer, ...props },
   ref
 ) {
-  // const { rect } = usePosition(dom)
-
   React.useEffect(() => {
     dom.__mometa.preventEvent = false
     return () => {
@@ -211,6 +211,32 @@ export const OveringFloat = React.forwardRef<HTMLDivElement, OveringFloatProps>(
 
   const data = dom.__mometa?.getMometaData()
 
+  const [dataStr, drag, preview] = useDrag(
+    () => ({
+      type: 'dom',
+      item: dom,
+      end: (item, monitor) => {},
+      collect: (monitor) =>
+        JSON.stringify({
+          isDragging: monitor.isDragging()
+        })
+    }),
+    [dom]
+  )
+
+  const { isDragging } = React.useMemo(() => JSON.parse(dataStr), [dataStr])
+  // React.useLayoutEffect(() => {
+  //   const cls = css`
+  //     background-color: #fff !important;
+  //   `
+  //   if (isDragging && dom) {
+  //     dom.classList.add(cls)
+  //     return () => {
+  //       dom?.classList?.remove(cls)
+  //     }
+  //   }
+  // }, [dom, isDragging])
+
   const onClickFn = usePersistFn(() => {
     // eslint-disable-next-line no-unused-expressions
     onSelect?.()
@@ -219,7 +245,7 @@ export const OveringFloat = React.forwardRef<HTMLDivElement, OveringFloatProps>(
   const color = isSelected ? '#5185EC' : '#6F97E7'
 
   const commonCss = css`
-    display: block;
+    display: flex;
     color: #fff;
     background-color: ${color};
     padding: 2px 4px;
@@ -232,6 +258,16 @@ export const OveringFloat = React.forwardRef<HTMLDivElement, OveringFloatProps>(
     cursor: pointer;
     margin-left: 2px;
     margin-right: 2px;
+    width: 15px !important;
+    height: 17px !important;
+    line-height: 1 !important;
+
+    &::before {
+      background: transparent !important;
+    }
+    .anticon {
+      color: #fff !important;
+    }
   `
 
   const opHandler = usePersistFn(async (opType: string) => {
@@ -260,34 +296,57 @@ export const OveringFloat = React.forwardRef<HTMLDivElement, OveringFloatProps>(
   `
 
   const widthGte = true //rect.width >= rect.height
+
+  const flagElem = (
+    <div ref={preview} className={c(commonCss)} title={data.text}>
+      {!!data.container && '*'}
+      {data.name || 'Unknown'}
+    </div>
+  )
+
   return (
     <FloatingUi
       ref={ref}
-      leftTopElement={
-        <div className={c(commonCss)} title={data.text}>
-          {!!data.container && '*'}
-          {data.name || 'Unknown'}
-        </div>
-      }
+      leftTopElement={!isDragging && flagElem}
       rightTopElement={
+        !isDragging &&
         isSelected &&
         !isOverCurrent && (
           <div className={c(commonCss)}>
             <PreventFastClick onClick={() => opHandler('moving')}>
-              <DragOutlined title={'按住并拖动来进行移动'} className={c(btnCss)} />
+              <Button
+                ref={drag}
+                className={c(btnCss)}
+                type={'text'}
+                size={'small'}
+                icon={<DragOutlined />}
+                title={'按住并拖动来进行移动；只允许同名文件内移动'}
+              />
             </PreventFastClick>
             {!!data.previousSibling && (
               <PreventFastClick onClick={() => opHandler('up')}>
-                <ArrowUpOutlined title={'上移'} className={c(btnCss)} />
+                <Button className={c(btnCss)} type={'text'} size={'small'} title={'上移'} icon={<ArrowUpOutlined />} />
               </PreventFastClick>
             )}
             {!!data.nextSibling && (
               <PreventFastClick onClick={() => opHandler('down')}>
-                <ArrowDownOutlined title={'下移'} className={c(btnCss)} />
+                <Button
+                  className={c(btnCss)}
+                  type={'text'}
+                  size={'small'}
+                  title={'下移'}
+                  icon={<ArrowDownOutlined />}
+                />
               </PreventFastClick>
             )}
             <PreventFastClick onClick={() => opHandler('del')}>
-              <DeleteOutlined title={'删除'} className={c(btnCss)} />
+              <Button
+                className={c(btnCss)}
+                type={'text'}
+                size={'small'}
+                title={'删除'}
+                icon={<DeleteOutlined title={'删除'} />}
+              />
             </PreventFastClick>
             <MoreButton className={btnCss} dom={dom} />
           </div>
@@ -301,6 +360,10 @@ export const OveringFloat = React.forwardRef<HTMLDivElement, OveringFloatProps>(
         display: flex;
         flex-direction: ${widthGte ? 'row' : 'column'};
       `,
+        isDragging &&
+          css`
+            background-color: rgba(96, 125, 217, 0.3);
+          `,
         !isOverCurrent && css`outline: ${isSelected ? '1px solid ' + color : '1px dashed ' + color}; !important;`
       )}
       onClick={onClickFn}
@@ -317,7 +380,7 @@ export const OveringFloat = React.forwardRef<HTMLDivElement, OveringFloatProps>(
               `
             )}
           >
-            放置上方
+            放置在上
           </div>
           {!data.selfClosed && (
             <div
@@ -351,7 +414,7 @@ export const OveringFloat = React.forwardRef<HTMLDivElement, OveringFloatProps>(
               `
             )}
           >
-            放置下方
+            放置在下
           </div>
         </>
       )}

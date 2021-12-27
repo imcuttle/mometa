@@ -69,71 +69,96 @@ const BaseInfoForm = () => {
     }
   })
 
-  return !!mometaData ? (
-    <div>
-      <Form
-        layout={'vertical'}
-        form={form}
-        onFieldsChange={() => {
-          // !isDirty && setIsDirty(true)
-        }}
-      >
-        <Form.Item label={'类型'}>
-          <Typography.Title level={5}>
-            <Typography.Link
-              onClick={() =>
-                api.openEditor({
-                  fileName: mometaData.filename,
-                  lineNumber: mometaData.start?.line,
-                  colNumber: mometaData.start?.column
-                })
-              }
-            >
-              <NumberOutlined style={{ marginRight: 2 }} />
-              {mometaData.name}
-            </Typography.Link>
-          </Typography.Title>
-        </Form.Item>
-        <Form.Item name={'text'} label={'代码'}>
+  if (!mometaData) {
+    return null
+  }
+
+  return (
+    <Form
+      layout={'vertical'}
+      form={form}
+      onFieldsChange={() => {
+        // !isDirty && setIsDirty(true)
+      }}
+    >
+      <Form.Item label={'类型'}>
+        <Typography.Title level={5}>
+          <Typography.Link
+            title={'点击进入代码'}
+            onClick={() =>
+              api.openEditor({
+                fileName: mometaData.filename,
+                lineNumber: mometaData.start?.line,
+                colNumber: mometaData.start?.column
+              })
+            }
+          >
+            <NumberOutlined style={{ marginRight: 2 }} />
+            {mometaData.name}
+          </Typography.Link>
+        </Typography.Title>
+      </Form.Item>
+      <Form.Item name={'text'} label={'代码'}>
+        <CodeEditor language={'typescript'} height={'100px'} />
+      </Form.Item>
+      {!!mometaData?.container?.text && (
+        <Form.Item name={['container', 'text']} label={'容器代码'} tooltip={'修改将以容器代码为主，代码修改视为无效'}>
           <CodeEditor language={'typescript'} height={'100px'} />
         </Form.Item>
-        {!!mometaData?.container?.text && (
-          <Form.Item name={['container', 'text']} label={'容器代码'} tooltip={'修改将以容器代码为主，代码修改视为无效'}>
-            <CodeEditor language={'typescript'} height={'100px'} />
-          </Form.Item>
-        )}
-        <div className={c('__btns')}>
-          <Form.Item noStyle shouldUpdate>
-            {({ getFieldsValue }) => {
-              const editData = getFieldsValue()
-              return (
-                <PreventFastClick onClick={onUpdate}>
-                  <UpdateBtn disabled={isMatch(mometaData, editData)} />
-                </PreventFastClick>
-              )
-            }}
-          </Form.Item>
-        </div>
-      </Form>
-      {
-        /*process.env.NODE_ENV === 'development' && */ <>
-          <p> </p>
-          <CodeEditor readOnly height={'300px'} language={'json'} value={JSON.stringify(mometaData, null, 2)} />
-        </>
-      }
-    </div>
-  ) : (
-    <Empty description={'请选中编辑元素'} style={{ marginTop: 20 }} />
+      )}
+      <div className={c('__btns')}>
+        <Form.Item noStyle shouldUpdate>
+          {({ getFieldsValue }) => {
+            const editData = getFieldsValue()
+            return (
+              <PreventFastClick onClick={onUpdate}>
+                <UpdateBtn disabled={isMatch(mometaData, editData)} />
+              </PreventFastClick>
+            )
+          }}
+        </Form.Item>
+      </div>
+    </Form>
+  )
+}
+
+const MetaInfo = () => {
+  const [selectedNode] = useSelectedNode()
+  const mometaData = selectedNode?.__mometa?.getMometaData()
+
+  if (!mometaData) {
+    return null
+  }
+
+  return (
+    <CodeEditor
+      readOnly
+      height={'300px'}
+      language={'json'}
+      style={{ marginTop: 20 }}
+      value={JSON.stringify(mometaData, null, 2)}
+    />
   )
 }
 
 const RightPanel: React.FC<RightPanelProps> = React.memo(({ className }) => {
+  const [selectedNode] = useSelectedNode()
+  const mometaData = selectedNode?.__mometa?.getMometaData()
   return (
-    <Tabs className={cn(c(), className)}>
-      <Tabs.TabPane key={'attr'} tab={'属性'}>
-        <BaseInfoForm />
-      </Tabs.TabPane>
-    </Tabs>
+    <div className={cn(c(), className)}>
+      {!!mometaData ? (
+        <Tabs>
+          <Tabs.TabPane key={'attr'} tab={'属性'}>
+            <BaseInfoForm />
+          </Tabs.TabPane>
+          <Tabs.TabPane key={'meta'} tab={'元信息'}>
+            <MetaInfo />
+          </Tabs.TabPane>
+        </Tabs>
+      ) : (
+        <Empty description={'请选中编辑元素'} style={{ paddingTop: 40 }} />
+      )}
+    </div>
   )
 })
 

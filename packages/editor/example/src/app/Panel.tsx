@@ -5,8 +5,8 @@ export class Panel extends React.Component<any, any> {
     return (
       // @ts-ignore
       <panel {...this.props}>
-        <h2>Panel Title</h2>
         <div>Panel Content</div>
+        <h2>Panel Title</h2>
         {/*// @ts-ignore*/}
       </panel>
     )

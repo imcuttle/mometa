@@ -7,6 +7,7 @@ import { OveringFloat } from './floating-ui'
 import { MometaHTMLElement, MometaDomApi } from './dom-api'
 import { ConfigProvider } from 'antd'
 import zhCN from 'antd/lib/locale/zh_CN'
+import { Button } from '../../../../../../fs-handler/__tests__/fixture/simple'
 
 function isDropableDom(dom: HTMLElement) {
   if (dom.localName === EMPTY_PLACEHOLDER_NAME) {
@@ -118,10 +119,14 @@ function useMometaDomInject(dom: MometaHTMLElement) {
 }
 
 export const DndDropableNode = React.memo(({ dom }: { dom: MometaHTMLElement }) => {
+  const [overingNode, setOveringNode] = useOveringNode()
+  const [selNode, setSelNode] = useSelectedNode()
+  const isSelected = selNode === dom && !!dom
+
   const overingUiRef = React.useRef(null)
   const [str, drop] = useDrop(
     () => ({
-      accept: ['asset'],
+      accept: ['asset', 'dom'],
       drop(item: any, monitor) {
         if (monitor.isOver({ shallow: true }) && overingUiRef.current) {
           const clientOffset = monitor.getClientOffset()
@@ -137,25 +142,48 @@ export const DndDropableNode = React.memo(({ dom }: { dom: MometaHTMLElement }) 
               return true
             }
           })
-
+          const itemType = monitor.getItemType()
+          console.log('itemType', { itemType, item, pos: matchedDom?.dataset?.pos })
           if (matchedDom?.dataset?.pos) {
-            return api.handleViewOp('insert-asset', dom, {
-              asset: item.data,
-              direction: matchedDom?.dataset?.pos
-            })
+            if (itemType === 'asset') {
+              return api.handleViewOp('insert-asset', dom, {
+                asset: item.data,
+                direction: matchedDom?.dataset?.pos
+              })
+            } else if (itemType === 'dom') {
+              return api.handleViewOp('move-dom', item, {
+                toDom: dom,
+                direction: matchedDom?.dataset?.pos
+              })
+            }
           }
         }
       },
       collect: (monitor) => {
+        const itemType = monitor.getItemType()
+        const item = monitor.getItem() as any
+
+        let isOverCurrent = false
+        if (itemType !== 'dom') {
+          isOverCurrent = monitor.isOver({ shallow: true })
+        } else {
+          // dom 下只能允许同名文件内移动 & 不同 dom
+          isOverCurrent =
+            item !== dom &&
+            monitor.isOver({ shallow: true }) &&
+            !!item?.__mometa &&
+            item.__mometa.getMometaData().filename === dom.__mometa.getMometaData().filename
+        }
+
         // dnd 在 window.parent 环境中，当前 useDrog 在 iframe 环境中，使用 collect 返回 object，对比会出现不匹配的情况
         // {}.valueOf !== window.parent.Object.prototype.valueOf
         return JSON.stringify({
-          isOverCurrent: monitor.isOver({ shallow: true }),
+          isOverCurrent,
           isOver: monitor.isOver()
         })
       }
     }),
-    [dom]
+    [dom, isSelected]
   )
 
   const [{ canSelect }] = useHeaderStatus()
@@ -174,8 +202,6 @@ export const DndDropableNode = React.memo(({ dom }: { dom: MometaHTMLElement }) 
     }
   }, [isOver, dom])
 
-  const [overingNode, setOveringNode] = useOveringNode()
-  const [selNode, setSelNode] = useSelectedNode()
   const [isEnter, setIsEnter] = React.useState(false)
   useMometaDomInject(dom)
 
@@ -219,8 +245,6 @@ export const DndDropableNode = React.memo(({ dom }: { dom: MometaHTMLElement }) 
     }
     dropRef.current(dom)
   }, [dom])
-
-  const isSelected = selNode === dom && !!dom
 
   return (
     <>

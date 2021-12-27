@@ -9,6 +9,7 @@ import { CodeEditor } from '../../../../shared/code-editor'
 import { MometaHTMLElement } from '../../../../mometa/preset/react/runtime/dom-api'
 import { openReactStandalone } from '../../../../shared/open-react-element'
 import { createPreload } from '../../utils/utils'
+import { MoveNodePreload } from '@mometa/fs-handler'
 
 const getReactWrap = (anotherTo) => ({
   startStr: '<>',
@@ -31,7 +32,11 @@ export class ApiServerPack extends ApiCore {
     return true
   }
 
-  async handleViewOp(opType: 'up' | 'down' | 'del' | 'copy' | 'insert-asset', dom: MometaHTMLElement, extraData?: any) {
+  async handleViewOp(
+    opType: 'up' | 'down' | 'del' | 'copy' | 'insert-asset' | 'move-dom',
+    dom: MometaHTMLElement,
+    extraData?: any
+  ) {
     if (this.queue.pending && !this.closeTip) {
       this.closeTip = this.toast.loading('任务正在进行中，请等待')
     }
@@ -104,7 +109,7 @@ export class ApiServerPack extends ApiCore {
   }
 
   async _handleViewOp(
-    opType: 'up' | 'down' | 'del' | 'copy' | 'insert-asset',
+    opType: 'up' | 'down' | 'del' | 'copy' | 'insert-asset' | 'move-dom',
     dom: MometaHTMLElement,
     extraData?: any
   ) {
@@ -114,6 +119,41 @@ export class ApiServerPack extends ApiCore {
       locationData = data.container as any
     }
     switch (opType) {
+      case 'move-dom': {
+        const { direction, toDom } = extraData
+
+        const toData = toDom.__mometa.getMometaData()
+        const common = {
+          filename: data.filename,
+          relativeFilename: data.relativeFilename,
+          start: data.start,
+          end: data.end,
+          text: data.text
+        }
+        if (direction === 'up' || direction === 'down') {
+          return this.submitOperation({
+            type: OpType.MOVE_NODE,
+            preload: {
+              ...common,
+              data: {
+                to: direction === 'up' ? toData.start : toData.end
+              }
+            }
+          })
+        } else if (direction === 'child') {
+          return this.submitOperation({
+            type: OpType.MOVE_NODE,
+            preload: {
+              ...common,
+              data: {
+                to: toData.innerEnd
+              }
+            }
+          })
+        }
+
+        break
+      }
       case 'insert-asset': {
         const { asset, direction } = extraData
         if (direction === 'up' || direction === 'down') {
