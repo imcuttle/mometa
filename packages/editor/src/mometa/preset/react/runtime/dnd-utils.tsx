@@ -30,7 +30,10 @@ function useDfsDom(dom: HTMLElement) {
   domChildrenRef.current = domChildren
 
   const getDomChildren = React.useCallback(() => {
-    return Array.from(dom?.children || [])
+    if (dom?.parentElement) {
+      return Array.from(dom?.children || [])
+    }
+    return []
   }, [dom])
 
   React.useLayoutEffect(() => {
@@ -85,6 +88,11 @@ function useDfsDom(dom: HTMLElement) {
 
 export const DndUndropableNode = React.memo(({ dom }: { dom: HTMLElement }) => {
   const [domChildren] = useDfsDom(dom)
+
+  if (!dom?.parentElement) {
+    return null
+  }
+
   return (
     // eslint-disable-next-line react/jsx-no-useless-fragment
     <>
@@ -97,7 +105,10 @@ export const DndUndropableNode = React.memo(({ dom }: { dom: HTMLElement }) => {
 })
 
 const DndNode = React.memo(function ({ dom }: any) {
-  return isDropableDom(dom) ? <DndDropableNode dom={dom} /> : <DndUndropableNode dom={dom} />
+  if (dom && dom.parentElement) {
+    return isDropableDom(dom) ? <DndDropableNode dom={dom} /> : <DndUndropableNode dom={dom} />
+  }
+  return null
 })
 
 function useMometaDomInject(dom: MometaHTMLElement) {
@@ -248,6 +259,10 @@ export const DndDropableNode = React.memo(({ dom }: { dom: MometaHTMLElement }) 
     }
     dropRef.current(dom)
   }, [dom])
+
+  if (!dom?.parentElement) {
+    return null
+  }
 
   return (
     <>

@@ -34,7 +34,7 @@ const AssetUI = React.memo<Asset>(({ homepage, cover, name, data }) => {
   const renderComp = ({ ref, opacity, style, className }: any) => {
     return (
       <div className={c('__asset-group__cell', className)} style={{ opacity, ...style }}>
-        <Image className={c('__asset-group__cell__img')} src={cover} />
+        <Image wrapperClassName={c('__asset-group__cell__img')} src={cover} />
         <span className={c('__asset-group__cell__name')}>
           <Button
             ref={ref}

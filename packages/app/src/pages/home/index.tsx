@@ -53,6 +53,11 @@ export default function HomePage() {
 
   return (
     <Spin spinning={loading}>
+      <SearchForm
+        onFinish={(vals: any) => {
+          refetch(omitBy(vals, (x) => !x))
+        }}
+      />
       <Space style={{ display: 'flex', marginBottom: 20 }}>
         <Button icon={<PlusOutlined />} type={'primary'}>
           <Link to={'/new'} style={{ color: 'inherit' }}>
@@ -60,12 +65,6 @@ export default function HomePage() {
           </Link>
         </Button>
       </Space>
-
-      <SearchForm
-        onFinish={(vals: any) => {
-          refetch(omitBy(vals, (x) => !x))
-        }}
-      />
       <Table
         dataSource={users}
         rowKey={'id'}

@@ -20,7 +20,7 @@
       padding: 4px;
       background-color: #fff;
 
-      border: 1px solid #ccc;
+      border: 1px solid #e9e2e2;
       margin-left: -1px;
 
       display: flex;
@@ -40,6 +40,7 @@
         max-height: 70px;
         object-fit: contain;
         margin: auto;
+        overflow: hidden;
       }
       &__name {
         margin-top: 4px;
