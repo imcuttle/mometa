@@ -13,7 +13,12 @@ const getUrl = (url) => {
 
 if (!global.__MOMETA_LOCATION_REGISTED__) {
   global.__MOMETA_LOCATION_REGISTED__ = true
+  // React Router <=5 HashRouter
+  window.addEventListener('hashchange', (evt) => {
+    locationActionSubject.next({ action: 'PUSH', url: getUrl(location.hash) })
+  })
 
+  // BrowserRouter & React Router >=6 HashRouter
   const rawPushState = history.pushState
   history.pushState = function _pushState() {
     const [, , url] = arguments

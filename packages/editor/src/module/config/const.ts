@@ -7,6 +7,8 @@ const { useSubject: useSelectedNode, subject: selectedNodeSubject } = createReac
 const { useSubject: useLocationAction, subject: locationActionSubject } = createReactBehaviorSubject<{
   action: 'PUSH' | 'REPLACE'
   url?: string
+  // 来自外部的改动？
+  outer?: boolean
 }>(null, {
   eq: (a, b) => a === b
 })

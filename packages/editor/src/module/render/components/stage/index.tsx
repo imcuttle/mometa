@@ -35,8 +35,16 @@ const StageContent: React.FC<StageProps> = React.memo(({ className, externalModu
   React.useLayoutEffect(() => !!externalModules && addModules(externalModules), [externalModules])
   const [action, setAction] = useLocationAction()
   React.useLayoutEffect(() => {
-    setAction({ action: 'PUSH', url: bundlerURL })
+    setAction({ action: 'PUSH', url: bundlerURL, outer: true })
   }, [bundlerURL])
+
+  const [iframeSrc, setIframeSrc] = React.useState(bundlerURL)
+
+  React.useLayoutEffect(() => {
+    if (action?.outer) {
+      setIframeSrc(action.url)
+    }
+  }, [action])
 
   const iframeRef = React.useRef<HTMLIFrameElement>(null)
 
@@ -78,7 +86,7 @@ const StageContent: React.FC<StageProps> = React.memo(({ className, externalModu
   return (
     <div className={cn(c(), className)}>
       {!!showLocation && <LocationWidget iframeRef={iframeRef} />}
-      <iframe ref={iframeRef} src={action?.url} className={c('__iframe')} />
+      <iframe ref={iframeRef} src={iframeSrc} className={c('__iframe')} />
     </div>
   )
 })

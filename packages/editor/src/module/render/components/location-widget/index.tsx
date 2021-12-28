@@ -52,7 +52,11 @@ const LocationWidget: React.FC<LocationWidgetProps> = React.memo(({ className, i
   }, [action])
 
   const reload = () => {
-    iframeRef.current.contentWindow.location.reload()
+    if (iframeRef.current.getAttribute('src') === url()) {
+      iframeRef.current.contentWindow.location.reload()
+    } else {
+      setLocationAction({ action: 'REPLACE', url: url(), outer: true })
+    }
   }
   const reloadAndReset = () => {
     historyRef.current = {
@@ -81,13 +85,13 @@ const LocationWidget: React.FC<LocationWidgetProps> = React.memo(({ className, i
   const back = () => {
     if (canBack()) {
       historyRef.current.index = historyRef.current.index - 1
-      setLocationAction({ action: 'REPLACE', url: historyRef.current.urls[historyRef.current.index] })
+      setLocationAction({ action: 'REPLACE', url: historyRef.current.urls[historyRef.current.index], outer: true })
     }
   }
   const forward = () => {
     if (canForward()) {
       historyRef.current.index = historyRef.current.index + 1
-      setLocationAction({ action: 'REPLACE', url: historyRef.current.urls[historyRef.current.index] })
+      setLocationAction({ action: 'REPLACE', url: historyRef.current.urls[historyRef.current.index], outer: true })
     }
   }
 
@@ -128,7 +132,7 @@ const LocationWidget: React.FC<LocationWidgetProps> = React.memo(({ className, i
             if (url() === newUrl) {
               reload()
             } else {
-              setLocationAction({ action: 'PUSH', url: newUrl })
+              setLocationAction({ action: 'PUSH', url: newUrl, outer: true })
             }
           }}
         />

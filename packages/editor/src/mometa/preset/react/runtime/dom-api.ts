@@ -52,15 +52,15 @@ export class MometaDomApi extends EventEmitter {
 
   public preventEvent = true
 
-  public preventDefaultPop(event: string) {
-    this.dom.addEventListener(event, this._preventDefault, true)
+  public preventDefaultPop(event: string, options?: boolean | AddEventListenerOptions) {
+    this.dom.addEventListener(event, this._preventDefault, options)
     return () => {
-      this.dom.removeEventListener(event, this._preventDefault, true)
+      this.dom.removeEventListener(event, this._preventDefault, options)
     }
   }
 
   public getMometaList() {
-    const parents = []
+    const parents = new Set()
     const data = parseReactDomNodeDeep(this.dom)
     if (data?.fiber) {
       findClosestFiber(data.fiber, (f) => {
@@ -72,15 +72,15 @@ export class MometaDomApi extends EventEmitter {
           t = t.child
         }
         if (t) {
-          if (t.stateNode !== this.dom) {
-            return true
-          }
-          parents.push(f._debugSource?.__mometa)
+          // if (t.stateNode !== this.dom) {
+          //   return true
+          // }
+          parents.add(f._debugSource?.__mometa)
         }
         return f
       })
     }
-    return parents
+    return Array.from(parents.values()) as any[]
   }
 
   public getMometaData(): MometaData {

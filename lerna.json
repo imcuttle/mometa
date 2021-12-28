@@ -12,7 +12,7 @@
     },
     "bootstrap": {
       "hoist": true,
-      "nohoist": ["webpack-manifest-plugin"],
+      "nohoist": ["webpack-manifest-plugin", "@types/react-router-dom", "@types/react-router"],
       "npmClientArgs": []
     }
   },

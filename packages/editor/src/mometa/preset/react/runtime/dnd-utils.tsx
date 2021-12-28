@@ -206,7 +206,7 @@ export const DndDropableNode = React.memo(({ dom }: { dom: MometaHTMLElement }) 
 
   // eslint-disable-next-line consistent-return
   React.useEffect(() => {
-    if (!dom) {
+    if (!dom || !dom.__mometa) {
       return
     }
     if (canSelect) {
@@ -223,12 +223,16 @@ export const DndDropableNode = React.memo(({ dom }: { dom: MometaHTMLElement }) 
       }
       dom.addEventListener('mouseover', enterHandler)
       dom.addEventListener('mouseout', leaveHandler)
-      const dispose = dom.__mometa.preventDefaultPop('click')
+      const disposes = [
+        dom.__mometa.preventDefaultPop('click', true),
+        dom.__mometa.preventDefaultPop('mousedown', true),
+        dom.__mometa.preventDefaultPop('beforeinput', true)
+      ]
 
       return () => {
         dom.removeEventListener('mouseover', enterHandler)
         dom.removeEventListener('mouseout', leaveHandler)
-        dispose()
+        disposes.forEach((fn) => fn())
       }
     }
     setSelNode(null)

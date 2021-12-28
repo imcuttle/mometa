@@ -1,7 +1,7 @@
 import React from '@@__mometa-external/react'
 import { createPortal } from '@@__mometa-external/react-dom'
 import c from 'classnames'
-import { debounce } from 'lodash-es'
+import { debounce, pick } from 'lodash-es'
 import { getScrollParents } from '@floating-ui/dom'
 
 import { ArrowUpOutlined, ArrowDownOutlined, DragOutlined, DeleteOutlined } from '@ant-design/icons'
@@ -94,13 +94,16 @@ export const FloatingUi = React.forwardRef<HTMLDivElement, FloatingUiProps>(func
     children,
     dom,
     getContainer = globalGetContainer,
-    onClick,
     ...props
   },
   ref
 ) {
   const { isReady, shouldHide, rect } = usePosition(dom)
-  const events = React.useMemo(() => ({ onClick }), [onClick])
+
+  const handlerKeys = React.useMemo(() => {
+    return Object.keys(props).filter((n) => /^on[A-Z]/.test(n))
+  }, [props])
+  const events = React.useMemo(() => pick(props, handlerKeys), [handlerKeys, props])
   useProxyEvents(dom, events)
 
   return (
