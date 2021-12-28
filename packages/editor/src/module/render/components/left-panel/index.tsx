@@ -16,11 +16,7 @@ export interface LeftPanelProps extends Pick<MaterialPanelProps, 'materials'> {
 const LeftPanel: React.FC<LeftPanelProps> = React.memo(({ className, materials }) => {
   return (
     <div className={cn(c(), className)}>
-      <Tabs style={{ padding: '0 1px' }}>
-        <Tabs.TabPane key={'tool'} tab={'物料'}>
-          <MaterialPanel materials={materials} />
-        </Tabs.TabPane>
-      </Tabs>
+      <MaterialPanel materials={materials} />
     </div>
   )
 })

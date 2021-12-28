@@ -22,6 +22,7 @@ export interface Asset {
   name: string
   key: any
   cover?: string
+  homepage?: string
 
   data: {
     code: string // '<$ANT_BUTTON$></$ANT_BUTTON$>'

@@ -20,7 +20,7 @@ interface Data {
 }
 
 const { useSubject, subject } = createReactBehaviorSubject<Data>({
-  canSelect: true,
+  canSelect: false,
   showLocation: true
 })
 

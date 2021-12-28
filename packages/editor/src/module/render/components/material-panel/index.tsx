@@ -1,7 +1,8 @@
 import React from 'react'
 import p from 'prefix-classname'
-import { Radio, Empty, Image, Divider } from 'antd'
+import { Radio, Empty, Image, Divider, Button, Tabs } from 'antd'
 import { useDrag } from 'react-dnd'
+import { LinkOutlined, DragOutlined } from '@ant-design/icons'
 import { CLS_PREFIX } from '../../../config/const'
 
 import './style.scss'
@@ -15,9 +16,9 @@ export interface MaterialPanelProps {
   materials: Material[]
 }
 
-const AssetUI = React.memo<Asset>(({ cover, name, data }) => {
+const AssetUI = React.memo<Asset>(({ homepage, cover, name, data }) => {
   const item = React.useMemo(() => ({ cover, name, data }), [cover, name, data])
-  const [{ isDragging }, drag] = useDrag(
+  const [{ isDragging }, drag, preview] = useDrag(
     () => ({
       type: 'asset',
       item,
@@ -30,11 +31,29 @@ const AssetUI = React.memo<Asset>(({ cover, name, data }) => {
   )
   const opacity = isDragging ? 0.4 : 1
 
-  const renderComp = ({ ref, opacity, preview, style, className }: any) => {
+  const renderComp = ({ ref, opacity, style, className }: any) => {
     return (
-      <div ref={ref} className={c('__asset-group__cell', className)} style={{ opacity, ...style }}>
+      <div className={c('__asset-group__cell', className)} style={{ opacity, ...style }}>
         <Image className={c('__asset-group__cell__img')} src={cover} />
-        <span className={c('__asset-group__cell__name')}>{name}</span>
+        <span className={c('__asset-group__cell__name')}>
+          <Button
+            ref={ref}
+            className={c('__asset-group__cell__icon')}
+            type={'text'}
+            size={'small'}
+            icon={<DragOutlined />}
+            title={'按住并拖动来进行移动'}
+          />
+          <span style={{ display: 'inline-flex', padding: '3px 4px' }} ref={preview}>
+            {homepage ? (
+              <a href={homepage} target={'_blank'}>
+                {name}
+              </a>
+            ) : (
+              name
+            )}
+          </span>
+        </span>
       </div>
     )
   }
@@ -57,39 +76,26 @@ const AssetGroupComp: React.FC<{ assetGroup: AssetGroup }> = React.memo(({ asset
 })
 
 const MaterialPanel: React.FC<MaterialPanelProps> = React.memo(({ className, materials }) => {
-  const [materialValue, setMaterialValue] = React.useState(materials?.[0]?.key)
-
-  const panels = React.useMemo(() => {
-    return materials.map((mat) => (
-      <div key={mat.key} className={c('__mp', mat.key === materialValue && '__map-active')}>
-        {mat.assetGroups.map((group, index, { length }) => (
-          <div key={group.key}>
-            <AssetGroupComp assetGroup={group} />
-            {index !== length - 1 && <Divider type={'horizontal'} />}
-          </div>
-        ))}
-      </div>
-    ))
-  }, [materialValue, materials])
-
   return (
     <div className={cn(c(), className)}>
       {!materials?.length && <Empty description={'暂无物料'} style={{ marginTop: 20 }} />}
       {!!materials?.length && (
-        <>
-          {materials?.length > 1 && (
-            <Radio.Group value={materialValue} onChange={setMaterialValue}>
-              {materials.map((mat) => {
-                return (
-                  <Radio.Button key={mat.key} value={mat.key}>
-                    {mat.name}
-                  </Radio.Button>
-                )
-              })}
-            </Radio.Group>
-          )}
-          {panels}
-        </>
+        <Tabs style={{ padding: '0 1px' }}>
+          {materials.map((mat) => {
+            return (
+              <Tabs.TabPane key={mat.key} tab={mat.name}>
+                <div className={c('__mp')}>
+                  {mat.assetGroups.map((group, index, { length }) => (
+                    <div key={group.key}>
+                      <AssetGroupComp assetGroup={group} />
+                      {index !== length - 1 && <Divider type={'horizontal'} />}
+                    </div>
+                  ))}
+                </div>
+              </Tabs.TabPane>
+            )
+          })}
+        </Tabs>
       )}
     </div>
   )

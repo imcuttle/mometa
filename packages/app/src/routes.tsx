@@ -3,6 +3,8 @@ import DetailPage from './pages/detail'
 import { RouteConfig } from './render-router'
 import App from './pages/app'
 import Layout from './layout'
+import EditPage from './pages/edit'
+import { Detail } from './component/detail'
 
 export const routes: RouteConfig[] = [
   {
@@ -15,9 +17,18 @@ export const routes: RouteConfig[] = [
         component: HomePage
       },
       {
-        name: 'Detail',
-        path: '/detail',
+        path: '/detail/:id',
         component: DetailPage
+      },
+      {
+        path: '/edit/:id',
+        component: EditPage
+      },
+      {
+        path: '/new',
+        component: () => {
+          return <Detail />
+        }
       },
       {
         name: 'App',

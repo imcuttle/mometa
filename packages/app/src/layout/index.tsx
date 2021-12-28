@@ -10,6 +10,9 @@ export default function Layout({ route }: RouterComponentProps) {
   const menu = React.useMemo(() => {
     if (route.routes) {
       const renderMenuNode = (node: RouteConfig, i: number) => {
+        if (!node.name) {
+          return null
+        }
         return (
           <Menu.Item key={node.key ?? node.path ?? i}>
             <NavLink to={node.path as any}>{node.name}</NavLink>
@@ -26,9 +29,9 @@ export default function Layout({ route }: RouterComponentProps) {
   }, [loc, route])
 
   return (
-    <AntLayout style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+    <AntLayout style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <Header>{menu}</Header>
-      <Content style={{ flex: 1, padding: '10px 50px' }}>
+      <Content style={{ flex: 1, padding: '20px 50px' }}>
         <Suspense fallback={<Spin style={{ display: 'block', marginTop: 20, width: '100%' }} />}>
           <RouterRender route={route} />
         </Suspense>

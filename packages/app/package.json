@@ -3,10 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "lodash": "^4.17.21",
+    "@types/lodash": "^4.14.178",
     "@babel/core": "^7.16.0",
     "@mometa/editor": "^0.0.0",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.3",
-    "@rcp/use.fetcher": "^1.1.3",
+    "@rcp/use.fetcher": "^1.1.5",
     "@svgr/webpack": "^5.5.0",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",

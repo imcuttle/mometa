@@ -29,6 +29,12 @@
       height: auto;
       aspect-ratio: 1/1;
 
+      &__icon {
+        height: 16px !important;
+        width: 16px !important;
+        line-height: 1 !important;
+      }
+
       &__img {
         width: auto;
         max-height: 70px;
@@ -38,7 +44,9 @@
       &__name {
         margin-top: 4px;
         text-align: center;
-        display: block;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
     }
   }

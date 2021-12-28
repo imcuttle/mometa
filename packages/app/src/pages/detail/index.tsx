@@ -1,3 +1,5 @@
-export default function DetailPage() {
-  return <div>DetailPage</div>
+import { Detail } from '../../component/detail'
+
+export default function DetailPage({ match }: any) {
+  return <Detail id={match.params.id} />
 }

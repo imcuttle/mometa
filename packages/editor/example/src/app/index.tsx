@@ -12,10 +12,10 @@ const Navigation = () => {
   return (
     <ul>
       <li>
-        <Link to={'/list'}>ListPage</Link>
+        <Link to={'/'}>App</Link>
       </li>
       <li>
-        <Link to={'/'}>App</Link>
+        <Link to={'/list'}>ListPage</Link>
       </li>
     </ul>
   )
