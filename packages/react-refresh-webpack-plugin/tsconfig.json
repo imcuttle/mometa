@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "esModuleInterop": true,
+    "module": "commonjs",
+    "noUnusedLocals": true,
+    "outDir": "types",
+    "resolveJsonModule": true,
+    "strict": true,
+    "target": "es2017"
+  },
+  "include": ["./lib/*", "./loader/*", "./options/*"],
+  "exclude": ["node_modules"]
+}
