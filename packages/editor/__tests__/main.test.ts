@@ -1,5 +1,5 @@
-import editor from '../src/editor'
+// import editor from '../src/editor'
 
 describe('editor', function () {
-  it('spec case', function () {})
+  it.skip('spec case', function () {})
 })

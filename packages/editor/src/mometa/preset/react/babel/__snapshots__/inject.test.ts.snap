@@ -18,7 +18,16 @@ const elem = <div __mometa={{
   \\"relativeFilename\\": \\"file.jsx\\",
   \\"emptyChildren\\": false,
   \\"isFirst\\": true,
-  \\"hash\\": \\"4befa0f65fe3059492c7b6dafcd384fb8de0e683\\"
+  \\"selfClosed\\": false,
+  \\"innerStart\\": {
+    \\"line\\": 3,
+    \\"column\\": 22
+  },
+  \\"innerEnd\\": {
+    \\"line\\": 15,
+    \\"column\\": 4
+  },
+  \\"hash\\": \\"7bf6e88c7e6f9077f6a89b5e7f7d5248b1e17ac2\\"
 }}>
       <h1 title={'abc'} __mometa={{
     \\"start\\": {
@@ -35,7 +44,16 @@ const elem = <div __mometa={{
     \\"relativeFilename\\": \\"file.jsx\\",
     \\"emptyChildren\\": false,
     \\"isFirst\\": false,
-    \\"hash\\": \\"2518fed6850a221e52be5c27b71d629ef17066a1\\",
+    \\"selfClosed\\": false,
+    \\"innerStart\\": {
+      \\"line\\": 4,
+      \\"column\\": 24
+    },
+    \\"innerEnd\\": {
+      \\"line\\": 4,
+      \\"column\\": 35
+    },
+    \\"hash\\": \\"21cbb0b547925ade3cbcccaca98cda7197f34e45\\",
     \\"nextSibling\\": {
       \\"start\\": {
         \\"line\\": 5,
@@ -63,7 +81,16 @@ const elem = <div __mometa={{
     \\"relativeFilename\\": \\"file.jsx\\",
     \\"emptyChildren\\": false,
     \\"isFirst\\": false,
-    \\"hash\\": \\"bbc8bdc999c48ee6565aa27a073b8f2b50d6d683\\",
+    \\"selfClosed\\": false,
+    \\"innerStart\\": {
+      \\"line\\": 5,
+      \\"column\\": 12
+    },
+    \\"innerEnd\\": {
+      \\"line\\": 14,
+      \\"column\\": 6
+    },
+    \\"hash\\": \\"e86049510e95d08136b97036150643fed91d895b\\",
     \\"previousSibling\\": {
       \\"start\\": {
         \\"line\\": 4,
@@ -91,7 +118,16 @@ const elem = <div __mometa={{
       \\"relativeFilename\\": \\"file.jsx\\",
       \\"emptyChildren\\": false,
       \\"isFirst\\": false,
-      \\"hash\\": \\"5d70b0c59cf7fc01a3523cb74d9f393b4b513cca\\",
+      \\"selfClosed\\": false,
+      \\"innerStart\\": {
+        \\"line\\": 6,
+        \\"column\\": 44
+      },
+      \\"innerEnd\\": {
+        \\"line\\": 12,
+        \\"column\\": 6
+      },
+      \\"hash\\": \\"3135d703dfce53797e0fd0f25252f9920c75be90\\",
       \\"nextSibling\\": {
         \\"start\\": {
           \\"line\\": 13,
@@ -119,7 +155,16 @@ const elem = <div __mometa={{
         \\"relativeFilename\\": \\"file.jsx\\",
         \\"emptyChildren\\": false,
         \\"isFirst\\": false,
-        \\"hash\\": \\"b9fe00efba459265d80ba1729534518e2e0b6eb5\\",
+        \\"selfClosed\\": false,
+        \\"innerStart\\": {
+          \\"line\\": 7,
+          \\"column\\": 11
+        },
+        \\"innerEnd\\": {
+          \\"line\\": 7,
+          \\"column\\": 13
+        },
+        \\"hash\\": \\"6dddde0645f54e6d77d9e1c548970516414bb006\\",
         \\"nextSibling\\": {
           \\"start\\": {
             \\"line\\": 8,
@@ -147,7 +192,16 @@ const elem = <div __mometa={{
         \\"relativeFilename\\": \\"file.jsx\\",
         \\"emptyChildren\\": false,
         \\"isFirst\\": true,
-        \\"hash\\": \\"3b56b508a94274b94a9748d33f2674dc416f782c\\",
+        \\"selfClosed\\": false,
+        \\"innerStart\\": {
+          \\"line\\": 9,
+          \\"column\\": 21
+        },
+        \\"innerEnd\\": {
+          \\"line\\": 9,
+          \\"column\\": 32
+        },
+        \\"hash\\": \\"9dc3339d64744708be63399e5ac2088f940b8489\\",
         \\"container\\": {
           \\"isFirstElement\\": true,
           \\"text\\": \\"{arr.map((x, i) => (\\\\n          <p key={i}>content_{i}</p>\\\\n        ))}\\",
@@ -199,7 +253,16 @@ const elem = <div __mometa={{
         \\"relativeFilename\\": \\"file.jsx\\",
         \\"emptyChildren\\": true,
         \\"isFirst\\": false,
-        \\"hash\\": \\"ae10d35536c4a0b630ae3db77ac799fadaac3d49\\",
+        \\"selfClosed\\": false,
+        \\"innerStart\\": {
+          \\"line\\": 11,
+          \\"column\\": 29
+        },
+        \\"innerEnd\\": {
+          \\"line\\": 11,
+          \\"column\\": 29
+        },
+        \\"hash\\": \\"a1a178e48be1fe4373543693edfbcc5d032cfe64\\",
         \\"previousSibling\\": {
           \\"start\\": {
             \\"line\\": 8,
@@ -226,7 +289,16 @@ const elem = <div __mometa={{
           \\"relativeFilename\\": \\"file.jsx\\",
           \\"emptyChildren\\": true,
           \\"isFirst\\": false,
-          \\"hash\\": \\"ae10d35536c4a0b630ae3db77ac799fadaac3d49\\",
+          \\"selfClosed\\": false,
+          \\"innerStart\\": {
+            \\"line\\": 11,
+            \\"column\\": 29
+          },
+          \\"innerEnd\\": {
+            \\"line\\": 11,
+            \\"column\\": 29
+          },
+          \\"hash\\": \\"a1a178e48be1fe4373543693edfbcc5d032cfe64\\",
           \\"previousSibling\\": {
             \\"start\\": {
               \\"line\\": 8,
@@ -255,7 +327,16 @@ const elem = <div __mometa={{
       \\"relativeFilename\\": \\"file.jsx\\",
       \\"emptyChildren\\": true,
       \\"isFirst\\": false,
-      \\"hash\\": \\"4a87b1ec3553e6fa4a8badf0bde8e001c79ceae9\\",
+      \\"selfClosed\\": false,
+      \\"innerStart\\": {
+        \\"line\\": 13,
+        \\"column\\": 44
+      },
+      \\"innerEnd\\": {
+        \\"line\\": 13,
+        \\"column\\": 44
+      },
+      \\"hash\\": \\"fa9b43638bd9ae99a432ba9524f8e9f50959272f\\",
       \\"previousSibling\\": {
         \\"start\\": {
           \\"line\\": 6,
@@ -282,7 +363,16 @@ const elem = <div __mometa={{
         \\"relativeFilename\\": \\"file.jsx\\",
         \\"emptyChildren\\": true,
         \\"isFirst\\": false,
-        \\"hash\\": \\"4a87b1ec3553e6fa4a8badf0bde8e001c79ceae9\\",
+        \\"selfClosed\\": false,
+        \\"innerStart\\": {
+          \\"line\\": 13,
+          \\"column\\": 44
+        },
+        \\"innerEnd\\": {
+          \\"line\\": 13,
+          \\"column\\": 44
+        },
+        \\"hash\\": \\"fa9b43638bd9ae99a432ba9524f8e9f50959272f\\",
         \\"previousSibling\\": {
           \\"start\\": {
             \\"line\\": 6,

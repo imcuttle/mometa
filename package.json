@@ -66,6 +66,15 @@
     }
   },
   "jest": {
+    "globals": {
+      "ts-jest": {
+        "diagnostics": {
+          "ignoreCodes": [
+            2304
+          ]
+        }
+      }
+    },
     "transform": {
       "^.+\\.tsx?$": "ts-jest",
       "^.+\\.jsx?$": "babel-jest"
@@ -77,6 +86,11 @@
       "jsx",
       "json",
       "node"
+    ],
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/es/",
+      "/lib/"
     ],
     "testMatch": [
       "**/__test{s,}__/*.(spec|test).{t,j}s{x,}",

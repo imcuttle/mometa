@@ -103,7 +103,7 @@ const importPlugin = ({ types: t }) =>
           }
 
           const namedCache = new Map()
-          const getValidName = (name) => {
+          const getValidName = (name = 'Unknown') => {
             name = name.replace(/[\/@]/g, '$')
             // @ts-ignore
             while (true === path.scope?.references?.[name] || namedCache.has(name)) {

@@ -127,7 +127,7 @@ describe('fsHandler', function () {
               ANT_BUTTON: {
                 source: 'antd',
                 mode: 'named',
-                name: 'Button'
+                imported: 'Button'
               }
             }
           }

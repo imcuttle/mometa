@@ -17,10 +17,10 @@
   ],
   "scripts": {
     "__test": "../../scripts/run test",
-    "_build": "../../scripts/run build",
+    "build": "../../scripts/run build",
     "packlimit": "../../scripts/run packlimit",
     "dev": "npm run build -- --watch",
-    "prepublishOnly": "npm run _build && npm run packlimit",
+    "prepublishOnly": "npm run build && npm run packlimit",
     "version": "npm run packlimit"
   },
   "dependencies": {},
