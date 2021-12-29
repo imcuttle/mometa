@@ -1,6 +1,6 @@
 {
   "packages": ["packages/*", "packages/editor/example"],
-  "version": "0.0.5",
+  "version": "0.0.6",
   "extendCommands": ["lerna-command-toc"],
   "command": {
     "publish": {
