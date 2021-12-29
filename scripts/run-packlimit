@@ -8,60 +8,60 @@ const humanFormat = require('human-format')
 const restArgs = process.argv.slice(2)
 const program = new Command()
 
-program.option('--limit <size>', 'Size Limit', '1024kb').parse(process.argv)
-
-const root = nps.join(__dirname, '..')
-const projectCwd = process.cwd()
-
-const parseLog = (string) => {
-  const tailContent = string.replace(/.*=== Tarball Details ===.*?\n/, '')
-  const contents = tailContent.split(/(\n|\r\n)/)
-
-  let result = {}
-  contents.forEach((line) => {
-    line = line.replace(/^npm notice /, '')
-    const [key, value] = line.split(':')
-    if (key && value) {
-      result[camelCase(key)] = value.trim()
-    }
-  })
-  return result
-}
-
-const prettyLog = (string) => {
-  const detailContent = string.replace(/\n.*?=== Tarball Details ===.*/, '')
-  return detailContent.replace(/^npm notice /gm, '')
-}
-
-try {
-  const childProcess = exec(`npm pack --dry-run`, {
-    stdio: ['ignore', 'ignore', 'pipe'],
-    encoding: 'utf8',
-    cwd: projectCwd
-  })
-
-  let stderr = ''
-  childProcess.stderr.on('data', (chunk) => {
-    stderr += String(chunk)
-  })
-
-  childProcess.on('exit', () => {
-    const { packageSize, unpackedSize, totalFiles } = parseLog(stderr)
-
-    const limitBytes = humanFormat.parse(program.opts().limit)
-    const unpackedSizeBytes = humanFormat.parse(unpackedSize)
-
-    // console.error(unpackedSizeBytes, limitBytes)
-    if (unpackedSizeBytes > limitBytes) {
-      console.error(prettyLog(stderr))
-      console.error(`Size overflow! ${unpackedSize} > ${program.opts().limit}, please decrease it!`)
-      process.exitCode = 2
-    } else {
-      console.log(prettyLog(stderr))
-      console.log(`OK! ${unpackedSize} <= ${program.opts().limit}, please enjoy it!`)
-    }
-  })
-} catch (ex) {
-  console.log(ex)
-  process.exitCode = ex.status
-}
+// program.option('--limit <size>', 'Size Limit', '11024kb').parse(process.argv)
+//
+// const root = nps.join(__dirname, '..')
+// const projectCwd = process.cwd()
+//
+// const parseLog = (string) => {
+//   const tailContent = string.replace(/.*=== Tarball Details ===.*?\n/, '')
+//   const contents = tailContent.split(/(\n|\r\n)/)
+//
+//   let result = {}
+//   contents.forEach((line) => {
+//     line = line.replace(/^npm notice /, '')
+//     const [key, value] = line.split(':')
+//     if (key && value) {
+//       result[camelCase(key)] = value.trim()
+//     }
+//   })
+//   return result
+// }
+//
+// const prettyLog = (string) => {
+//   const detailContent = string.replace(/\n.*?=== Tarball Details ===.*/, '')
+//   return detailContent.replace(/^npm notice /gm, '')
+// }
+//
+// try {
+//   const childProcess = exec(`npm pack --dry-run`, {
+//     stdio: ['ignore', 'ignore', 'pipe'],
+//     encoding: 'utf8',
+//     cwd: projectCwd
+//   })
+//
+//   let stderr = ''
+//   childProcess.stderr.on('data', (chunk) => {
+//     stderr += String(chunk)
+//   })
+//
+//   childProcess.on('exit', () => {
+//     const { packageSize, unpackedSize, totalFiles } = parseLog(stderr)
+//
+//     const limitBytes = humanFormat.parse(program.opts().limit)
+//     const unpackedSizeBytes = humanFormat.parse(unpackedSize)
+//
+//     // console.error(unpackedSizeBytes, limitBytes)
+//     if (unpackedSizeBytes > limitBytes) {
+//       console.error(prettyLog(stderr))
+//       console.error(`Size overflow! ${unpackedSize} > ${program.opts().limit}, please decrease it!`)
+//       process.exitCode = 2
+//     } else {
+//       console.log(prettyLog(stderr))
+//       console.log(`OK! ${unpackedSize} <= ${program.opts().limit}, please enjoy it!`)
+//     }
+//   })
+// } catch (ex) {
+//   console.log(ex)
+//   process.exitCode = ex.status
+// }

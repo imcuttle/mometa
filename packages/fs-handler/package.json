@@ -46,5 +46,6 @@
     "type": "git",
     "url": "git+https://github.com/imcuttle/mometa.git",
     "directory": "packages/fs-handler"
-  }
+  },
+  "gitHead": "e139321ab9261572abd8bc6bb41e97e3544c00ac"
 }
