@@ -1,6 +1,6 @@
 {
   "name": "@mometa/editor-example",
-  "version": "0.1.0",
+  "version": "0.0.0",
   "private": true,
   "dependencies": {
     "react-router": "^6.2.1",
