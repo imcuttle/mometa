@@ -8,7 +8,14 @@
   <a href="https://lernajs.io/"><img src="https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg?style=flat-square" /></a>
   <a href="https://conventionalcommits.org"><img src="https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg?style=flat-square" /></a>
 </p>
-<p align="center">面向研发的低代码元编程平台</p>
+<p align="center">面向研发的低代码元编程（代码可视化）能力</p>
+
+## 特性
+
+- 面向研发的代码可视化编辑
+- 开放物料生态，可定制团队内物料库，见 [mometa-mat](https://github.com/imcuttle/mometa-mat)
+- 多语言、多生态支持，目前暂只支持 React
+- 开发友好，对于 Webpack 支持 0 成本接入
 
 ## Packages
 

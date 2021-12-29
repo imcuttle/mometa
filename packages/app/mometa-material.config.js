@@ -536,7 +536,7 @@ module.exports = [
             homepage: 'https://ant.design/components/radio-cn/',
             cover: 'https://gw.alipayobjects.com/zos/alicdn/8cYb5seNB/Radio.svg',
             data: {
-              code: '<$Radio$ />',
+              code: '<$Radio$>单选</$Radio$>',
               dependencies: {
                 Radio: {
                   source: 'antd',
@@ -584,7 +584,13 @@ module.exports = [
             homepage: 'https://ant.design/components/select-cn/',
             cover: 'https://gw.alipayobjects.com/zos/alicdn/_0XzgOis7/Select.svg',
             data: {
-              code: '<$Select$ />',
+              code: `<$Select$ defaultValue="lucy" style={{ width: 120 }}>
+              <$Select$.Option value="jack">Jack</$Select$.Option>
+      <$Select$.Option value="lucy">Lucy</$Select$.Option>
+      <$Select$.Option value="disabled" disabled>
+        Disabled
+      </$Select$.Option>
+              </$Select$>`,
               dependencies: {
                 Select: {
                   source: 'antd',
@@ -600,7 +606,17 @@ module.exports = [
             homepage: 'https://ant.design/components/tree-select-cn/',
             cover: 'https://gw.alipayobjects.com/zos/alicdn/Ax4DA0njr/TreeSelect.svg',
             data: {
-              code: '<$TreeSelect$ />',
+              code: `<$TreeSelect$ showSearch dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}>
+              <$TreeSelect$.TreeNode value="parent 1" title="parent 1">
+        <$TreeSelect$.TreeNode value="parent 1-0" title="parent 1-0">
+          <$TreeSelect$.TreeNode value="leaf1" title="leaf1" />
+          <$TreeSelect$.TreeNode value="leaf2" title="leaf2" />
+        </$TreeSelect$.TreeNode>
+        <$TreeSelect$.TreeNode value="parent 1-1" title="parent 1-1">
+          <$TreeSelect$.TreeNode value="leaf3" title={<b style={{ color: '#08c' }}>leaf3</b>} />
+        </$TreeSelect$.TreeNode>
+      </$TreeSelect$.TreeNode>
+              </$TreeSelect$>`,
               dependencies: {
                 TreeSelect: {
                   source: 'antd',
@@ -648,7 +664,7 @@ module.exports = [
             homepage: 'https://ant.design/components/upload-cn/',
             cover: 'https://gw.alipayobjects.com/zos/alicdn/QaeBt_ZMg/Upload.svg',
             data: {
-              code: '<$Upload$ />',
+              code: '<$Upload$ ><span>点击上传</span><$Upload$>',
               dependencies: {
                 Upload: {
                   source: 'antd',
@@ -670,7 +686,7 @@ module.exports = [
             homepage: 'https://ant.design/components/avatar-cn/',
             cover: 'https://gw.alipayobjects.com/zos/antfincdn/aBcnbw68hP/Avatar.svg',
             data: {
-              code: '<$Avatar$ />',
+              code: '<$Avatar$ size={40} src="https://joeschmoe.io/api/v1/random" />',
               dependencies: {
                 Avatar: {
                   source: 'antd',
@@ -686,7 +702,7 @@ module.exports = [
             homepage: 'https://ant.design/components/badge-cn/',
             cover: 'https://gw.alipayobjects.com/zos/antfincdn/6%26GF9WHwvY/Badge.svg',
             data: {
-              code: '<$Badge$ />',
+              code: '<$Badge$ count={5}><span>Badge</span></$Badge$>',
               dependencies: {
                 Badge: {
                   source: 'antd',
@@ -702,7 +718,7 @@ module.exports = [
             homepage: 'https://ant.design/components/comment-cn/',
             cover: 'https://gw.alipayobjects.com/zos/alicdn/ILhxpGzBO/Comment.svg',
             data: {
-              code: '<$Comment$ />',
+              code: '<$Comment$ author={<span>imcuttle</span>}  />',
               dependencies: {
                 Comment: {
                   source: 'antd',
@@ -718,7 +734,14 @@ module.exports = [
             homepage: 'https://ant.design/components/collapse-cn/',
             cover: 'https://gw.alipayobjects.com/zos/alicdn/IxH16B9RD/Collapse.svg',
             data: {
-              code: '<$Collapse$ />',
+              code: `<$Collapse$ defaultActiveKey={['1']} >
+                <$Collapse$.Panel header="This is panel header 1" key="1">
+                  <p>hello world</p>
+                </$Collapse$.Panel>
+                <$Collapse$.Panel header="This is panel header 2" key="2">
+                  <p>hello world</p>
+                </$Collapse$.Panel>
+              </$Collapse$>`,
               dependencies: {
                 Collapse: {
                   source: 'antd',
@@ -734,7 +757,13 @@ module.exports = [
             homepage: 'https://ant.design/components/carousel-cn/',
             cover: 'https://gw.alipayobjects.com/zos/antfincdn/%24C9tmj978R/Carousel.svg',
             data: {
-              code: '<$Carousel$ />',
+              code: `<$Carousel$>
+              <div>
+              <h3 >1</h3>
+            </div>
+            <div>
+              <h3 >2</h3>
+            </div></$Carousel$>`,
               dependencies: {
                 Carousel: {
                   source: 'antd',
@@ -750,7 +779,7 @@ module.exports = [
             homepage: 'https://ant.design/components/card-cn/',
             cover: 'https://gw.alipayobjects.com/zos/antfincdn/NqXt8DJhky/Card.svg',
             data: {
-              code: '<$Card$ />',
+              code: '<$Card$ style={{ width: 300 }} ><p>content</p></Card>',
               dependencies: {
                 Card: {
                   source: 'antd',
@@ -782,7 +811,15 @@ module.exports = [
             homepage: 'https://ant.design/components/descriptions-cn/',
             cover: 'https://gw.alipayobjects.com/zos/alicdn/MjtG9_FOI/Descriptions.svg',
             data: {
-              code: '<$Descriptions$ />',
+              code: `<$Descriptions$ title="User Info" >
+              <$Descriptions$.Item label="UserName">Zhou Maomao</$Descriptions$.Item>
+              <$Descriptions$.Item label="Telephone">1810000000</$Descriptions$.Item>
+              <$Descriptions$.Item label="Live">Hangzhou, Zhejiang</$Descriptions$.Item>
+              <$Descriptions$.Item label="Remark">empty</$Descriptions$.Item>
+              <$Descriptions$.Item label="Address">
+                No. 18, Wantang Road, Xihu District, Hangzhou, Zhejiang, China
+              </$Descriptions$.Item>
+              </$Descriptions$>`,
               dependencies: {
                 Descriptions: {
                   source: 'antd',
@@ -814,7 +851,7 @@ module.exports = [
             homepage: 'https://ant.design/components/image-cn/',
             cover: 'https://gw.alipayobjects.com/zos/antfincdn/D1dXz9PZqa/image.svg',
             data: {
-              code: '<$Image$ />',
+              code: `<$Image$ width={200} src="https://gw.alipayobjects.com/zos/antfincdn/aPkFc8Sj7n/method-draw-image.svg" />`,
               dependencies: {
                 Image: {
                   source: 'antd',
@@ -830,7 +867,20 @@ module.exports = [
             homepage: 'https://ant.design/components/list-cn/',
             cover: 'https://gw.alipayobjects.com/zos/alicdn/5FrZKStG_/List.svg',
             data: {
-              code: '<$List$ />',
+              code: `<$List$
+              size="small"
+              header={<div>Header</div>}
+              footer={<div>Footer</div>}
+              bordered
+              dataSource={[
+  'Racing car sprays burning fuel into crowd.',
+  'Japanese princess to wed commoner.',
+  'Australian walks 100km after outback crash.',
+  'Man charged over missing wedding girl.',
+  'Los Angeles battles huge wildfires.',
+]}
+              renderItem={item => <$List$.Item>{item}</$List$.Item>}
+              />`,
               dependencies: {
                 List: {
                   source: 'antd',
@@ -846,7 +896,10 @@ module.exports = [
             homepage: 'https://ant.design/components/popover-cn/',
             cover: 'https://gw.alipayobjects.com/zos/alicdn/1PNL1p_cO/Popover.svg',
             data: {
-              code: '<$Popover$ />',
+              code: `<$Popover$ title="Title" content={<div>
+    <p>Content</p>
+    <p>Content</p>
+  </div>} ><span>Hover me</span></$Popover$>`,
               dependencies: {
                 Popover: {
                   source: 'antd',
@@ -862,7 +915,7 @@ module.exports = [
             homepage: 'https://ant.design/components/statistic-cn/',
             cover: 'https://gw.alipayobjects.com/zos/antfincdn/rcBNhLBrKbE/Statistic.svg',
             data: {
-              code: '<$Statistic$ />',
+              code: '<$Statistic$ title="Active Users" value={112893} />',
               dependencies: {
                 Statistic: {
                   source: 'antd',
@@ -878,7 +931,41 @@ module.exports = [
             homepage: 'https://ant.design/components/tree-cn/',
             cover: 'https://gw.alipayobjects.com/zos/alicdn/Xh-oWqg9k/Tree.svg',
             data: {
-              code: '<$Tree$ />',
+              code: `<$Tree$
+              checkable
+              defaultExpandedKeys={['0-0-0', '0-0-1']}
+              defaultSelectedKeys={['0-0-0', '0-0-1']}
+              defaultCheckedKeys={['0-0-0', '0-0-1']}
+              treeData={[
+  {
+    title: 'parent 1',
+    key: '0-0',
+    children: [
+      {
+        title: 'parent 1-0',
+        key: '0-0-0',
+        disabled: true,
+        children: [
+          {
+            title: 'leaf',
+            key: '0-0-0-0',
+            disableCheckbox: true,
+          },
+          {
+            title: 'leaf',
+            key: '0-0-0-1',
+          },
+        ],
+      },
+      {
+        title: 'parent 1-1',
+        key: '0-0-1',
+        children: [{ title: <span style={{ color: '#1890ff' }}>sss</span>, key: '0-0-1-0' }],
+      },
+    ],
+  },
+]}
+              />`,
               dependencies: {
                 Tree: {
                   source: 'antd',
@@ -894,7 +981,7 @@ module.exports = [
             homepage: 'https://ant.design/components/tooltip-cn/',
             cover: 'https://gw.alipayobjects.com/zos/alicdn/Vyyeu8jq2/Tooltp.svg',
             data: {
-              code: '<$Tooltip$ />',
+              code: '<$Tooltip$ title="prompt text"><span>Tooltip will show on mouse enter.</span></$Tooltip$>',
               dependencies: {
                 Tooltip: {
                   source: 'antd',
@@ -910,7 +997,12 @@ module.exports = [
             homepage: 'https://ant.design/components/timeline-cn/',
             cover: 'https://gw.alipayobjects.com/zos/antfincdn/vJmo00mmgR/Timeline.svg',
             data: {
-              code: '<$Timeline$ />',
+              code: `<$Timeline$>
+              <$Timeline$.Item>Create a services site 2015-09-01</$Timeline$.Item>
+    <$Timeline$.Item>Solve initial network problems 2015-09-01</$Timeline$.Item>
+    <$Timeline$.Item>Technical testing 2015-09-01</$Timeline$.Item>
+    <$Timeline$.Item>Network problems being solved 2015-09-01</$Timeline$.Item>
+              </$Timeline$>`,
               dependencies: {
                 Timeline: {
                   source: 'antd',
@@ -926,7 +1018,7 @@ module.exports = [
             homepage: 'https://ant.design/components/tag-cn/',
             cover: 'https://gw.alipayobjects.com/zos/alicdn/cH1BOLfxC/Tag.svg',
             data: {
-              code: '<$Tag$ />',
+              code: '<$Tag$>Tag</$Tag$>',
               dependencies: {
                 Tag: {
                   source: 'antd',
@@ -942,7 +1034,14 @@ module.exports = [
             homepage: 'https://ant.design/components/tabs-cn/',
             cover: 'https://gw.alipayobjects.com/zos/antfincdn/lkI2hNEDr2V/Tabs.svg',
             data: {
-              code: '<$Tabs$ />',
+              code: `<$Tabs$ >
+              <$Tabs$.TabPane tab="Tab 1" key="1">
+                Tab Pane 1
+              </$Tabs$.TabPane>
+              <$Tabs$.TabPane tab="Tab 2" key="2">
+                Tab Pane 2
+              </$Tabs$.TabPane>
+              </$Tabs$>`,
               dependencies: {
                 Tabs: {
                   source: 'antd',
@@ -958,7 +1057,36 @@ module.exports = [
             homepage: 'https://ant.design/components/table-cn/',
             cover: 'https://gw.alipayobjects.com/zos/alicdn/f-SbcX2Lx/Table.svg',
             data: {
-              code: '<$Table$ />',
+              code: `<$Table$ dataSource={[
+  {
+    key: '1',
+    name: '胡彦斌',
+    age: 32,
+    address: '西湖区湖底公园1号',
+  },
+  {
+    key: '2',
+    name: '胡彦祖',
+    age: 42,
+    address: '西湖区湖底公园1号',
+  },
+]} columns={[
+  {
+    title: '姓名',
+    dataIndex: 'name',
+    key: 'name',
+  },
+  {
+    title: '年龄',
+    dataIndex: 'age',
+    key: 'age',
+  },
+  {
+    title: '住址',
+    dataIndex: 'address',
+    key: 'address',
+  },
+]} />`,
               dependencies: {
                 Table: {
                   source: 'antd',
@@ -980,7 +1108,7 @@ module.exports = [
             homepage: 'https://ant.design/components/alert-cn/',
             cover: 'https://gw.alipayobjects.com/zos/alicdn/8emPa3fjl/Alert.svg',
             data: {
-              code: '<$Alert$ />',
+              code: '<$Alert$ message="Success Text" type="success" />',
               dependencies: {
                 Alert: {
                   source: 'antd',
