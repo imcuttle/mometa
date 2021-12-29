@@ -1,6 +1,6 @@
 {
   "name": "@mometa/react-docgen-typescript",
-  "version": "0.0.0",
+  "version": "0.0.3",
   "private": true,
   "publishConfig": {
     "access": "public"
@@ -23,7 +23,6 @@
     "prepublishOnly": "npm run build && npm run packlimit",
     "version": "npm run packlimit"
   },
-  "dependencies": {},
   "keywords": [
     "imcuttle",
     "react-docgen-typescript",
