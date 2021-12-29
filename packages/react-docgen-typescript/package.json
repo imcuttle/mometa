@@ -4,7 +4,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "author": "余聪 <yucong@yuanfudao.com>",
+  "author": "imcuttle <imcuttle@163.com>",
   "description": "forked from https://github.com/styleguidist/react-docgen-typescript",
   "main": "lib",
   "types": "types",
@@ -24,7 +24,7 @@
   },
   "dependencies": {},
   "keywords": [
-    "余聪",
+    "imcuttle",
     "react-docgen-typescript",
     "mometa"
   ],

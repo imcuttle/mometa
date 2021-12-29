@@ -1,6 +1,6 @@
 import React, { Dispatch, SetStateAction, useContext } from 'react'
 import p from 'prefix-classname'
-import { Button, Switch } from 'antd'
+import { Button, Switch, Divider } from 'antd'
 import { createReactBehaviorSubject, UseBehaviorSubjectOpts } from '@rcp/use.behaviorsubject'
 import { CLS_PREFIX } from '../../../config/const'
 
@@ -61,19 +61,31 @@ const Header: React.FC<HeaderProps> = React.memo(({ className, bundlerURL }) => 
 
   return (
     <div className={cn(c(), className)}>
-      <Switch
-        unCheckedChildren={'预览'}
-        checked={canSelect}
-        onChange={(checked) => setValue((x) => ({ ...x, canSelect: checked }))}
-        checkedChildren={'编辑'}
-      />
+      <div className={c('__logo')}>
+        <a target={'_blank'} href={'https://github.com/imcuttle/mometa'} style={{ color: 'inherit' }}>
+          Mometa
+        </a>
+      </div>
 
-      <Switch
-        checked={showLocation}
-        onChange={(checked) => setValue((x) => ({ ...x, showLocation: checked }))}
-        unCheckedChildren={'隐藏路由'}
-        checkedChildren={'展示路由'}
-      />
+      <Divider type={'vertical'} />
+
+      <div className={c('__switch')}>
+        <Switch
+          unCheckedChildren={'预览'}
+          checked={canSelect}
+          onChange={(checked) => setValue((x) => ({ ...x, canSelect: checked }))}
+          checkedChildren={'编辑'}
+        />
+
+        <Switch
+          checked={showLocation}
+          onChange={(checked) => setValue((x) => ({ ...x, showLocation: checked }))}
+          unCheckedChildren={'隐藏路由'}
+          checkedChildren={'展示路由'}
+        />
+      </div>
+
+      <Divider type={'vertical'} />
 
       <Button type="link" href={bundlerURL} target={'_blank'}>
         在新窗口预览

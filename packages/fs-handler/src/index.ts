@@ -1,7 +1,7 @@
 /** *
  file updator
  * @author
- 余聪
+ imcuttle
  */
 import { waterFall } from 'run-seq'
 import pify from 'pify'

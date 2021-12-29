@@ -9,8 +9,21 @@
   z-index: 1;
   box-shadow: 0 2px 4px 0 rgb(0 0 0 / 12%), 0 0 6px 0 rgb(0 0 0 / 4%);
 
-  > * {
-    margin-left: 10px;
-    margin-right: 10px;
+  .mmt-ant-divider-vertical {
+    top: 0;
+    height: 1.2em;
+  }
+
+  &__switch {
+    > * {
+      margin-left: 10px;
+      margin-right: 10px;
+    }
+  }
+
+  &__logo {
+    font-size: 20px;
+    font-weight: 400;
+    padding: 0 15px;
   }
 }

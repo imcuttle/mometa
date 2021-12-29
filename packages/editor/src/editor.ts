@@ -1,7 +1,7 @@
 /** *
 编辑器
 * @author
-余聪
+imcuttle
 */
 
 export { default as Editor } from './module/render/editor'

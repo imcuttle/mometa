@@ -4,7 +4,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "author": "余聪 <yucong@yuanfudao.com>",
+  "author": "imcuttle <imcuttle@163.com>",
   "description": "file updator",
   "main": "lib",
   "types": "types",
@@ -36,9 +36,9 @@
     "@mometa/materials-generator": "^0.0.2"
   },
   "keywords": [
-    "余聪",
+    "imcuttle",
     "fs-handler",
-    "余聪",
+    "imcuttle",
     "mometa",
     "mometa"
   ],

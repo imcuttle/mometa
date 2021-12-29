@@ -4,7 +4,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "author": "余聪 <yucong@yuanfudao.com>",
+  "author": "imcuttle <imcuttle@163.com>",
   "description": "编辑器",
   "main": "lib",
   "types": "types",
@@ -53,9 +53,9 @@
     "shell-quote": "^1.7.2"
   },
   "keywords": [
-    "余聪",
+    "imcuttle",
     "editor",
-    "余聪",
+    "imcuttle",
     "mometa",
     "mometa"
   ],

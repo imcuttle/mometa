@@ -35,8 +35,8 @@ import editor from '@mometa/editor'
 
 ## Authors
 
-This library is written and maintained by [余聪](mailto:yucong@yuanfudao.com).
+This library is written and maintained by [imcuttle](mailto:imcuttle@163.com).
 
 ## License
 
-MIT - [余聪](mailto:yucong@yuanfudao.com)
+MIT - [imcuttle](mailto:imcuttle@163.com)

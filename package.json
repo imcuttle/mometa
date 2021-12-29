@@ -2,7 +2,7 @@
   "name": "mometa",
   "version": "1.0.0",
   "description": "面向研发的低代码元编程平台",
-  "author": "余聪 <yucong@yuanfudao.com>",
+  "author": "imcuttle <imcuttle@163.com>",
   "scripts": {
     "test": "npx jest",
     "test:watch": "npm test -- --watch",
@@ -29,14 +29,14 @@
     "lib"
   ],
   "keywords": [
-    "余聪",
+    "imcuttle",
     "mometa",
     "mometa"
   ],
   "main": "lib",
   "types": "types",
   "license": "MIT",
-  "repository": "余聪/mometa",
+  "repository": "imcuttle/mometa",
   "module": "es",
   "edam": {
     "alias": {
