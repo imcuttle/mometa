@@ -41,7 +41,14 @@ const StageContent: React.FC<StageProps> = React.memo(({ className, externalModu
   const [iframeSrc, setIframeSrc] = React.useState(bundlerURL)
 
   React.useLayoutEffect(() => {
-    if (action?.outer) {
+    if (!action) {
+      return
+    }
+    if (action.url.includes('#')) {
+      setIframeSrc(action.url)
+      return
+    }
+    if (action.outer) {
       setIframeSrc(action.url)
     }
   }, [action])

@@ -63,7 +63,7 @@ const Header: React.FC<HeaderProps> = React.memo(({ className, bundlerURL }) => 
     <div className={cn(c(), className)}>
       <div className={c('__logo')}>
         <a target={'_blank'} href={'https://github.com/imcuttle/mometa'} style={{ color: 'inherit' }}>
-          Mometa
+          mometa
         </a>
       </div>
 

@@ -3,7 +3,7 @@
 .#{$prefix}-header {
   height: 35px;
   display: flex;
-  padding: 0 12px;
+  padding: 0 10px;
   align-items: center;
 
   z-index: 1;
@@ -24,6 +24,6 @@
   &__logo {
     font-size: 20px;
     font-weight: 400;
-    padding: 0 15px;
+    margin-right: 230px;
   }
 }
