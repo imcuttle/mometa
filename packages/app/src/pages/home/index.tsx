@@ -1,5 +1,5 @@
 import React from 'react'
-import { Form, Spin, Table, Typography, Input, Button, Space, Popconfirm } from 'antd'
+import { Form, Spin, Table, Typography, Input, Button, Space, Popconfirm, Layout } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
 import useFetcher from '@rcp/use.fetcher'
 import { omitBy } from 'lodash'
@@ -10,36 +10,38 @@ const SearchForm = ({ onFinish }: any) => {
   const width = 120
   const [form] = Form.useForm()
   return (
-    <Form form={form} onFinish={onFinish} labelCol={{ style: { width } }} style={{ marginBottom: 20 }}>
-      <Form.Item label={'ID'} name={'id'}>
-        <Input />
-      </Form.Item>
-      <Form.Item label={'姓名'} name={'name'}>
-        <Input />
-      </Form.Item>
-      <Form.Item label={'用户名'} name={'username'}>
-        <Input />
-      </Form.Item>
-      <Form.Item label={'Email'} name={'email'}>
-        <Input />
-      </Form.Item>
+    <>
+      <Form form={form} onFinish={onFinish} labelCol={{ style: { width } }} style={{ marginBottom: 20 }}>
+        <Form.Item label={'ID'} name={'id'}>
+          <Input />
+        </Form.Item>
+        <Form.Item label={'姓名'} name={'name'}>
+          <Input />
+        </Form.Item>
+        <Form.Item label={'用户名'} name={'username'}>
+          <Input />
+        </Form.Item>
+        <Form.Item label={'Email'} name={'email'}>
+          <Input />
+        </Form.Item>
 
-      <Form.Item noStyle>
-        <Space style={{ marginLeft: width }}>
-          <Button type={'primary'} htmlType={'submit'}>
-            查询
-          </Button>
-          <Button
-            type={'default'}
-            onClick={() => {
-              form.resetFields()
-            }}
-          >
-            重置
-          </Button>
-        </Space>
-      </Form.Item>
-    </Form>
+        <Form.Item noStyle>
+          <Space style={{ marginLeft: width }}>
+            <Button type={'primary'} htmlType={'submit'}>
+              查询
+            </Button>
+            <Button
+              type={'default'}
+              onClick={() => {
+                form.resetFields()
+              }}
+            >
+              重置
+            </Button>
+          </Space>
+        </Form.Item>
+      </Form>
+    </>
   )
 }
 

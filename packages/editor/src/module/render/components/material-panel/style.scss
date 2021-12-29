@@ -1,27 +1,51 @@
 @import '../../style/_var';
 
 .#{$prefix}-material-panel {
+  height: 100%;
+
   &-dragging {
     .ant-image-mask {
       //display: none;
     }
   }
+
+  &__tabs {
+    height: 100%;
+    overflow: visible !important;
+
+    .mmt-ant-tabs-content-holder {
+      overflow: auto;
+      margin-right: -10px;
+      padding-right: 10px;
+
+      padding-top: 20px;
+      padding-bottom: 40px;
+    }
+
+    .mmt-ant-tabs-nav {
+      margin-bottom: 0 !important;
+    }
+  }
+
   &__asset-group {
     display: flex;
     flex-direction: column;
 
     &__container {
       display: flex;
+      flex-wrap: wrap;
     }
 
     &__cell {
-      max-width: 33%;
-      width: 33%;
+      cursor: move;
+      max-width: 33.33333%;
+      width: 33.33333%;
       padding: 4px;
       background-color: #fff;
 
       border: 1px solid #e9e2e2;
-      margin-left: -1px;
+      margin-right: -1px;
+      margin-bottom: -1px;
 
       display: flex;
       flex-direction: column;
@@ -36,11 +60,22 @@
       }
 
       &__img {
-        width: auto;
-        max-height: 70px;
-        object-fit: contain;
-        margin: auto;
-        overflow: hidden;
+        width: auto !important;
+        max-height: 100%;
+        max-width: 100%;
+
+        &__wrapper {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          height: 100%;
+          width: 100%;
+          max-height: 70px;
+          object-fit: contain;
+          margin: auto;
+          overflow: hidden;
+        }
       }
       &__name {
         margin-top: 4px;

@@ -33,20 +33,21 @@ const AssetUI = React.memo<Asset>(({ homepage, cover, name, data }) => {
 
   const renderComp = ({ ref, opacity, style, className }: any) => {
     return (
-      <div className={c('__asset-group__cell', className)} style={{ opacity, ...style }}>
-        <Image wrapperClassName={c('__asset-group__cell__img')} src={cover} />
+      <div
+        ref={ref}
+        title={'按住以进行拖动'}
+        className={c('__asset-group__cell', className)}
+        style={{ opacity, ...style }}
+      >
+        <Image
+          wrapperClassName={c('__asset-group__cell__img__wrapper')}
+          className={c('__asset-group__cell__img')}
+          src={cover}
+        />
         <span className={c('__asset-group__cell__name')}>
-          <Button
-            ref={ref}
-            className={c('__asset-group__cell__icon')}
-            type={'text'}
-            size={'small'}
-            icon={<DragOutlined />}
-            title={'按住并拖动来进行移动'}
-          />
-          <span style={{ display: 'inline-flex', padding: '3px 4px' }} ref={preview}>
+          <span style={{ display: 'inline-flex', padding: '2px 3px' }} ref={preview}>
             {homepage ? (
-              <a href={homepage} target={'_blank'}>
+              <a href={homepage} target={'_blank'} style={{ color: '#399bf5' }}>
                 {name}
               </a>
             ) : (
@@ -65,7 +66,7 @@ const AssetUI = React.memo<Asset>(({ homepage, cover, name, data }) => {
 const AssetGroupComp: React.FC<{ assetGroup: AssetGroup }> = React.memo(({ assetGroup }) => {
   return (
     <div className={c('__asset-group')}>
-      <h5>{assetGroup.name}</h5>
+      <h4>{assetGroup.name}</h4>
       <div className={c('__asset-group__container')}>
         {assetGroup.assets?.map((asset) => {
           return <AssetUI {...asset} />
@@ -78,14 +79,14 @@ const AssetGroupComp: React.FC<{ assetGroup: AssetGroup }> = React.memo(({ asset
 const MaterialPanel: React.FC<MaterialPanelProps> = React.memo(({ className, materials }) => {
   return (
     <div className={cn(c(), className)}>
-      {!materials?.length && <Empty description={'暂无物料'} style={{ marginTop: 20 }} />}
+      {!materials?.length && <Empty description={'暂无物料'} style={{ paddingTop: 40 }} />}
       {!!materials?.length && (
-        <Tabs style={{ padding: '0 1px' }}>
+        <Tabs className={c('__tabs')}>
           {materials.map((mat) => {
             return (
               <Tabs.TabPane key={mat.key} tab={mat.name}>
                 <div className={c('__mp')}>
-                  {mat.assetGroups.map((group, index, { length }) => (
+                  {mat.assetGroups?.map((group, index, { length }) => (
                     <div key={group.key}>
                       <AssetGroupComp assetGroup={group} />
                       {index !== length - 1 && <Divider type={'horizontal'} />}

@@ -1,10 +1,11 @@
 import React, { Dispatch, SetStateAction, useContext } from 'react'
 import p from 'prefix-classname'
 import { Button, Switch } from 'antd'
-import { createReactBehaviorSubject } from '@rcp/use.behaviorsubject'
+import { createReactBehaviorSubject, UseBehaviorSubjectOpts } from '@rcp/use.behaviorsubject'
 import { CLS_PREFIX } from '../../../config/const'
 
 import './style.scss'
+import { symbol } from '../../utils/utils'
 
 const cn = p('')
 const c = p(`${CLS_PREFIX}-header`)
@@ -19,10 +20,38 @@ interface Data {
   showLocation: boolean
 }
 
-const { useSubject, subject } = createReactBehaviorSubject<Data>({
-  canSelect: false,
-  showLocation: true
-})
+function createReactBehaviorSubjectStored<T>(
+  d: T,
+  { storeKey, ...opts }: { storeKey: string } & UseBehaviorSubjectOpts
+) {
+  try {
+    const prev = JSON.parse(localStorage.getItem(storeKey))
+    if (prev && typeof prev === 'object') {
+      d = {
+        ...d,
+        ...prev
+      }
+    }
+  } catch (e) {}
+
+  const { useSubject, subject } = createReactBehaviorSubject<T>(d, opts)
+  subject.subscribe((value) => {
+    localStorage.setItem(storeKey, JSON.stringify(value))
+  })
+
+  return {
+    subject,
+    useSubject
+  }
+}
+
+const { useSubject, subject } = createReactBehaviorSubjectStored<Data>(
+  {
+    canSelect: false,
+    showLocation: true
+  },
+  { storeKey: symbol(`headerStatus`) }
+)
 
 export const useHeaderStatus = useSubject
 export const headerStatusSubject = subject

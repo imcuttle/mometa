@@ -7,4 +7,22 @@
     display: flex;
     justify-content: flex-end;
   }
+
+  &__tabs {
+    height: 100%;
+    overflow: visible !important;
+
+    .mmt-ant-tabs-content-holder {
+      overflow: auto;
+      margin-right: -10px;
+      padding-right: 10px;
+
+      padding-top: 20px;
+      padding-bottom: 40px;
+    }
+
+    .mmt-ant-tabs-nav {
+      margin-bottom: 0 !important;
+    }
+  }
 }

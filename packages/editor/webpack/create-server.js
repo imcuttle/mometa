@@ -119,7 +119,7 @@ exports.createServer = function createServer({
             }
 
             const listener = (oldModule, path) => {
-              console.log('updated', path)
+              console.log('[MMS] updated', path)
               setConfig(path)
             }
             hotRequire.accept([data.filepath], listener)
@@ -128,7 +128,7 @@ exports.createServer = function createServer({
               hotRequire.refuse([data.filepath], listener)
             })
 
-            await setConfig(data.filepath)
+            hotRequire.hotUpdate(data.filepath)
           } else {
             throw new Error('[MMS] please set "mometa-material.config.js" in your dev root directory.')
           }

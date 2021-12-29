@@ -64,7 +64,7 @@ export const Detail = suspense(
           )}
           <Button type={'link'}>
             <Link to={'/'} replace>
-              返回x
+              返回
             </Link>
           </Button>
         </Space>

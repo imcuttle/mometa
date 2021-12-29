@@ -7,3 +7,7 @@ export function createPreload(data: any, other?: Omit<RequestData['preload'], 'r
     filename: data.filename
   } as any
 }
+
+export function symbol(name: string) {
+  return `MOMETA_${name}`
+}

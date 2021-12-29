@@ -17,6 +17,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend'
 import './style.scss'
 import createApi from '../components/stage/create-api'
 import { createClientConnection } from './sse'
+import { Button } from 'antd'
 
 const cn = p('')
 const c = p(`${CLS_PREFIX}`)
@@ -40,8 +41,19 @@ function CollapseBtn({ hide, dir, onClick }: any) {
   return (
     <div onClick={onClick} className={c('__collapse', `-collapse-${dir}`, `-collapse-${hide ? 'hide' : 'show'}`)}>
       <Tooltip title={title}>
-        {((hide && dir === 'left') || (!hide && dir === 'right')) && <DoubleLeftOutlined style={style} />}
-        {((hide && dir === 'right') || (!hide && dir === 'left')) && <DoubleRightOutlined style={style} />}
+        <Button
+          style={{ padding: 0 }}
+          size={'small'}
+          shape={'round'}
+          icon={
+            (hide && dir === 'left') || (!hide && dir === 'right') ? (
+              <DoubleLeftOutlined style={style} />
+            ) : (
+              <DoubleRightOutlined style={style} />
+            )
+          }
+          type={'link'}
+        />
       </Tooltip>
     </div>
   )
@@ -70,9 +82,15 @@ const Body = ({ className, apiBaseURL, leftPanelProps, rightPanelProps, stagePro
 
   const [hideLeft, setHideLeft] = React.useState(false)
   const [hideRight, setHideRight] = React.useState(false)
+  const hideChangedRef = React.useRef({ left: false, right: false })
+
   React.useEffect(() => {
-    setHideLeft(!canSelect)
-    setHideRight(!canSelect)
+    if (!hideChangedRef.current.left) {
+      setHideLeft(!canSelect)
+    }
+    if (!hideChangedRef.current.right) {
+      setHideRight(!canSelect)
+    }
   }, [canSelect])
 
   return (
@@ -81,7 +99,14 @@ const Body = ({ className, apiBaseURL, leftPanelProps, rightPanelProps, stagePro
       <div className={c('__main-content')}>
         <div className={c('__panel')}>
           <LeftPanel {...leftPanelProps} className={c('__l-panel', hideLeft && '-hide')} materials={mats} />
-          <CollapseBtn onClick={() => setHideLeft((x) => !x)} hide={hideLeft} dir={'left'} />
+          <CollapseBtn
+            onClick={() => {
+              hideChangedRef.current.left = true
+              setHideLeft((x) => !x)
+            }}
+            hide={hideLeft}
+            dir={'left'}
+          />
         </div>
         <Stage
           bundlerURL={bundlerURL}
@@ -90,7 +115,14 @@ const Body = ({ className, apiBaseURL, leftPanelProps, rightPanelProps, stagePro
         />
         <div className={c('__panel')}>
           <RightPanel {...rightPanelProps} className={c('__r-panel', hideRight && '-hide')} />
-          <CollapseBtn onClick={() => setHideRight((x) => !x)} hide={hideRight} dir={'right'} />
+          <CollapseBtn
+            onClick={() => {
+              hideChangedRef.current.right = true
+              setHideRight((x) => !x)
+            }}
+            hide={hideRight}
+            dir={'right'}
+          />
         </div>
       </div>
     </div>

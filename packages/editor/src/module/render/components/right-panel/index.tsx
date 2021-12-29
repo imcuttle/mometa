@@ -130,15 +130,7 @@ const MetaInfo = () => {
     return null
   }
 
-  return (
-    <CodeEditor
-      readOnly
-      height={'300px'}
-      language={'json'}
-      style={{ marginTop: 20 }}
-      value={JSON.stringify(mometaData, null, 2)}
-    />
-  )
+  return <CodeEditor readOnly height={'500px'} language={'json'} value={JSON.stringify(mometaData, null, 2)} />
 }
 
 const RightPanel: React.FC<RightPanelProps> = React.memo(({ className }) => {
@@ -147,7 +139,7 @@ const RightPanel: React.FC<RightPanelProps> = React.memo(({ className }) => {
   return (
     <div className={cn(c(), className)}>
       {!!mometaData ? (
-        <Tabs>
+        <Tabs className={c('__tabs')}>
           <Tabs.TabPane key={'attr'} tab={'属性'}>
             <BaseInfoForm />
           </Tabs.TabPane>
