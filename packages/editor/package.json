@@ -9,6 +9,14 @@
   "main": "lib",
   "types": "types",
   "module": "es",
+  "files": [
+    "webpack",
+    "es",
+    "lib",
+    "types",
+    "build",
+    "babel"
+  ],
   "scripts": {
     "test": "../../scripts/run test",
     "build:app": "cd example && npm run build",
