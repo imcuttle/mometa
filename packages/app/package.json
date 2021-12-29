@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@mometa-mat/antd": "^0.0.2",
+    "@mometa/materials-generator": "^0.0.2",
     "lodash": "^4.17.21",
     "@types/lodash": "^4.14.178",
     "@babel/core": "^7.16.0",

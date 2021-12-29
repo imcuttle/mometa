@@ -3,6 +3,8 @@ import * as nps from 'path'
 
 const isObject = (value) => typeof value === 'object' && value !== null
 
+const isPromise = (val) => (val && val instanceof Promise) || typeof val.then === 'function'
+
 // Customized for this use-case
 const isObjectCustom = (value) =>
   isObject(value) && !(value instanceof RegExp) && !(value instanceof Error) && !(value instanceof Date)
@@ -65,12 +67,15 @@ function mapObject(object, mapper, options) {
 
 export async function resolveAsyncConfig<T = any>(config: T): Promise<T> {
   config = await Promise.resolve(config)
+  if (Array.isArray(config)) {
+    config = await Promise.all(config)
+  }
 
   const tasks = []
   const newConfig = mapObject(
     config,
     (key, val, raw, target) => {
-      if ((val && val instanceof Promise) || typeof val.then === 'function') {
+      if (isPromise(val)) {
         tasks.push(
           Promise.resolve(val).then((resolved) => {
             target[key] = resolved

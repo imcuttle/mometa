@@ -1,7 +1,10 @@
+const { resolveLibMatConfig } = require('@mometa/materials-generator')
+
 module.exports = [
+  resolveLibMatConfig('antd'),
   {
-    name: 'Antd',
-    key: 'antd',
+    name: 'My Antd',
+    key: 'my-antd',
     assetGroups: [
       {
         name: '通用',

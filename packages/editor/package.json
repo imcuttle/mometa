@@ -53,11 +53,12 @@
     "shell-quote": "^1.7.2"
   },
   "keywords": [
-    "imcuttle",
     "editor",
     "imcuttle",
     "mometa",
-    "mometa"
+    "lowcode",
+    "react",
+    "webpack"
   ],
   "repository": {
     "type": "git",
