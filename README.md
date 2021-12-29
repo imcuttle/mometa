@@ -21,6 +21,20 @@
 - 多语言、多生态支持，目前暂只支持 React
 - 开发友好，对于 Webpack 支持 0 成本接入
 
+## 操作
+
+#### 预览
+
+<p align="center">
+  <img src="./images/mometa-preview.gif" />
+</p>
+
+#### 编辑
+
+<p align="center">
+  <img src="./images/mometa-edit.gif" />
+</p>
+
 ## Packages
 
 - [@mometa/editor](packages/editor) - 编辑器
