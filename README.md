@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./logo.png" />
+  <img src="./images/logo.png" />
 </p>
 <p align="center">
   <a href="https://travis-ci.org/imcuttle/mometa"><img src="https://img.shields.io/travis/imcuttle/mometa/master.svg?style=flat-square" /></a>
@@ -9,6 +9,10 @@
   <a href="https://conventionalcommits.org"><img src="https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg?style=flat-square" /></a>
 </p>
 <p align="center">面向研发的低代码元编程（代码可视化）能力</p>
+
+<p align="center">
+  <img src="./images/snapshot.png" />
+</p>
 
 ## 特性
 

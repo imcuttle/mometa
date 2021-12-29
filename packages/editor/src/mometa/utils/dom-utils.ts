@@ -103,11 +103,12 @@ export function parseReactDomNode(dom: HTMLElement) {
 
 export function getDomName(dom: HTMLElement) {
   let name = dom.localName
-  if (dom.id) {
-    name += `#${dom.id}`
+  if (dom.getAttribute('id')) {
+    name += `#${dom.getAttribute('id')}`
+    return name
   }
-  if (dom.getAttribute('class')) {
-    name += `.${dom.getAttribute('class')}`
+  if (dom.getAttribute('class')?.trim()) {
+    name += `.${Array.from(dom.classList.entries()).join('.')}`
   }
   return name
 }

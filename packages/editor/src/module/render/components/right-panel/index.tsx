@@ -99,7 +99,7 @@ const BaseInfoForm = () => {
         </Typography.Title>
       </Form.Item>
       <Form.Item name={'text'} label={'代码'}>
-        <CodeEditor language={'typescript'} height={'100px'} />
+        <CodeEditor language={'typescript'} height={'200px'} />
       </Form.Item>
       {!!mometaData?.container?.text && (
         <Form.Item name={['container', 'text']} label={'容器代码'} tooltip={'修改将以容器代码为主，代码修改视为无效'}>
