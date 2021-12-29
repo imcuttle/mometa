@@ -5,6 +5,9 @@
   "bugs": {
     "url": "https://github.com/pmmmwh/react-refresh-webpack-plugin/issues"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "ansi-html-community": "^0.0.8",
     "common-path-prefix": "^3.0.0",
@@ -151,5 +154,5 @@
   },
   "types": "types/lib/index.d.ts",
   "version": "0.0.7",
-  "gitHead": "e139321ab9261572abd8bc6bb41e97e3544c00ac"
+  "gitHead": "737285e5ccce104f4ec2ca3c9f6f4f8bc477c304"
 }

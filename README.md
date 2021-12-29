@@ -95,6 +95,8 @@ module.exports = {
 
 **注意：使用时，不需要开启官方预设的 react-refresh，mometa 默认会开启 react-refresh 能力**
 
+启动 webpack dev server，开启 `http://localhost:${port}/mometa/` 即可
+
 提供的例子可见 [@mometa/app](./packages/app)
 
 ## Packages
