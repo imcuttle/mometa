@@ -5,7 +5,7 @@
     "access": "public"
   },
   "author": "imcuttle <imcuttle@163.com>",
-  "description": "file updator",
+  "description": "代码操作转换核心逻辑，如删除、移动、替换、插入等",
   "main": "lib",
   "types": "types",
   "module": "es",

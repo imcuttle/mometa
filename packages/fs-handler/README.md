@@ -5,7 +5,7 @@
 [![Prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://prettier.io/)
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg?style=flat-square)](https://conventionalcommits.org)
 
-> file updator
+> 代码操作转换核心逻辑，如删除、移动、替换、插入等
 
 ## Installation
 
