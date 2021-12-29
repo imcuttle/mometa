@@ -814,14 +814,14 @@ module.exports = function getConfig(webpackEnv) {
       return cb()
     }
     return [
-      getSingleConfig('production', {
-        entry: [nps.resolve(__dirname, 'entry/__mometa_outer_vendor__.js'), paths.appIndexJs],
-        refresh: false,
-        name: 'editor',
-        outputPath: nps.join(paths.appBuild, 'standalone/production'),
-        htmlName: 'index.html',
-        externals
-      }),
+      // getSingleConfig('production', {
+      //   entry: [nps.resolve(__dirname, 'entry/__mometa_outer_vendor__.js'), paths.appIndexJs],
+      //   refresh: false,
+      //   name: 'editor',
+      //   outputPath: nps.join(paths.appBuild, 'standalone/production'),
+      //   htmlName: 'index.html',
+      //   externals
+      // }),
       getSingleConfig('development', {
         cssExtract: true,
         entry: [nps.resolve(__dirname, 'entry/__mometa_outer_vendor__.js'), paths.appIndexJs],
