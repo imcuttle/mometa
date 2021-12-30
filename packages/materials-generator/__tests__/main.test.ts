@@ -22,12 +22,14 @@ describe('materialsGenerator', function () {
   })
 
   it('resolveLibMatConfig invalid', async function () {
-    await expect(resolveLibMatConfig(fixture('invalid-mat-lib'))).rejects.toMatchObject({
-      _originalMessage: `Cannot find module '${fixture(
-        'invalid-mat-lib',
-        'mometa.js'
-      )}' from 'src/utils/resolve-async-config.ts'`
-    })
+    let error
+    try {
+      await resolveLibMatConfig(fixture('invalid-mat-lib'))
+    } catch (e) {
+      error = e
+    }
+
+    expect(error.message).toMatch(`Cannot find module '${fixture('invalid-mat-lib', 'mometa.js')}'`)
   })
 })
 
