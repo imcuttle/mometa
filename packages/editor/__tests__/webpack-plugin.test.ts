@@ -31,9 +31,8 @@ const run = async (version: any = '') => {
   return stats
 }
 
-jest.setTimeout(1000 * 60)
 describe('editor webpack plugin', function () {
-  it('webpack5', async function () {
+  it.skip('webpack5', async function () {
     const stats = await run()
     expect(Object.keys(stats.compilation.getAssets())).toMatchObject(['mometa/index.html'])
   })
