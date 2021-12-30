@@ -1,0 +1,7 @@
+{
+  "name": "mat-lib",
+  "private": true,
+  "version": "1.0.0",
+  "mometa": "mometa.js",
+  "dependencies": {}
+}

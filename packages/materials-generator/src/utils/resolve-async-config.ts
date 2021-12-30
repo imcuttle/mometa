@@ -1,5 +1,6 @@
 import { Material } from '../types'
 import * as nps from 'path'
+import * as fs from 'fs'
 
 const isObject = (value) => typeof value === 'object' && value !== null
 
@@ -83,6 +84,14 @@ export async function resolveAsyncConfig<T = any>(config: T): Promise<T> {
         )
         return [key, val, { shouldRecurse: false }]
       }
+      if (Array.isArray(val)) {
+        tasks.push(
+          Promise.all(val).then((resolved) => {
+            target[key] = resolved
+          })
+        )
+        return [key, val]
+      }
       return [key, val]
     },
     {
@@ -96,22 +105,31 @@ export async function resolveAsyncConfig<T = any>(config: T): Promise<T> {
 }
 
 const myRequire = (p) => {
-  const mod = require(p)
+  const mod = require(resolvePath(p))
   if (mod.__esModule) {
     return mod.default ?? mod
   }
   return mod
 }
 
-const exists = (p) => {
+const resolvePath = (p) => {
+  let pkgName: string
   try {
-    return !!require.resolve(p)
+    pkgName = require.resolve(nps.join(p, 'package.json'))
   } catch (e) {
-    if (e.code === 'MODULE_NOT_FOUND') {
-      return false
+    if (e.code !== 'MODULE_NOT_FOUND') {
+      throw e
     }
-    throw e
   }
+
+  if (pkgName) {
+    const pkg = JSON.parse(fs.readFileSync(pkgName, 'utf-8'))
+    if (pkg.mometa && typeof pkg.mometa === 'string') {
+      return require.resolve(nps.join(p, pkg.mometa))
+    }
+  }
+
+  return require.resolve(p)
 }
 
 export async function resolveLibMatConfig<T extends Material | Material[] = Material>(path: string): Promise<T> {
@@ -120,7 +138,7 @@ export async function resolveLibMatConfig<T extends Material | Material[] = Mate
     config = myRequire(nps.resolve(path))
   } else if (path.startsWith('@')) {
     config = myRequire(path)
-  } else if (exists(`@mometa-mat/${path}`)) {
+  } else if (resolvePath(`@mometa-mat/${path}`)) {
     config = myRequire(`@mometa-mat/${path}`)
   } else {
     config = myRequire(path)
