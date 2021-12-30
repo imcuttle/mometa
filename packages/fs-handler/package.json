@@ -1,6 +1,6 @@
 {
   "name": "@mometa/fs-handler",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "publishConfig": {
     "access": "public"
   },
@@ -33,7 +33,7 @@
     "run-seq": "^1.0.4"
   },
   "devDependencies": {
-    "@mometa/materials-generator": "^0.0.8"
+    "@mometa/materials-generator": "^0.0.9"
   },
   "keywords": [
     "imcuttle",

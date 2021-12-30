@@ -153,6 +153,6 @@
     "yalc:publish": "yalc publish --no-scripts"
   },
   "types": "types/lib/index.d.ts",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "gitHead": "737285e5ccce104f4ec2ca3c9f6f4f8bc477c304"
 }
