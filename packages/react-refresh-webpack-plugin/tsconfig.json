@@ -9,6 +9,7 @@
     "outDir": "types",
     "resolveJsonModule": true,
     "strict": true,
+    "skipLibCheck": true,
     "target": "es2017"
   },
   "include": ["./lib/*", "./loader/*", "./options/*"],
