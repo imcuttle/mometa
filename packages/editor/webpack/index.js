@@ -78,6 +78,7 @@ module.exports = class MometaEditorPlugin {
     const mode = compiler.options.mode || 'production'
 
     const major = this.getWebpackMajor(compiler)
+    let { ExternalsPlugin } = webpack
     let EntryPlugin
     let CopyPlugin
     if (major < 5) {
@@ -132,15 +133,18 @@ module.exports = class MometaEditorPlugin {
             name: 'MOMETA_OUTER_VENDOR'
           }
         }
+
+        const commonPlugins = []
         const childCompiler = compilation.createChildCompiler(
           NAME,
           outputOptions,
-          major < 5 ? [] : [new webpack.library.EnableLibraryPlugin('var')]
+          (major < 5
+            ? [new webpack.LibraryTemplatePlugin(outputOptions.library.name, 'var')]
+            : [new webpack.library.EnableLibraryPlugin('var')]
+          )
+            .concat(commonPlugins)
+            .filter(Boolean)
         )
-
-        if (major < 5) {
-          new webpack.LibraryTemplatePlugin(outputOptions.library.name, 'var').apply(childCompiler)
-        }
 
         const entries = {
           [this.options.name]: [require.resolve('./assets/vendor-entry')]
@@ -175,12 +179,13 @@ module.exports = class MometaEditorPlugin {
   }
 
   applyForRuntime(compiler) {
+    const { ExternalsPlugin } = this.getWebpack(compiler)
     const major = this.getWebpackMajor(compiler)
-    let externals = compiler.options.externals || []
-    if (!Array.isArray(externals)) {
-      externals = [externals]
-    }
-    compiler.options.externals = externals
+    // let externals = compiler.options.externals || [];
+    // if (!Array.isArray(externals)) {
+    //   externals = [externals];
+    // }
+    // compiler.options.externals = externals;
 
     const handleExternal = (issuer, request, callback) => {
       const whiteList = [
@@ -213,25 +218,27 @@ module.exports = class MometaEditorPlugin {
 
       if (this.options.react) {
         if (WHITE_MODULES.includes(request)) {
-          return callback(null, `__mometa_require__(${JSON.stringify(request)})`)
+          return callback(null, `assign __mometa_require__(${JSON.stringify(request)})`)
         }
       }
 
       if (/^(@@__mometa-external\/(.+))$/.test(request)) {
-        return callback(null, `__mometa_require__(${JSON.stringify(RegExp.$2)})`)
+        return callback(null, `assign __mometa_require__(${JSON.stringify(RegExp.$2)})`)
       }
       callback()
     }
 
+    const externalsType =
+      compiler.options.externalsType || (compiler.options.output && compiler.options.output.libraryTarget)
     if (major < 5) {
-      externals.unshift((context, request, callback) => {
+      new ExternalsPlugin(externalsType, (context, request, callback) => {
         return handleExternal(context, request, callback)
-      })
+      }).apply(compiler)
     } else {
-      externals.unshift(({ request = '', contextInfo = {} }, callback) => {
+      new ExternalsPlugin(externalsType, ({ request = '', contextInfo = {} }, callback) => {
         const issuer = contextInfo.issuer || ''
         return handleExternal(issuer, request, callback)
-      })
+      }).apply(compiler)
     }
 
     this.applyForReactRuntime(compiler)
@@ -304,11 +311,12 @@ module.exports = class MometaEditorPlugin {
   apply(compiler) {
     isLocal && console.log(`${NAME} in local mode`)
 
-    this.applyForRuntime(compiler)
     if (this.options.__runtime_build) {
+      this.applyForRuntime(compiler)
       return
     }
     this.applyForEditor(compiler)
+    this.applyForRuntime(compiler)
     this.applyForServer(compiler)
   }
 }
