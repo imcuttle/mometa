@@ -1,6 +1,6 @@
 {
   "name": "@mometa/editor",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "publishConfig": {
     "access": "public"
   },
@@ -30,16 +30,16 @@
     "version": "npm test && npm run packlimit"
   },
   "peerDependencies": {
-    "webpack": "^4 || ^5",
-    "html-webpack-plugin": "*"
+    "html-webpack-plugin": "*",
+    "webpack": "^4 || ^5"
   },
   "dependencies": {
     "@babel/helper-module-imports": "^7.16.0",
     "@emotion/css": "^11.7.1",
     "@floating-ui/dom": "^0.1.7",
-    "@mometa/fs-handler": "^0.0.9",
-    "@mometa/materials-generator": "^0.0.9",
-    "@mometa/react-refresh-webpack-plugin": "^0.0.9",
+    "@mometa/fs-handler": "^0.0.10",
+    "@mometa/materials-generator": "^0.0.10",
+    "@mometa/react-refresh-webpack-plugin": "^0.0.10",
     "@monaco-editor/react": "^4.3.1",
     "@rcp/c.preventfastop": "^1.2.0",
     "@rcp/use.behaviorsubject": "^1.0.2",

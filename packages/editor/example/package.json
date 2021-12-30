@@ -1,10 +1,10 @@
 {
   "name": "@mometa/editor-example",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "private": true,
   "dependencies": {
     "@babel/core": "^7.14.2",
-    "@mometa/editor": "^0.0.9",
+    "@mometa/editor": "^0.0.10",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.1",
     "@svgr/webpack": "^5.5.0",
     "@testing-library/jest-dom": "^5.15.1",
