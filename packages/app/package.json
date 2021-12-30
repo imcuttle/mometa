@@ -3,6 +3,8 @@
   "version": "0.0.9",
   "private": true,
   "dependencies": {
+    "require-resolve-hook": "^1.1.0",
+    "webpack4": "npm:webpack@4",
     "@babel/core": "^7.16.0",
     "@mometa-mat/antd": "^0.0.2",
     "@mometa/editor": "^0.0.9",
@@ -76,8 +78,9 @@
     "workbox-webpack-plugin": "^6.4.1"
   },
   "scripts": {
-    "start": "node scripts/start.js",
-    "build": "node scripts/build.js"
+    "start": "node -r ./alias.js scripts/start.js",
+    "start:webpack4": "WEBPACK_VERSION=4 npm start",
+    "build": "node -r ./alias.js scripts/build.js"
   },
   "eslintConfig": {
     "extends": [

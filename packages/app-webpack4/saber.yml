@@ -1,0 +1,77 @@
+version: 2.0
+project_type: node
+
+stages:
+  - install
+  - build
+
+install:
+  image: node:12.13.1
+  stage: install
+  script:
+    - export http_proxy=http://proxy.zhenguanyu.com:8118
+    - export https_proxy=http://proxy.zhenguanyu.com:8118
+    - npm ci
+  artifacts:
+    name: install-packages
+    path:
+      - node_modules/**
+
+test-before-build:
+  image: node:12.13.1
+  stage: test
+  script:
+    - echo "noop test"
+#    - npm ci
+#    - npm run test
+#  artifacts:
+#    name: test-before-build-artifacts
+#    path:
+#      - coverage/**
+
+sonar:
+  image: registry.cn-beijing.aliyuncs.com/yuanfd/yfd_sonar:latest
+  stage: sonar
+  variables:
+    SONAR_EXCLUDE: '**/*.html,**/*.css'
+  script:
+    - bash -x yfd-sonar-scanner -Dsonar.typescript.lcov.reportPaths=coverage/lcov.info
+#  dependencies:
+#    - test-before-build
+
+build-test:
+  image: node:12.13.1
+  stage: build
+  except:
+    branch:
+      - online
+  script:
+    - npm run build:test
+  dependencies:
+    - install
+  artifacts:
+    name: build-test
+    upload: true
+    path:
+      - 'dist/**'
+    tags:
+      - test
+
+build-online:
+  image: node:12.13.1
+  stage: build
+  only:
+    branch:
+      - online
+      - master
+  script:
+    - npm run build:online
+  dependencies:
+    - install
+  artifacts:
+    name: build-online
+    upload: true
+    path:
+      - 'dist/**'
+    tags:
+      - online

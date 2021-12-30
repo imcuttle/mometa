@@ -53,7 +53,7 @@ class ReactRefreshPlugin {
 
     // Get Webpack imports from compiler instance (if available) -
     // this allow mono-repos to use different versions of Webpack without conflicts.
-    const webpack = compiler.webpack || require('webpack')
+    const webpack = this.options.__webpack || compiler.webpack || require('webpack')
     const {
       DefinePlugin,
       EntryDependency,

@@ -1,3 +1,6 @@
 module.exports = {
-  ...require('../../package.json').jest
+  ...require('../../package.json').jest,
+  moduleNameMapper: {
+    ...require('../../package.json').jest.moduleNameMapper
+  }
 }

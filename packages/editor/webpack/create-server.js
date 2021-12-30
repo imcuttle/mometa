@@ -70,7 +70,7 @@ exports.createServer = function createServer({
               if (!body.preload.filename) {
                 throw new Error('Requires preload.filename')
               }
-              body.preload.filename = nps.relative(context, body.preload.filename)
+              body.preload.filename = nps.resolve(context, body.preload.filename)
               await fsHandler(body)
               res.statusCode = 200
               res.write('true')

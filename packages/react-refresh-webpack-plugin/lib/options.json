@@ -51,6 +51,7 @@
     "exclude": {
       "anyOf": [{ "$ref": "#/definitions/MatchCondition" }, { "$ref": "#/definitions/MatchConditions" }]
     },
+    "__webpack": {},
     "forceEnable": { "type": "boolean" },
     "include": {
       "anyOf": [{ "$ref": "#/definitions/MatchCondition" }, { "$ref": "#/definitions/MatchConditions" }]

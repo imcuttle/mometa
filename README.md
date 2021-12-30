@@ -36,7 +36,7 @@ mometa 不是传统主流的低代码平台（如 amis/云凤蝶），mometa 是
   - 层级选择
 - 开放物料生态，可定制团队内物料库，见 [mometa-mat](https://github.com/imcuttle/mometa-mat)
 - 多语言、多生态支持，目前暂只支持 React
-- 接入友好，Webpack 0 成本接入
+- 接入友好，Webpack>=4 插件化接入
 - 开发友好，物料库支持热更新，不破坏已有开发模式
 
 ## 使用场景

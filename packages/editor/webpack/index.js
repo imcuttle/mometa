@@ -3,7 +3,6 @@ const nps = require('path')
 const { createServer } = require('./create-server')
 const injectEntry = require('./injectEntry')
 const ReactRefreshWebpackPlugin = require('@mometa/react-refresh-webpack-plugin')
-const CopyPlugin = require('copy-webpack-plugin')
 
 const safeResolve = (path) => {
   try {
@@ -64,18 +63,40 @@ module.exports = class MometaEditorPlugin {
     this.server = null
   }
 
+  getWebpack(compiler) {
+    return this.options.__webpack || compiler.webpack || require('webpack')
+  }
+
+  getWebpackMajor(compiler) {
+    const webpack = this.getWebpack(compiler)
+    const [major] = (webpack.version || '5.0.0').split('.')
+    return major
+  }
+
   applyForEditor(compiler) {
-    const webpack = compiler.webpack || require('webpack')
-    const { EntryPlugin, optimize } = webpack
-    const { SplitChunksPlugin, RuntimeChunkPlugin } = optimize || {}
+    const webpack = this.getWebpack(compiler)
     const mode = compiler.options.mode || 'production'
+
+    const major = this.getWebpackMajor(compiler)
+    let EntryPlugin
+    let CopyPlugin
+    if (major < 5) {
+      EntryPlugin = webpack.SingleEntryPlugin
+      CopyPlugin = require('copy-webpack-plugin-webpack4')
+    } else {
+      EntryPlugin = webpack.EntryPlugin
+      CopyPlugin = require('copy-webpack-plugin')
+    }
 
     const BUDLER_FILENAME = 'mometa-outer-vendor.bundler.js'
     new CopyPlugin({
       patterns: [
         {
           from: nps.join(BUILD_PATH, mode),
-          to: `${this.options.contentBasePath}[path][name][ext]`,
+          to:
+            major < 5
+              ? `${this.options.contentBasePath}[path][name].[ext]`
+              : `${this.options.contentBasePath}[path][name][ext]`,
           transform: (content, absoluteFrom) => {
             if (absoluteFrom === nps.join(BUILD_PATH, mode, 'index.html')) {
               // /**
@@ -111,9 +132,15 @@ module.exports = class MometaEditorPlugin {
             name: 'MOMETA_OUTER_VENDOR'
           }
         }
-        const childCompiler = compilation.createChildCompiler(NAME, outputOptions, [
-          new webpack.library.EnableLibraryPlugin('var')
-        ])
+        const childCompiler = compilation.createChildCompiler(
+          NAME,
+          outputOptions,
+          major < 5 ? [] : [new webpack.library.EnableLibraryPlugin('var')]
+        )
+
+        if (major < 5) {
+          new webpack.LibraryTemplatePlugin(outputOptions.library.name, 'var').apply(childCompiler)
+        }
 
         const entries = {
           [this.options.name]: [require.resolve('./assets/vendor-entry')]
@@ -148,16 +175,18 @@ module.exports = class MometaEditorPlugin {
   }
 
   applyForRuntime(compiler) {
+    const major = this.getWebpackMajor(compiler)
     let externals = compiler.options.externals || []
     if (!Array.isArray(externals)) {
       externals = [externals]
     }
     compiler.options.externals = externals
-    externals.unshift(({ request, context = '', contextInfo = {} }, callback) => {
-      const issuer = contextInfo.issuer || ''
+
+    const handleExternal = (issuer, request, callback) => {
       const whiteList = [
         ...WHITE_MODULES.map((module) => resolvePath(module)),
         nps.join(__dirname, '../build/runtime-entry'),
+        /\/__mometa_require__$/,
         /\/__mometa_require__\.(js|jsx|ts|tsx)$/
       ]
 
@@ -192,13 +221,24 @@ module.exports = class MometaEditorPlugin {
         return callback(null, `__mometa_require__(${JSON.stringify(RegExp.$2)})`)
       }
       callback()
-    })
+    }
+
+    if (major < 5) {
+      externals.unshift((context, request, callback) => {
+        return handleExternal(context, request, callback)
+      })
+    } else {
+      externals.unshift(({ request = '', contextInfo = {} }, callback) => {
+        const issuer = contextInfo.issuer || ''
+        return handleExternal(issuer, request, callback)
+      })
+    }
 
     this.applyForReactRuntime(compiler)
   }
 
   applyForReactRuntime(compiler) {
-    const webpack = compiler.webpack || require('webpack')
+    const webpack = this.getWebpack(compiler)
     const { DefinePlugin } = webpack
 
     compiler.options.entry = injectEntry(compiler.options.entry, {
@@ -230,6 +270,7 @@ module.exports = class MometaEditorPlugin {
 
     if (this.options.react && this.options.react.refresh !== false) {
       new ReactRefreshWebpackPlugin({
+        __webpack: this.getWebpack(compiler),
         library: compiler.options.name,
         overlay: false
       }).apply(compiler)
@@ -245,7 +286,12 @@ module.exports = class MometaEditorPlugin {
         ...this.options.serverOptions,
         context: compiler.context,
         fileSystem: {
-          readFile: compiler.inputFileSystem.readFile,
+          // 兼容 webpack4/5
+          readFile: (filename, encode, cb) =>
+            compiler.inputFileSystem.readFile(filename, (err, data) => {
+              const fn = typeof encode === 'function' ? encode : cb
+              fn(err, data ? String(data) : data)
+            }),
           writeFile: fs.writeFile
         }
       })

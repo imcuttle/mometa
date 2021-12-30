@@ -18,10 +18,11 @@
     "babel"
   ],
   "scripts": {
-    "test": "../../scripts/run test",
+    "test": "NODE_OPTIONS=--experimental-vm-modules ../../scripts/run test",
     "build:app": "cd example && npm run build",
     "build:lib": "../../scripts/run build",
     "build:runtime": "cd example && npm run build:runtime",
+    "postbuild:runtime": "node ./example/config/post-buildruntime",
     "build": "run-p -l 'build:*'",
     "start": "cd example && npm start",
     "packlimit": "../../scripts/run packlimit",
@@ -29,6 +30,7 @@
     "version": "npm test && npm run packlimit"
   },
   "peerDependencies": {
+    "webpack": "^4 || ^5",
     "html-webpack-plugin": "*"
   },
   "dependencies": {
@@ -49,6 +51,7 @@
     "axios": "^0.24.0",
     "chalk": "^2.4.2",
     "copy-webpack-plugin": "^10.2.0",
+    "copy-webpack-plugin-webpack4": "npm:copy-webpack-plugin@6",
     "hot-module-require": "^4.0.0",
     "lodash-es": "^4.17.21",
     "monaco-editor": "^0.31.1",
@@ -77,8 +80,7 @@
     "moment": "^2.29.1",
     "npm-run-all": "^4.1.5",
     "react": "^17.0.2",
-    "sass": "^1.43.4",
-    "suffix-resolve-plugin": "^1.0.1"
+    "sass": "^1.43.4"
   },
   "gitHead": "737285e5ccce104f4ec2ca3c9f6f4f8bc477c304"
 }
