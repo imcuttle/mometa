@@ -1,11 +1,10 @@
 {
   "name": "@mometa/editor-example",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "private": true,
   "dependencies": {
-    "globby": "^11.0.2",
     "@babel/core": "^7.14.2",
-    "@mometa/editor": "^0.0.11",
+    "@mometa/editor": "^0.0.12",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.1",
     "@svgr/webpack": "^5.5.0",
     "@testing-library/jest-dom": "^5.15.1",
@@ -33,6 +32,7 @@
     "eslint-webpack-plugin": "^2.5.4",
     "file-loader": "^6.2.0",
     "fs-extra": "^10.0.0",
+    "globby": "^11.0.2",
     "html-webpack-plugin": "^5.3.2",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^27.1.0",
