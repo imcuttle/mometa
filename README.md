@@ -66,6 +66,8 @@ mometa 不是传统主流的低代码平台（如 amis/云凤蝶），mometa 是
   <img src="./images/mometa-edit.gif" />
 </p>
 
+更多操作说明见：https://zhuanlan.zhihu.com/p/451403178
+
 ## 如何使用
 
 #### 安装依赖
