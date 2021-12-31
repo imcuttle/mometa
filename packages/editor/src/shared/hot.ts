@@ -1,7 +1,10 @@
-import { mometaRequire } from './mometa-require'
+import { getByRemoteOnce, getInLocal } from './pipe'
 
 export function addUpdateCallbackListener(fn) {
-  var RefreshUtils = mometaRequire('@mometa/react-refresh-webpack-plugin/lib/runtime/RefreshUtils') as any
+  var RefreshUtils = getByRemoteOnce('RefreshUtils') ?? getInLocal('RefreshUtils')
+  if (!RefreshUtils) {
+    throw new Error('没有找到 RefreshUtils')
+  }
   RefreshUtils?.eventEmitter?.on('updateCallback', fn)
   return () => {
     RefreshUtils?.eventEmitter?.off('updateCallback', fn)
@@ -9,8 +12,10 @@ export function addUpdateCallbackListener(fn) {
 }
 
 export function addExecuteRuntimeListener(fn) {
-  var RefreshUtils = mometaRequire('@mometa/react-refresh-webpack-plugin/lib/runtime/RefreshUtils') as any
-
+  var RefreshUtils = getByRemoteOnce('RefreshUtils') ?? getInLocal('RefreshUtils')
+  if (!RefreshUtils) {
+    throw new Error('没有找到 RefreshUtils')
+  }
   const handler = function () {
     setTimeout(() => {
       fn.apply(this, arguments)

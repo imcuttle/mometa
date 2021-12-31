@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events'
-import React from '@@__mometa-external/react'
-import { parseReactDomNode, parseReactDomNodeDeep, ReactFiber } from '../../../utils/dom-utils'
+import React from 'react'
+import { parseReactDomNodeDeep, ReactFiber } from '../utils/dom-utils'
 
 const findClosest = <T extends HTMLElement>(
   from: T,

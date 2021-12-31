@@ -400,7 +400,7 @@ module.exports = function (webpackEnv) {
 
                 plugins: [
                   [require.resolve('babel-plugin-import'), { libraryName: 'antd', style: 'css' }],
-                  isEnvDevelopment && require.resolve('@mometa/editor/babel/plugin-react-runtime'),
+                  isEnvDevelopment && require.resolve('@mometa/editor/babel/plugin-react'),
                   isEnvDevelopment && shouldUseReactRefresh && require.resolve('react-refresh/babel')
                 ].filter(Boolean),
                 // This is a feature of `babel-loader` for webpack (not Babel itself).

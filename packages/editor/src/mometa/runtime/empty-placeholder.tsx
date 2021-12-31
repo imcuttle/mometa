@@ -1,10 +1,12 @@
+import { isInIframe } from '../../shared/utils'
+import { getSharedFromMain, useHeaderStatus } from '../utils/get-from-main'
+
 export default function EmptyPlaceholder({ __mometa }) {
-  const React = require('@@__mometa-external/react')
-  if (!React || !require('@@__mometa-external/shared')) {
+  const React = require('react')
+  if (!React || !isInIframe()) {
     return null
   }
 
-  const { useHeaderStatus } = require('@@__mometa-external/shared')
   const [{ canSelect }] = useHeaderStatus()
 
   return React.createElement(

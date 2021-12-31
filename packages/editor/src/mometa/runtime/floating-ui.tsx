@@ -1,18 +1,19 @@
-import React from '@@__mometa-external/react'
-import { createPortal } from '@@__mometa-external/react-dom'
+import React from 'react'
+import { createPortal } from 'react-dom'
 import c from 'classnames'
 import { debounce, pick } from 'lodash-es'
 import { getScrollParents } from '@floating-ui/dom'
 
 import { ArrowUpOutlined, ArrowDownOutlined, DragOutlined, DeleteOutlined } from '@ant-design/icons'
-import { css } from '../../../utils/emotion-css'
+import { css } from '../utils/emotion-css'
 import usePersistFn from '@rcp/use.persistfn'
-import { Button, Tooltip } from 'antd'
-import { api } from '@@__mometa-external/shared'
+import { Button } from 'antd'
 import { MometaHTMLElement, useProxyEvents } from './dom-api'
 import { PreventFastClick } from '@rcp/c.preventfastop'
 import MoreButton from './components/more-button'
-import { useDrag } from '@@__mometa-external/react-dnd'
+import { useDrag } from 'react-dnd'
+import { getSharedFromMain } from '../utils/get-from-main'
+const { api } = getSharedFromMain()
 
 function usePosition(dom: HTMLElement) {
   const [data, setData] = React.useState({ isReady: false, rect: { width: 0, height: 0, x: 0, y: 0 } })

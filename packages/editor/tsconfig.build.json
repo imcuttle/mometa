@@ -1,7 +1,9 @@
 {
   "extends": "../../tsconfig.json",
   "type": "module",
-  "compilerOptions": {},
+  "compilerOptions": {
+    "target": "ES6"
+  },
   "include": ["./src"],
   "exclude": ["node_modules", "**/__tests__/**", "example"]
 }

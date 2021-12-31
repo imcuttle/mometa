@@ -6,10 +6,9 @@ import PQueue from 'p-queue'
 import { Form } from 'antd'
 
 import { CodeEditor } from '../../../../shared/code-editor'
-import { MometaHTMLElement } from '../../../../mometa/preset/react/runtime/dom-api'
 import { openReactStandalone } from '../../../../shared/open-react-element'
 import { createPreload } from '../../utils/utils'
-import { MoveNodePreload } from '@mometa/fs-handler'
+import type { MometaHTMLElement } from '../../../../mometa/runtime/dom-api'
 
 const getReactWrap = (anotherTo) => ({
   startStr: '<>',

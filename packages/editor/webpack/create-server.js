@@ -38,10 +38,9 @@ const json = async (req) => {
 exports.createServer = function createServer({
   host = 'localhost',
   port = '8686',
-  apiBaseURL = '',
+  baseURL = '',
   fileSystem = fs,
-  context = process.cwd(),
-  react
+  context = process.cwd()
 }) {
   const fsHandler = createFsHandler({
     fs: fileSystem,
@@ -64,7 +63,7 @@ exports.createServer = function createServer({
     const handlerHttp = async () => {
       try {
         if (req.method.toUpperCase() === 'POST') {
-          switch (stripPrefix(apiBaseURL, req.url)) {
+          switch (stripPrefix(baseURL, req.url)) {
             case '/submit-op': {
               const body = await json(req)
               if (!body.preload.filename) {
@@ -97,7 +96,7 @@ exports.createServer = function createServer({
     }
 
     if (req.method.toUpperCase() === 'GET') {
-      switch (stripPrefix(apiBaseURL, req.url)) {
+      switch (stripPrefix(baseURL, req.url)) {
         case '/sse': {
           let onCloseHandlers = []
           const es = createEventStream(6000, {
@@ -146,7 +145,7 @@ exports.createServer = function createServer({
 
   return new Promise((res) => {
     server.listen(port, host, () => {
-      console.log(`[MMS] run on http://${host}:${port}${apiBaseURL}`)
+      console.log(`[MMS] run on http://${host}:${port}${baseURL}`)
       res(server)
     })
   })

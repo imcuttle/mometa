@@ -1,7 +1,7 @@
 import { transform } from '@babel/core'
-import babelPluginMometaReactInject from './inject'
+import babelPluginMometaReactInject from '.'
 
-describe('babel-inject', () => {
+describe('babel-react', () => {
   it('spec', function () {
     const rs = transform(
       `

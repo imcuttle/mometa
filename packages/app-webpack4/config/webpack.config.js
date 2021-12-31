@@ -400,7 +400,7 @@ module.exports = function (webpackEnv) {
                 ],
 
                 plugins: [
-                  isEnvDevelopment && require.resolve('@mometa/editor/babel/plugin-react-runtime'),
+                  isEnvDevelopment && require.resolve('@mometa/editor/babel/plugin-react'),
                   require.resolve('babel-plugin-lodash'),
                   [require.resolve('babel-plugin-import'), { libraryName: 'antd', style: 'css' }],
                   [
@@ -584,6 +584,9 @@ module.exports = function (webpackEnv) {
     plugins: [
       isEnvDevelopment &&
         new MometaEditorPlugin({
+          serverOptions: {
+            port: 9898,
+          },
           __webpack: webpack,
         }),
       // Generates an `index.html` file with the <script> injected.

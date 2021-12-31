@@ -10,10 +10,6 @@ if (process.env.NODE_ENV !== 'production') {
     if (typeof __react_refresh_library__ !== 'undefined' && __react_refresh_library__) {
       $RefreshInjected$ += '_' + __react_refresh_library__
     }
-    if (safeThis.parent && safeThis.parent !== safeThis) {
-      safeThis = safeThis.parent
-    }
-
     // Only inject the runtime if it hasn't been injected
     if (!safeThis[$RefreshInjected$]) {
       // Inject refresh runtime into global scope

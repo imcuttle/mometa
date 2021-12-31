@@ -1,4 +1,5 @@
-import { locationActionSubject } from '@@__mometa-external/shared'
+import { getSharedFromMain } from './utils/get-from-main'
+const { locationActionSubject } = getSharedFromMain()
 
 const getUrl = (url) => {
   if (url == null) {

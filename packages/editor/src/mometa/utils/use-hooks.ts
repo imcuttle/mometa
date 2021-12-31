@@ -1,4 +1,4 @@
-import React from '@@__mometa-external/react'
+import React from 'react'
 import { pick } from 'lodash-es'
 
 export function useStyle(style: CSSStyleDeclaration, dom: HTMLElement) {

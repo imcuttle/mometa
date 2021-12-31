@@ -1,12 +1,12 @@
-import React from '@@__mometa-external/react'
-import { css } from '../../../utils/emotion-css'
-import { useDragDropManager, useDrop } from '@@__mometa-external/react-dnd'
-import { addCss, parseReactDomNode, parseReactDomNodeDeep, setStyle } from '../../../utils/dom-utils'
-import { api, useHeaderStatus, useSelectedNode, useOveringNode } from '@@__mometa-external/shared'
+import React from 'react'
+import { css } from '../utils/emotion-css'
+import { useDrop } from 'react-dnd'
+import { addCss, parseReactDomNodeDeep } from '../utils/dom-utils'
 import { OveringFloat } from './floating-ui'
 import { MometaHTMLElement, MometaDomApi } from './dom-api'
-import { ConfigProvider } from 'antd'
-import zhCN from 'antd/lib/locale/zh_CN'
+import { Provider } from './provider'
+import { getSharedFromMain, useOveringNode, useHeaderStatus, useSelectedNode } from '../utils/get-from-main'
+const { api } = getSharedFromMain()
 
 function isDropableDom(dom: HTMLElement) {
   if (dom.localName === EMPTY_PLACEHOLDER_NAME) {
@@ -280,22 +280,10 @@ export const DndDropableNode = React.memo(({ dom }: { dom: MometaHTMLElement }) 
   )
 })
 
-export function DndLayout({ dom, children }) {
-  const dragDropManager = useDragDropManager()
-  React.useLayoutEffect(() => {
-    const bk: any = dragDropManager.getBackend()
-    bk.addEventListeners(window)
-    return () => {
-      bk.removeEventListeners(window)
-    }
-  }, [dragDropManager])
-
+export function DndLayout({ dom }) {
   return (
-    <>
-      <ConfigProvider locale={zhCN} prefixCls={'mmt-ant'}>
-        <DndNode dom={dom} />
-      </ConfigProvider>
-      {children}
-    </>
+    <Provider>
+      <DndNode dom={dom} />
+    </Provider>
   )
 }

@@ -27,9 +27,6 @@ const SearchForm = ({ onFinish }: any) => {
 
         <Form.Item noStyle>
           <Space style={{ marginLeft: width }}>
-            <Button type={'primary'} htmlType={'submit'}>
-              查询
-            </Button>
             <Button
               type={'default'}
               onClick={() => {
@@ -37,6 +34,9 @@ const SearchForm = ({ onFinish }: any) => {
               }}
             >
               重置
+            </Button>
+            <Button type={'primary'} htmlType={'submit'}>
+              查询
             </Button>
           </Space>
         </Form.Item>

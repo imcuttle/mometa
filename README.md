@@ -108,7 +108,7 @@ module.exports = {
         include: paths.appSrc,
         loader: require.resolve('babel-loader'),
         options: {
-          plugins: [isEnvDevelopment && require.resolve('@mometa/editor/babel/plugin-react-runtime')]
+          plugins: [isEnvDevelopment && require.resolve('@mometa/editor/babel/plugin-react')]
         }
       }
     ]

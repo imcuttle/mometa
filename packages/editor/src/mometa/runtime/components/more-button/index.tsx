@@ -1,14 +1,15 @@
 import React from 'react'
 import p from 'prefix-classname'
-import { NodeIndexOutlined, MenuOutlined } from '@ant-design/icons'
+import { MenuOutlined } from '@ant-design/icons'
 import { CLS_PREFIX } from '../../../config/const'
 
 import { Button, Dropdown, Menu } from 'antd'
 import { MometaHTMLElement } from '../../dom-api'
-import { getDomName } from '../../../../../utils/dom-utils'
-import { useSelectedNode, api } from '@@__mometa-external/shared'
+import { getSharedFromMain, useSelectedNode } from '../../../utils/get-from-main'
+const { api } = getSharedFromMain()
 
 import './style.scss'
+import { getDomName } from '../../../utils/dom-utils'
 
 const cn = p('')
 const c = p(`${CLS_PREFIX}-more-button`)
@@ -49,7 +50,7 @@ const MoreButton: React.FC<MoreButtonProps> = React.memo(({ className, dom }) =>
       className={c('__dropdown')}
       overlay={
         <Menu>
-          <Menu.SubMenu title={'选中层级'} popupOffset={[0, 0]}>
+          <Menu.SubMenu key={'level'} title={'选中层级'} popupOffset={[0, 0]}>
             {!!paths &&
               Array.from(paths.keys()).map((groupDom, i) => {
                 const list = paths.get(groupDom)
@@ -68,6 +69,7 @@ const MoreButton: React.FC<MoreButtonProps> = React.memo(({ className, dom }) =>
               })}
           </Menu.SubMenu>
           <Menu.Item
+            key={'cancel-select'}
             onClick={() => {
               setSelectedNode(null)
             }}
@@ -76,6 +78,7 @@ const MoreButton: React.FC<MoreButtonProps> = React.memo(({ className, dom }) =>
           </Menu.Item>
           <Menu.Divider />
           <Menu.Item
+            key={'copy'}
             onClick={() => {
               return api.handleViewOp('copy', dom)
             }}

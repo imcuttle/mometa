@@ -1,6 +1,6 @@
 import React, { StrictMode } from 'react'
 import Tabs from 'antd/es/tabs'
-import { Table, Input } from 'antd'
+import { Table, Input, Typography } from 'antd'
 import 'antd/lib/table/style/css'
 import 'antd/es/tabs/style/css'
 import { body, panel } from './elements'
@@ -14,10 +14,10 @@ const array = new Array(100).fill(1)
 export default function App(props: Props) {
   return (
     <div>
-      <Input placeholder="请输入" />
+      <Input placeholder="请输入 hhh" />
       <Table />
       <h1 title={'abc'}>Hello World👌</h1>
-      <input defaultValue="abc" />
+      <input defaultValue="abcdd" />
       <p className="empty"></p>
       <Tabs>
         <Tabs.TabPane key={'tool'} tab={'物料'}>

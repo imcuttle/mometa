@@ -3,8 +3,6 @@ import p from 'prefix-classname'
 import { useDragDropManager } from 'react-dnd'
 import {
   CLS_PREFIX,
-  useOveringNode,
-  useSelectedNode,
   overingNodeSubject,
   selectedNodeSubject,
   useLocationAction,
@@ -13,17 +11,16 @@ import {
 import { addModules } from '../../utils/externals-modules'
 import { useSharedMap, useSharedUpdateMap, SharedProvider, useShared, useSharedProvider } from '@rcp/use.shared'
 
-const Dnd = require('react-dnd')
-
 const cn = p('')
 const c = p(`${CLS_PREFIX}-stage`)
 
 import './style.scss'
 
 import { headerStatusSubject, useHeaderStatus } from '../header'
-import { ConfigProvider } from 'antd'
-import zhCN from 'antd/lib/locale/zh_CN'
+import { register, addRemoteGlobalThis, removeRemoteGlobalThis, setId } from '../../../../shared/pipe'
 import LocationWidget from '../location-widget'
+
+setId(`main`)
 
 export interface StageProps {
   className?: string
@@ -33,13 +30,22 @@ export interface StageProps {
 
 const StageContent: React.FC<StageProps> = React.memo(({ className, externalModules, bundlerURL }) => {
   React.useLayoutEffect(() => !!externalModules && addModules(externalModules), [externalModules])
+  const iframeRef = React.useRef<HTMLIFrameElement>(null)
+  React.useEffect(() => {
+    if (iframeRef.current?.contentWindow) {
+      addRemoteGlobalThis(iframeRef.current.contentWindow)
+      return () => {
+        removeRemoteGlobalThis(iframeRef.current?.contentWindow)
+      }
+    }
+  }, [iframeRef])
+
   const [action, setAction] = useLocationAction()
   React.useLayoutEffect(() => {
     setAction({ action: 'PUSH', url: bundlerURL, outer: true })
   }, [bundlerURL])
 
   const [iframeSrc, setIframeSrc] = React.useState(bundlerURL)
-
   React.useLayoutEffect(() => {
     if (!action) {
       return
@@ -53,8 +59,6 @@ const StageContent: React.FC<StageProps> = React.memo(({ className, externalModu
     }
   }, [action])
 
-  const iframeRef = React.useRef<HTMLIFrameElement>(null)
-
   const [{ showLocation }] = useHeaderStatus()
   const [api] = useShared('api')
   const ddManager = useDragDropManager()
@@ -62,30 +66,15 @@ const StageContent: React.FC<StageProps> = React.memo(({ className, externalModu
   const _sharedUpdateMap = useSharedUpdateMap()
   React.useLayoutEffect(
     () =>
-      addModules({
-        shared: {
-          api,
-
-          // value shared
-          useShared,
-          overingNodeSubject,
-          selectedNodeSubject,
-          useOveringNode,
-          useSelectedNode,
-          useHeaderStatus,
-          headerStatusSubject,
-          useLocationAction,
-          locationActionSubject,
-          RootProvider: (props) => {
-            return (
-              <SharedProvider _internal={{ valuesMap: _sharedMap, updateMap: _sharedUpdateMap }}>
-                <ConfigProvider locale={zhCN} prefixCls={'mmt-ant'}>
-                  <Dnd.DndProvider {...props} manager={ddManager} />
-                </ConfigProvider>
-              </SharedProvider>
-            )
-          }
-        }
+      register('shared', {
+        api,
+        overingNodeSubject,
+        selectedNodeSubject,
+        headerStatusSubject,
+        locationActionSubject,
+        ddManager,
+        _sharedMap,
+        _sharedUpdateMap
       }),
     [ddManager, _sharedMap, _sharedUpdateMap, api]
   )

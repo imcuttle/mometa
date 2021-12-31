@@ -108,6 +108,7 @@ function getSingleConfig(
     entry,
     target,
     name,
+    library,
     plugins = [],
     outputPath,
     babelPresets = [],
@@ -224,6 +225,7 @@ function getSingleConfig(
     entry: entries,
     name,
     output: {
+      library,
       // The build folder.
       path: outputPath || paths.appBuild,
       // Add /* filename */ comments to generated require()s in the output.
@@ -329,6 +331,7 @@ function getSingleConfig(
         .map((ext) => `.${ext}`)
         .filter((ext) => useTypeScript || !ext.includes('ts')),
       alias: {
+        ...opts.alias,
         // Support React Native Web
         // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
         'react-native': 'react-native-web',
@@ -777,6 +780,19 @@ function getSingleConfig(
   }
 }
 
+const localPlugins = [
+  new webpack.ExternalsPlugin(undefined, ({ request }, cb) => {
+    if (/^\$mometa-external:(.+)$/.test(request)) {
+      return cb(null, `commonjs ${RegExp.$1}`)
+    }
+
+    // if (/^\$(react|react-dom|react\/jsx-runtime)$/.test(request)) {
+    //   return cb(null, `commonjs ${RegExp.$1}`)
+    // }
+    return cb()
+  })
+]
+
 module.exports = function getConfig(webpackEnv) {
   if (process.env.BUILD_MOD === 'runtime') {
     return getSingleConfig('development', {
@@ -787,31 +803,13 @@ module.exports = function getConfig(webpackEnv) {
       outputPath: nps.join(paths.appBuild, 'runtime-entry'),
       target: 'node',
       filename: 'index.js',
-      plugins: [
-        new MometaEditorPlugin({
-          react: {
-            refresh: false
-          },
-          __runtime_build: true
-        })
-      ],
+      plugins: [...localPlugins],
+      library: { type: 'commonjs2' },
       htmlName: false
     })
   }
 
   if (process.env.BUILD_MOD === 'app') {
-    const externals = ({ request, context, contextInfo }, cb) => {
-      const issuer = contextInfo.issuer || ''
-      if (
-        /^(react|react-dom)$/.test(request) &&
-        ![nps.resolve(__dirname, 'entry/__mometa_outer_vendor__.js')]
-          .concat(WHITE_PATHS)
-          .find((x) => issuer.startsWith(x))
-      ) {
-        return cb(null, `__mometa_outer_vendor_require__(${JSON.stringify(request)})`)
-      }
-      return cb()
-    }
     return [
       // getSingleConfig('production', {
       //   entry: [nps.resolve(__dirname, 'entry/__mometa_outer_vendor__.js'), paths.appIndexJs],
@@ -823,12 +821,11 @@ module.exports = function getConfig(webpackEnv) {
       // }),
       getSingleConfig('development', {
         cssExtract: true,
-        entry: [nps.resolve(__dirname, 'entry/__mometa_outer_vendor__.js'), paths.appIndexJs],
+        entry: [paths.appIndexJs],
         refresh: false,
         name: 'editor',
         outputPath: nps.join(paths.appBuild, 'standalone/development'),
-        htmlName: 'index.html',
-        externals
+        htmlName: 'index.html'
       })
     ]
   }
@@ -838,13 +835,16 @@ module.exports = function getConfig(webpackEnv) {
       name: 'app',
       htmlName: 'bundler.html',
       entry: paths.resolveApp('src/app/index.tsx'),
-      babelPlugins: [require.resolve('../../babel/plugin-react-runtime')],
+      babelPlugins: [require.resolve('../../babel/plugin-react')],
       plugins: [
         new MometaEditorPlugin({
           react: true,
           editorConfig: {
             bundlerURL: '/bundler.html'
           }
+        }),
+        new webpack.NormalModuleReplacementPlugin(/^\$mometa-external:(.+)$/, function (resource) {
+          resource.request = resource.request.replace(/^\$mometa-external:(.+)$/, '$1')
         })
       ],
       refresh: false

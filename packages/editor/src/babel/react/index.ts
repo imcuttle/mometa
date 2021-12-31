@@ -8,7 +8,7 @@ import { createLineContentsByContent } from '@mometa/fs-handler'
 import { sha1 as hash } from 'object-hash'
 import * as nps from 'path'
 
-const scopePath = nps.resolve(__dirname, '../../../../')
+const scopePath = nps.resolve(__dirname, '../../')
 
 export default function babelPluginMometaReactInject(api) {
   const { types: t } = api
@@ -167,7 +167,7 @@ export default function babelPluginMometaReactInject(api) {
                     this.emptyChildrenPlc ||
                     (this.emptyChildrenPlc = addDefault(
                       path,
-                      state.opts.emptyPlaceholderPath || require.resolve('../runtime/empty-placeholder'),
+                      state.opts.emptyPlaceholderPath || require.resolve('../../mometa/runtime/empty-placeholder'),
                       {
                         nameHint: 'MometaEmptyPlaceholder'
                       }
