@@ -9,13 +9,15 @@ import { addUpdateCallbackListener } from '../shared/hot'
 import { getSharedFromMain } from './utils/get-from-main'
 import { lazy } from '../shared/utils'
 import { lazyDomGetter } from './config/backlist-dom'
-const { selectedNodeSubject } = getSharedFromMain()
+const { selectedNodeSubject, overingNodeSubject } = getSharedFromMain()
 
 injectGlobal(`
     body {
     padding: 30px 10px;
     }
 `)
+selectedNodeSubject.next(null)
+overingNodeSubject.next(null)
 
 addUpdateCallbackListener((moduleExports, moduleId, webpackHot, refreshOverlay, isTest) => {
   // Update selectedNodeSubject for render

@@ -93,9 +93,13 @@ export abstract class ApiCore {
       }
 
       let dispose = addExecuteRuntimeListener((exports, id) => {
-        console.log('addExecuteRuntimeListener id', id)
+        function stripRequest(path) {
+          const paths = path.split(/(!+)/)
+          return paths[paths.length - 1]
+        }
+        console.log('addExecuteRuntimeListener id', id, ', striped: ', stripRequest(id))
         // @ts-ignore
-        if (`./${requestData.preload.relativeFilename}` === id) {
+        if (`./${requestData.preload.relativeFilename}` === stripRequest(id)) {
           updated = true
           resolveMaybe()
           dispose()

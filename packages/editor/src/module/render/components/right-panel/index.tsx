@@ -135,7 +135,7 @@ const MetaInfo = () => {
 
 const RightPanel: React.FC<RightPanelProps> = React.memo(({ className }) => {
   const [selectedNode] = useSelectedNode()
-  const mometaData = selectedNode?.__mometa?.getMometaData()
+  const mometaData = selectedNode?.parentNode && selectedNode?.__mometa?.getMometaData()
   return (
     <div className={cn(c(), className)}>
       {!!mometaData ? (
