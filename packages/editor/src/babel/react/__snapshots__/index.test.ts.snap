@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`babel-inject spec 1`] = `
+exports[`babel-react spec 1`] = `
 "import _MometaEmptyPlaceholder from \\"empty\\";
 const arr = new Array(100).fill(1);
 const elem = <div __mometa={{
