@@ -1,5 +1,5 @@
 import React from 'react';
-import { ConfigProvider, Button } from 'antd';
+import { ConfigProvider, Button, Typography } from 'antd';
 import { HashRouter } from 'react-router-dom';
 import { Route } from 'react-router';
 import zhCN from 'antd/lib/locale/zh_CN';

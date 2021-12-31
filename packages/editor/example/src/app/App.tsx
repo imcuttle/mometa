@@ -14,8 +14,8 @@ const array = new Array(100).fill(1)
 export default function App(props: Props) {
   return (
     <div>
-      <Input placeholder="请输入 hhh" />
       <Table />
+      <Input placeholder="请输入 hhh" />
       <h1 title={'abc'}>Hello World👌</h1>
       <input defaultValue="abcdd" />
       <p className="empty"></p>

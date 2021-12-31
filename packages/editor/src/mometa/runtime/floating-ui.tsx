@@ -13,6 +13,7 @@ import { PreventFastClick } from '@rcp/c.preventfastop'
 import MoreButton from './components/more-button'
 import { useDrag } from 'react-dnd'
 import { getSharedFromMain } from '../utils/get-from-main'
+import { globalGetContainer } from '../config/backlist-dom'
 const { api } = getSharedFromMain()
 
 function usePosition(dom: HTMLElement) {
@@ -54,27 +55,6 @@ function usePosition(dom: HTMLElement) {
   }, [dom])
 
   return { shouldHide, ...data }
-}
-
-let gDiv
-const globalGetContainer = () => {
-  if (gDiv && gDiv.parentElement) {
-    return gDiv
-  }
-
-  if (gDiv) {
-    gDiv.remove()
-  }
-
-  const div = document.createElement('div')
-  Object.assign(div.style, {
-    position: 'fixed',
-    left: 0,
-    top: 0
-  })
-  document.body.appendChild(div)
-  gDiv = div
-  return div
 }
 
 type FloatingUiProps = JSX.IntrinsicElements['div'] & {

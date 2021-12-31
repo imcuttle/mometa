@@ -8,6 +8,7 @@ import { DndLayout } from './runtime/dnd'
 import { addUpdateCallbackListener } from '../shared/hot'
 import { getSharedFromMain } from './utils/get-from-main'
 import { lazy } from '../shared/utils'
+import { lazyDomGetter } from './config/backlist-dom'
 const { selectedNodeSubject } = getSharedFromMain()
 
 injectGlobal(`
@@ -20,16 +21,11 @@ addUpdateCallbackListener((moduleExports, moduleId, webpackHot, refreshOverlay, 
   // Update selectedNodeSubject for render
   const prev = selectedNodeSubject.value
   selectedNodeSubject.next(null)
-  if (prev?.parentElement) {
+  if (prev?.parentNode) {
     selectedNodeSubject.next(prev)
   }
 })
 
-const lazyDomGetter = lazy(() => {
-  const doc = document.createElement('mometa-runtime')
-  document.body.appendChild(doc)
-  return doc
-})
 const lazyFloatingRender = lazy(() => {
   const doc = lazyDomGetter()
   ReactDOM.render(<DndLayoutManager />, doc)
@@ -38,7 +34,6 @@ const lazyFloatingRender = lazy(() => {
 const domSub = new BehaviorSubject<any[]>([])
 function DndLayoutManager() {
   const [doms] = useBehaviorSubject(domSub)
-  console.log('doms', doms)
   return (
     <>
       {doms?.map((dom, i) => (
@@ -48,24 +43,24 @@ function DndLayoutManager() {
   )
 }
 
-const rawRender = require('$mometa-external:react-dom').render
-// @ts-ignore
-require('$mometa-external:react-dom').render = function _render(...argv) {
-  const [elem, dom, cb] = argv
-  return rawRender.apply(this, [
-    elem,
-    dom,
-    function () {
-      setTimeout(() => {
-        if (dom !== lazyDomGetter()) {
-          lazyFloatingRender()
-          domSub.next(Array.from(new Set(domSub.value.concat(dom)).values()).filter((x) => x && x.parentElement))
-        }
-      })
-      return cb?.apply(this, arguments)
-    }
-  ])
-}
+setTimeout(() => {
+  lazyFloatingRender()
+  domSub.next([document.body])
+})
+
+// const rawRender = require('$mometa-external:react-dom').render
+// // @ts-ignore
+// require('$mometa-external:react-dom').render = function _render(...argv) {
+//   const [elem, dom, cb] = argv
+//   return rawRender.apply(this, [
+//     elem,
+//     dom,
+//     function () {
+//       return cb?.apply(this, arguments)
+//     }
+//   ])
+// }
+
 if (__mometa_env_react_jsx_runtime__ && __mometa_env_is_dev__) {
   const JSXDEVRuntime = require('$mometa-external:react/jsx-dev-runtime')
   const { jsxDEV } = JSXDEVRuntime

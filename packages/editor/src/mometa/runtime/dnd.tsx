@@ -6,6 +6,7 @@ import { OveringFloat } from './floating-ui'
 import { MometaHTMLElement, MometaDomApi } from './dom-api'
 import { Provider } from './provider'
 import { getSharedFromMain, useOveringNode, useHeaderStatus, useSelectedNode } from '../utils/get-from-main'
+import { getBlackListDom } from '../config/backlist-dom'
 const { api } = getSharedFromMain()
 
 function isDropableDom(dom: HTMLElement) {
@@ -30,7 +31,7 @@ function useDfsDom(dom: HTMLElement) {
   domChildrenRef.current = domChildren
 
   const getDomChildren = React.useCallback(() => {
-    if (dom?.parentElement) {
+    if (dom?.parentNode) {
       return Array.from(dom?.children || [])
     }
     return []
@@ -89,7 +90,7 @@ function useDfsDom(dom: HTMLElement) {
 export const DndUndropableNode = React.memo(({ dom }: { dom: HTMLElement }) => {
   const [domChildren] = useDfsDom(dom)
 
-  if (!dom?.parentElement) {
+  if (!dom?.parentNode) {
     return null
   }
 
@@ -105,7 +106,7 @@ export const DndUndropableNode = React.memo(({ dom }: { dom: HTMLElement }) => {
 })
 
 const DndNode = React.memo(function ({ dom }: any) {
-  if (dom && dom.parentElement) {
+  if (dom && dom.parentNode && !getBlackListDom().includes(dom)) {
     return isDropableDom(dom) ? <DndDropableNode dom={dom} /> : <DndUndropableNode dom={dom} />
   }
   return null
@@ -260,7 +261,7 @@ export const DndDropableNode = React.memo(({ dom }: { dom: MometaHTMLElement }) 
     dropRef.current(dom)
   }, [dom])
 
-  if (!dom?.parentElement) {
+  if (!dom?.parentNode) {
     return null
   }
 
