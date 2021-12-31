@@ -12,7 +12,10 @@ function App() {
       <React.Suspense fallback={pageDefaultLoading}>
         <HashRouter>
           <Route path={'*'}>
-            <h1>Start</h1>
+            <>
+              <h1>Start</h1>
+              <h1> End </h1>
+            </>
           </Route>
           {/*<ExtendRoutes route={route} />*/}
         </HashRouter>

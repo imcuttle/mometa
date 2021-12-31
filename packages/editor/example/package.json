@@ -3,6 +3,7 @@
   "version": "0.0.11",
   "private": true,
   "dependencies": {
+    "globby": "^11.0.2",
     "@babel/core": "^7.14.2",
     "@mometa/editor": "^0.0.11",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.1",

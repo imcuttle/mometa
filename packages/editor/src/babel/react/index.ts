@@ -167,7 +167,10 @@ export default function babelPluginMometaReactInject(api) {
                     this.emptyChildrenPlc ||
                     (this.emptyChildrenPlc = addDefault(
                       path,
-                      state.opts.emptyPlaceholderPath || require.resolve('../../mometa/runtime/empty-placeholder'),
+                      state.opts.emptyPlaceholderPath ||
+                        (!!process.env.__MOMETA_LOCAL__
+                          ? require.resolve('../../mometa/runtime/empty-placeholder')
+                          : require.resolve('../../../build/runtime/empty-placeholder')),
                       {
                         nameHint: 'MometaEmptyPlaceholder'
                       }

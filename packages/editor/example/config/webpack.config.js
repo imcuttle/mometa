@@ -207,7 +207,6 @@ function getSingleConfig(
   const DATETIME = moment().utcOffset(8, false).format('YYYYMMDD_HHmm')
 
   let entries = entry || paths.appIndexJs
-  entries = Array.isArray(entries) ? entries : [entries]
 
   return {
     ignoreWarnings: [/Failed to parse source map/],
@@ -310,7 +309,8 @@ function getSingleConfig(
         }),
         // This is only used in production mode
         new CssMinimizerPlugin()
-      ]
+      ],
+      ...opts.optimization
     },
     resolve: {
       fallback: {
@@ -795,18 +795,41 @@ const localPlugins = [
 
 module.exports = function getConfig(webpackEnv) {
   if (process.env.BUILD_MOD === 'runtime') {
-    return getSingleConfig('development', {
-      cssExtract: false,
-      refresh: false,
-      entry: [nps.resolve(__dirname, '../../webpack/assets/runtime-entry.js')],
-      name: 'runtime-entry',
-      outputPath: nps.join(paths.appBuild, 'runtime-entry'),
-      target: 'node',
-      filename: 'index.js',
-      plugins: [...localPlugins],
-      library: { type: 'commonjs2' },
-      htmlName: false
-    })
+    return [
+      getSingleConfig('development', {
+        cssExtract: false,
+        refresh: false,
+        entry: {
+          entry: [nps.resolve(__dirname, '../../webpack/assets/runtime-entry.js')],
+          'empty-placeholder': [nps.resolve(__dirname, '../../src/mometa/runtime/empty-placeholder.tsx')]
+        },
+        optimization: {
+          splitChunks: {
+            chunks: 'all',
+            name: false
+          }
+        },
+        name: 'runtime',
+        outputPath: nps.join(paths.appBuild, 'runtime'),
+        target: 'node',
+        filename: '[name].js',
+        plugins: [...localPlugins],
+        library: { type: 'commonjs2' },
+        htmlName: false
+      })
+      // getSingleConfig('development', {
+      //   cssExtract: false,
+      //   refresh: false,
+      //   entry: [nps.resolve(__dirname, '../../src/mometa/runtime/empty-placeholder.tsx')],
+      //   name: 'runtime-empty-placeholder',
+      //   outputPath: nps.join(paths.appBuild, 'runtime-empty-placeholder'),
+      //   target: 'node',
+      //   filename: 'index.js',
+      //   plugins: [...localPlugins],
+      //   library: { type: 'commonjs2' },
+      //   htmlName: false
+      // })
+    ]
   }
 
   if (process.env.BUILD_MOD === 'app') {
@@ -825,7 +848,13 @@ module.exports = function getConfig(webpackEnv) {
         refresh: false,
         name: 'editor',
         outputPath: nps.join(paths.appBuild, 'standalone/development'),
-        htmlName: 'index.html'
+        htmlName: 'index.html',
+        optimization: {
+          splitChunks: {
+            chunks: 'all',
+            name: false
+          }
+        }
       })
     ]
   }

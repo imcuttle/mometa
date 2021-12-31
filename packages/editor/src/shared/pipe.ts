@@ -63,5 +63,5 @@ const exps = {
   removeRemoteGlobalThis,
   data
 }
-
-globalThis[SYMBOL_NAME] = exps
+// 防止重入，如 empty-placeholder 再次加载
+globalThis[SYMBOL_NAME] = globalThis[SYMBOL_NAME] ?? exps
