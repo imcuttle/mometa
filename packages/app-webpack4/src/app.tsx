@@ -13,8 +13,8 @@ function App() {
         <HashRouter>
           <Route path={'*'}>
             <>
-              <h1>Start</h1>
               <h1> End </h1>
+              <h1>Start</h1>
             </>
           </Route>
           {/*<ExtendRoutes route={route} />*/}
