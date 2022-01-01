@@ -1,12 +1,12 @@
 {
   "name": "@mometa/app",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "private": true,
   "dependencies": {
     "@babel/core": "^7.16.0",
     "@mometa-mat/antd": "^0.0.2",
-    "@mometa/editor": "^0.0.14",
-    "@mometa/materials-generator": "^0.0.14",
+    "@mometa/editor": "^0.0.15",
+    "@mometa/materials-generator": "^0.0.15",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.3",
     "@rcp/use.fetcher": "^1.1.5",
     "@svgr/webpack": "^5.5.0",
