@@ -1,6 +1,6 @@
 import React, { StrictMode } from 'react'
 import Tabs from 'antd/es/tabs'
-import { Table, Input, Typography } from 'antd'
+import { Table, Input, Typography, Button } from 'antd'
 import 'antd/lib/table/style/css'
 import 'antd/es/tabs/style/css'
 import { body, panel } from './elements'
@@ -14,6 +14,11 @@ const array = new Array(100).fill(1)
 export default function App(props: Props) {
   return (
     <div>
+      <>
+        <h1> End </h1>
+        <h1>Start</h1>
+      </>
+      <Button type="default">按钮</Button>
       <Table />
       <Input placeholder="请输入 hhh" />
       <h1 title={'abc'}>Hello World👌</h1>

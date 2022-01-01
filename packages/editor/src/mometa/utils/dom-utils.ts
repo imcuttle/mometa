@@ -20,8 +20,10 @@ export function addCss(dom: HTMLElement, cls: string) {
 export interface ReactFiber {
   type?: string | ComponentType
   key?: string
+  actualStartTime: number
   return?: ReactFiber
   child?: ReactFiber
+  alternate?: ReactFiber
   sibling?: ReactFiber
   stateNode: HTMLElement | any | null
   _debugSource?: {
@@ -57,6 +59,15 @@ export function parseReactDomNodeDeep(dom: HTMLElement) {
   }
 }
 
+export function getLatestFiber(f?: ReactFiber) {
+  if (!f) {
+    return f
+  }
+  if (f.alternate) {
+    return f.alternate.actualStartTime > f.actualStartTime ? f.alternate : f
+  }
+  return f
+}
 const domMap = new WeakMap()
 export function parseReactDomNode(dom: HTMLElement) {
   const cachedName = domMap.get(dom)
@@ -64,14 +75,14 @@ export function parseReactDomNode(dom: HTMLElement) {
     const { fiberName, propName } = cachedName
     if (propName && dom[propName]?.__mometa) {
       return {
-        fiber: !!fiberName && dom[fiberName],
+        fiber: !!fiberName && getLatestFiber(dom[fiberName]),
         mometa: dom[propName]?.__mometa
       }
     }
     if (fiberName && dom[fiberName]?._debugSource?.__mometa) {
       return {
-        fiber: dom[cachedName?.fiberName] as ReactFiber,
-        mometa: dom[cachedName?.fiberName]?._debugSource?.__mometa
+        fiber: getLatestFiber(dom[cachedName?.fiberName]) as ReactFiber,
+        mometa: getLatestFiber(dom[cachedName?.fiberName])?._debugSource?.__mometa
       }
     }
   }
@@ -80,8 +91,8 @@ export function parseReactDomNode(dom: HTMLElement) {
   if (fiberName && dom[fiberName]?._debugSource?.__mometa) {
     domMap.set(dom, { fiberName })
     return {
-      fiber: dom[fiberName] as ReactFiber,
-      mometa: dom[fiberName]?._debugSource?.__mometa
+      fiber: getLatestFiber(dom[fiberName]) as ReactFiber,
+      mometa: getLatestFiber(dom[fiberName])?._debugSource?.__mometa
     }
   }
 

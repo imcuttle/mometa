@@ -17,9 +17,10 @@ const c = p(`${CLS_PREFIX}-more-button`)
 export interface MoreButtonProps {
   className?: string
   dom: MometaHTMLElement
+  menu?: React.ReactNode
 }
 
-const MoreButton: React.FC<MoreButtonProps> = React.memo(({ className, dom }) => {
+const MoreButton: React.FC<MoreButtonProps> = React.memo(({ className, dom, menu }) => {
   const [, setSelectedNode] = useSelectedNode()
   const [paths, setPaths] = React.useState(null)
 
@@ -50,6 +51,12 @@ const MoreButton: React.FC<MoreButtonProps> = React.memo(({ className, dom }) =>
       className={c('__dropdown')}
       overlay={
         <Menu>
+          {!!menu && (
+            <>
+              {menu}
+              <Menu.Divider />
+            </>
+          )}
           <Menu.SubMenu key={'level'} title={'选中层级'} popupOffset={[0, 0]}>
             {!!paths &&
               Array.from(paths.keys()).map((groupDom, i) => {

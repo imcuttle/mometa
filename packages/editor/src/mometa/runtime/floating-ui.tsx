@@ -7,7 +7,7 @@ import { getScrollParents } from '@floating-ui/dom'
 import { ArrowUpOutlined, ArrowDownOutlined, DragOutlined, DeleteOutlined } from '@ant-design/icons'
 import { css } from '../utils/emotion-css'
 import usePersistFn from '@rcp/use.persistfn'
-import { Button } from 'antd'
+import { Button, Menu } from 'antd'
 import { MometaHTMLElement, useProxyEvents } from './dom-api'
 import { PreventFastClick } from '@rcp/c.preventfastop'
 import MoreButton from './components/more-button'
@@ -62,6 +62,7 @@ type FloatingUiProps = JSX.IntrinsicElements['div'] & {
   dom: MometaHTMLElement
   leftTopElement?: React.ReactNode
   rightTopElement?: React.ReactNode
+  rightBottomElement?: React.ReactNode
   centerTopElement?: React.ReactNode
   centerBottomElement?: React.ReactNode
 }
@@ -71,6 +72,7 @@ export const FloatingUi = React.forwardRef<HTMLDivElement, FloatingUiProps>(func
     centerBottomElement,
     centerTopElement,
     rightTopElement,
+    rightBottomElement,
     leftTopElement,
     children,
     dom,
@@ -127,6 +129,19 @@ export const FloatingUi = React.forwardRef<HTMLDivElement, FloatingUiProps>(func
             `}
           >
             {rightTopElement}
+          </div>
+        )}
+        {!!rightBottomElement && (
+          <div
+            className={css`
+              display: flex;
+              transform: translateY(100%);
+              position: absolute;
+              bottom: 0;
+              right: -1px;
+            `}
+          >
+            {rightBottomElement}
           </div>
         )}
         {!!centerTopElement && (
@@ -230,9 +245,11 @@ export const OveringFloat = React.forwardRef<HTMLDivElement, OveringFloatProps>(
 
   const commonCss = css`
     display: flex;
+    align-items: center;
     color: #fff;
     background-color: ${color};
-    padding: 2px 4px;
+    height: 21px;
+    padding: 0 4px;
     font-size: 12px;
     pointer-events: auto;
     border-radius: 3px 3px 0 0;
@@ -257,6 +274,7 @@ export const OveringFloat = React.forwardRef<HTMLDivElement, OveringFloatProps>(
   const opHandler = usePersistFn(async (opType: string) => {
     return api.handleViewOp(opType, dom)
   })
+  const { rect } = usePosition(dom)
 
   if (!dom || !data) {
     return null
@@ -288,50 +306,84 @@ export const OveringFloat = React.forwardRef<HTMLDivElement, OveringFloatProps>(
     </div>
   )
 
+  const opElement = (
+    <>
+      {!!data.previousSibling && (
+        <PreventFastClick onClick={() => opHandler('up')}>
+          <Button className={c(btnCss)} type={'text'} size={'small'} title={'上移'} icon={<ArrowUpOutlined />} />
+        </PreventFastClick>
+      )}
+      {!!data.nextSibling && (
+        <PreventFastClick onClick={() => opHandler('down')}>
+          <Button className={c(btnCss)} type={'text'} size={'small'} title={'下移'} icon={<ArrowDownOutlined />} />
+        </PreventFastClick>
+      )}
+      <PreventFastClick onClick={() => opHandler('del')}>
+        <Button
+          className={c(btnCss)}
+          type={'text'}
+          size={'small'}
+          title={'删除'}
+          icon={<DeleteOutlined title={'删除'} />}
+        />
+      </PreventFastClick>
+    </>
+  )
+
+  const dragElem = (
+    <PreventFastClick onClick={() => opHandler('moving')}>
+      <Button
+        ref={drag}
+        className={c(btnCss)}
+        type={'text'}
+        size={'small'}
+        icon={<DragOutlined />}
+        title={'按住并拖动来进行移动；只允许同名文件内移动'}
+      />
+    </PreventFastClick>
+  )
+
+  const isSimple = rect.width < 230
+  const shouldShowOp = !isDragging && isSelected && !isOverCurrent
+
   return (
     <FloatingUi
       ref={ref}
       leftTopElement={!isDragging && flagElem}
+      rightBottomElement={
+        isSimple &&
+        shouldShowOp && (
+          <div
+            className={c(
+              commonCss,
+              css`
+                border-radius: 0 0 3px 3px;
+              `
+            )}
+          >
+            {dragElem}
+            <MoreButton
+              className={btnCss}
+              dom={dom}
+              menu={
+                <>
+                  {!!data.previousSibling && <Menu.Item onClick={() => opHandler('up')}>上移</Menu.Item>}
+                  {!!data.nextSibling && <Menu.Item onClick={() => opHandler('down')}>下移</Menu.Item>}
+                  <Menu.Item danger onClick={() => opHandler('del')}>
+                    删除
+                  </Menu.Item>
+                </>
+              }
+            />
+          </div>
+        )
+      }
       rightTopElement={
-        !isDragging &&
-        isSelected &&
-        !isOverCurrent && (
+        !isSimple &&
+        shouldShowOp && (
           <div className={c(commonCss)}>
-            <PreventFastClick onClick={() => opHandler('moving')}>
-              <Button
-                ref={drag}
-                className={c(btnCss)}
-                type={'text'}
-                size={'small'}
-                icon={<DragOutlined />}
-                title={'按住并拖动来进行移动；只允许同名文件内移动'}
-              />
-            </PreventFastClick>
-            {!!data.previousSibling && (
-              <PreventFastClick onClick={() => opHandler('up')}>
-                <Button className={c(btnCss)} type={'text'} size={'small'} title={'上移'} icon={<ArrowUpOutlined />} />
-              </PreventFastClick>
-            )}
-            {!!data.nextSibling && (
-              <PreventFastClick onClick={() => opHandler('down')}>
-                <Button
-                  className={c(btnCss)}
-                  type={'text'}
-                  size={'small'}
-                  title={'下移'}
-                  icon={<ArrowDownOutlined />}
-                />
-              </PreventFastClick>
-            )}
-            <PreventFastClick onClick={() => opHandler('del')}>
-              <Button
-                className={c(btnCss)}
-                type={'text'}
-                size={'small'}
-                title={'删除'}
-                icon={<DeleteOutlined title={'删除'} />}
-              />
-            </PreventFastClick>
+            {dragElem}
+            {opElement}
             <MoreButton className={btnCss} dom={dom} />
           </div>
         )
