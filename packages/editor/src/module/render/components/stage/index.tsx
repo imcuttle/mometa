@@ -29,7 +29,11 @@ export interface StageProps {
 }
 
 const StageContent: React.FC<StageProps> = React.memo(({ className, externalModules, bundlerURL }) => {
-  React.useLayoutEffect(() => !!externalModules && addModules(externalModules), [externalModules])
+  React.useLayoutEffect(() => {
+    if (externalModules) {
+      return addModules(externalModules)
+    }
+  }, [externalModules])
   const iframeRef = React.useRef<HTMLIFrameElement>(null)
   React.useEffect(() => {
     if (iframeRef.current?.contentWindow) {
