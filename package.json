@@ -16,7 +16,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npx lerna toc && npx markdown-toc README.zh_CN.md -i && npx markdown-toc README.md -i && git add README.md && pretty-quick --staged",
+      "pre-commit": "npx lerna toc && npx markdown-toc README.md -i && git add README.md && pretty-quick --staged",
       "commit-msg": "commitlint -e $HUSKY_GIT_PARAMS"
     }
   },

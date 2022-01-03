@@ -12,11 +12,6 @@
 <p align="center">
 面向研发的低代码元编程（代码可视化）能力</p>
 
-<p align="center">
-<a href='./README.zh_CN.md'>简体中文</a>
- | English
-</p>
-
 ---
 
 <!-- toc -->
@@ -34,14 +29,13 @@
     - [移动视图](#%E7%A7%BB%E5%8A%A8%E8%A7%86%E5%9B%BE)
     - [编辑代码](#%E7%BC%96%E8%BE%91%E4%BB%A3%E7%A0%81)
   - [预览](#%E9%A2%84%E8%A7%88)
+- [如何实现](#%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0)
 - [如何使用](#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8)
   - [安装依赖](#%E5%AE%89%E8%A3%85%E4%BE%9D%E8%B5%96)
   - [使用 antd 物料](#%E4%BD%BF%E7%94%A8-antd-%E7%89%A9%E6%96%99)
   - [接入编辑器](#%E6%8E%A5%E5%85%A5%E7%BC%96%E8%BE%91%E5%99%A8)
-- [Packages](#packages)
-- [Contributing](#contributing)
-- [Authors](#authors)
-- [License](#license)
+- [NPM 包](#npm-%E5%8C%85)
+- [作者](#%E4%BD%9C%E8%80%85)
 
 <!-- tocstop -->
 
@@ -119,6 +113,10 @@ mometa 不是传统主流的低代码平台（如 amis/云凤蝶），mometa 是
 
 ![](./images/mometa-preview-url.gif)
 
+## 如何实现
+
+见 [mometa 实现原理](./docs/how-to-work.md)
+
 ## 如何使用
 
 #### 安装依赖
@@ -176,29 +174,13 @@ module.exports = {
 
 提供的例子可见 [@mometa/app](./packages/app)
 
-## Packages
+## NPM 包
 
 - [@mometa/editor](packages/editor) - 编辑器
 - [@mometa/fs-handler](packages/fs-handler) - 代码操作转换核心逻辑，如删除、移动、替换、插入等
 - [@mometa/materials-generator](packages/materials-generator) - 物料生成 & 解析
 - [@mometa/react-refresh-webpack-plugin](packages/react-refresh-webpack-plugin) - An **EXPERIMENTAL** Webpack plugin to enable "Fast Refresh" (also previously known as _Hot Reloading_) for React components.
 
-## Contributing
-
-- Fork it!
-- Create your new branch:\
-  `git checkout -b feature-new` or `git checkout -b fix-which-bug`
-- Start your magic work now
-- Make sure npm test passes
-- Commit your changes:\
-  `git commit -am 'feat: some description (close #123)'` or `git commit -am 'fix: some description (fix #123)'`
-- Push to the branch: `git push`
-- Submit a pull request :)
-
-## Authors
+## 作者
 
 This library is written and maintained by imcuttle, <a href="mailto:imcuttle@163.com">imcuttle@163.com</a>.
-
-## License
-
-MIT - [imcuttle](https://github.com/imcuttle) 🐟
