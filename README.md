@@ -17,6 +17,32 @@
  | English
 </p>
 
+<!-- toc -->
+
+- [背景](#%E8%83%8C%E6%99%AF)
+- [特性](#%E7%89%B9%E6%80%A7)
+- [使用场景](#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF)
+  - [新开发一个页面](#%E6%96%B0%E5%BC%80%E5%8F%91%E4%B8%80%E4%B8%AA%E9%A1%B5%E9%9D%A2)
+  - [已有历史项目，需要迭代功能，只在某一小块 ui 模块内](#%E5%B7%B2%E6%9C%89%E5%8E%86%E5%8F%B2%E9%A1%B9%E7%9B%AE%E9%9C%80%E8%A6%81%E8%BF%AD%E4%BB%A3%E5%8A%9F%E8%83%BD%E5%8F%AA%E5%9C%A8%E6%9F%90%E4%B8%80%E5%B0%8F%E5%9D%97-ui-%E6%A8%A1%E5%9D%97%E5%86%85)
+- [操作演示](#%E6%93%8D%E4%BD%9C%E6%BC%94%E7%A4%BA)
+  - [编辑](#%E7%BC%96%E8%BE%91)
+    - [反向定位](#%E5%8F%8D%E5%90%91%E5%AE%9A%E4%BD%8D)
+    - [插入物料](#%E6%8F%92%E5%85%A5%E7%89%A9%E6%96%99)
+    - [删除视图](#%E5%88%A0%E9%99%A4%E8%A7%86%E5%9B%BE)
+    - [移动视图](#%E7%A7%BB%E5%8A%A8%E8%A7%86%E5%9B%BE)
+    - [编辑代码](#%E7%BC%96%E8%BE%91%E4%BB%A3%E7%A0%81)
+  - [预览](#%E9%A2%84%E8%A7%88)
+- [如何使用](#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8)
+  - [安装依赖](#%E5%AE%89%E8%A3%85%E4%BE%9D%E8%B5%96)
+  - [使用 antd 物料](#%E4%BD%BF%E7%94%A8-antd-%E7%89%A9%E6%96%99)
+  - [接入编辑器](#%E6%8E%A5%E5%85%A5%E7%BC%96%E8%BE%91%E5%99%A8)
+- [Packages](#packages)
+- [Contributing](#contributing)
+- [Authors](#authors)
+- [License](#license)
+
+<!-- tocstop -->
+
 ## 背景
 
 mometa 不是传统主流的低代码平台（如 amis/云凤蝶），mometa 是面向研发的、代码可视设计编辑平台；它更像是 dreamweaver、gui 可视编辑 之于 程序员。
@@ -61,19 +87,35 @@ mometa 不是传统主流的低代码平台（如 amis/云凤蝶），mometa 是
 
 ## 操作演示
 
-#### 预览
-
-<p align="center">
-  <img src="./images/mometa-preview.gif" />
-</p>
-
 #### 编辑
 
-<p align="center">
-  <img src="./images/mometa-edit.gif" />
-</p>
+##### 反向定位
 
-更多操作说明见：https://zhuanlan.zhihu.com/p/451403178
+支持从视图定位代码位置
+![](./images/mometa-locate.gif)
+
+##### 插入物料
+
+可视化插入物料
+![](./images/mometa-insert-material.gif)
+
+##### 删除视图
+
+![](./images/mometa-delete.gif)
+
+##### 移动视图
+
+![](./images/mometa-move.gif)
+
+##### 编辑代码
+
+![](./images/mometa-code-edit.gif)
+
+#### 预览
+
+单页应用中的路由跳转能够进行拦截控制，其他和正常预览保持一致
+
+![](./images/mometa-preview-url.gif)
 
 ## 如何使用
 
