@@ -8,7 +8,9 @@ describe('babel-react', () => {
     const arr = new Array(100).fill(1)
     const elem = <div>
       <h1 title={'abc'}>Hello World</h1>
-      <Tabs>
+      <Tabs
+        // @ts-expect-error
+      >
       <Tabs.TabPane key={'tool'} tab={'物料'}>
         <p>物料</p>
         {arr.map((x, i) => (

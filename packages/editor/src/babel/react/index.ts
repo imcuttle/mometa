@@ -69,7 +69,8 @@ export default function babelPluginMometaReactInject(api) {
 
                 const mometaData = {
                   ...path.node.loc,
-                  name: openingElement.get('name')?.node.name,
+                  // @ts-ignore
+                  name: openingElement.get('name')?.node && getText(openingElement.get('name')?.node.loc),
                   text: getText(path.node.loc),
                   filename: this.filename,
                   relativeFilename: nps.relative(state.cwd || '', this.filename),

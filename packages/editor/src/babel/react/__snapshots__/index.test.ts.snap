@@ -9,12 +9,12 @@ const elem = <div __mometa={{
     \\"column\\": 17
   },
   \\"end\\": {
-    \\"line\\": 15,
+    \\"line\\": 17,
     \\"column\\": 10
   },
   \\"filename\\": \\"/file.jsx\\",
   \\"name\\": \\"div\\",
-  \\"text\\": \\"<div>\\\\n      <h1 title={'abc'}>Hello World</h1>\\\\n      <Tabs>\\\\n      <Tabs.TabPane key={'tool'} tab={'物料'}>\\\\n        <p>物料</p>\\\\n        {arr.map((x, i) => (\\\\n          <p key={i}>content_{i}</p>\\\\n        ))}\\\\n        <p className='empty'></p>\\\\n      </Tabs.TabPane>\\\\n      <Tabs.TabPane key={'attr'} tab={'属性'}></Tabs.TabPane>\\\\n      </Tabs>\\\\n    </div>\\",
+  \\"text\\": \\"<div>\\\\n      <h1 title={'abc'}>Hello World</h1>\\\\n      <Tabs\\\\n        // @ts-expect-error\\\\n      >\\\\n      <Tabs.TabPane key={'tool'} tab={'物料'}>\\\\n        <p>物料</p>\\\\n        {arr.map((x, i) => (\\\\n          <p key={i}>content_{i}</p>\\\\n        ))}\\\\n        <p className='empty'></p>\\\\n      </Tabs.TabPane>\\\\n      <Tabs.TabPane key={'attr'} tab={'属性'}></Tabs.TabPane>\\\\n      </Tabs>\\\\n    </div>\\",
   \\"relativeFilename\\": \\"file.jsx\\",
   \\"emptyChildren\\": false,
   \\"isFirst\\": true,
@@ -24,10 +24,10 @@ const elem = <div __mometa={{
     \\"column\\": 22
   },
   \\"innerEnd\\": {
-    \\"line\\": 15,
+    \\"line\\": 17,
     \\"column\\": 4
   },
-  \\"hash\\": \\"7bf6e88c7e6f9077f6a89b5e7f7d5248b1e17ac2\\"
+  \\"hash\\": \\"093fcc4d9a120c1159bef5b241d5b8ee320d37f9\\"
 }}>
       <h1 title={'abc'} __mometa={{
     \\"start\\": {
@@ -60,37 +60,38 @@ const elem = <div __mometa={{
         \\"column\\": 6
       },
       \\"end\\": {
-        \\"line\\": 14,
+        \\"line\\": 16,
         \\"column\\": 13
       },
-      \\"text\\": \\"<Tabs>\\\\n      <Tabs.TabPane key={'tool'} tab={'物料'}>\\\\n        <p>物料</p>\\\\n        {arr.map((x, i) => (\\\\n          <p key={i}>content_{i}</p>\\\\n        ))}\\\\n        <p className='empty'></p>\\\\n      </Tabs.TabPane>\\\\n      <Tabs.TabPane key={'attr'} tab={'属性'}></Tabs.TabPane>\\\\n      </Tabs>\\"
+      \\"text\\": \\"<Tabs\\\\n        // @ts-expect-error\\\\n      >\\\\n      <Tabs.TabPane key={'tool'} tab={'物料'}>\\\\n        <p>物料</p>\\\\n        {arr.map((x, i) => (\\\\n          <p key={i}>content_{i}</p>\\\\n        ))}\\\\n        <p className='empty'></p>\\\\n      </Tabs.TabPane>\\\\n      <Tabs.TabPane key={'attr'} tab={'属性'}></Tabs.TabPane>\\\\n      </Tabs>\\"
     }
   }}>Hello World</h1>
-      <Tabs __mometa={{
+      <Tabs // @ts-expect-error
+  __mometa={{
     \\"start\\": {
       \\"line\\": 5,
       \\"column\\": 6
     },
     \\"end\\": {
-      \\"line\\": 14,
+      \\"line\\": 16,
       \\"column\\": 13
     },
     \\"filename\\": \\"/file.jsx\\",
     \\"name\\": \\"Tabs\\",
-    \\"text\\": \\"<Tabs>\\\\n      <Tabs.TabPane key={'tool'} tab={'物料'}>\\\\n        <p>物料</p>\\\\n        {arr.map((x, i) => (\\\\n          <p key={i}>content_{i}</p>\\\\n        ))}\\\\n        <p className='empty'></p>\\\\n      </Tabs.TabPane>\\\\n      <Tabs.TabPane key={'attr'} tab={'属性'}></Tabs.TabPane>\\\\n      </Tabs>\\",
+    \\"text\\": \\"<Tabs\\\\n        // @ts-expect-error\\\\n      >\\\\n      <Tabs.TabPane key={'tool'} tab={'物料'}>\\\\n        <p>物料</p>\\\\n        {arr.map((x, i) => (\\\\n          <p key={i}>content_{i}</p>\\\\n        ))}\\\\n        <p className='empty'></p>\\\\n      </Tabs.TabPane>\\\\n      <Tabs.TabPane key={'attr'} tab={'属性'}></Tabs.TabPane>\\\\n      </Tabs>\\",
     \\"relativeFilename\\": \\"file.jsx\\",
     \\"emptyChildren\\": false,
     \\"isFirst\\": false,
     \\"selfClosed\\": false,
     \\"innerStart\\": {
-      \\"line\\": 5,
-      \\"column\\": 12
+      \\"line\\": 7,
+      \\"column\\": 7
     },
     \\"innerEnd\\": {
-      \\"line\\": 14,
+      \\"line\\": 16,
       \\"column\\": 6
     },
-    \\"hash\\": \\"e86049510e95d08136b97036150643fed91d895b\\",
+    \\"hash\\": \\"5df9cc7cee2ac8d0e25683ceb2a9d160e155cfff\\",
     \\"previousSibling\\": {
       \\"start\\": {
         \\"line\\": 4,
@@ -105,11 +106,11 @@ const elem = <div __mometa={{
   }}>
       <Tabs.TabPane key={'tool'} tab={'物料'} __mometa={{
       \\"start\\": {
-        \\"line\\": 6,
+        \\"line\\": 8,
         \\"column\\": 6
       },
       \\"end\\": {
-        \\"line\\": 12,
+        \\"line\\": 14,
         \\"column\\": 21
       },
       \\"filename\\": \\"/file.jsx\\",
@@ -120,21 +121,21 @@ const elem = <div __mometa={{
       \\"isFirst\\": false,
       \\"selfClosed\\": false,
       \\"innerStart\\": {
-        \\"line\\": 6,
+        \\"line\\": 8,
         \\"column\\": 44
       },
       \\"innerEnd\\": {
-        \\"line\\": 12,
+        \\"line\\": 14,
         \\"column\\": 6
       },
-      \\"hash\\": \\"3135d703dfce53797e0fd0f25252f9920c75be90\\",
+      \\"hash\\": \\"bc73396568694693b92041f5895ff61c6d7647eb\\",
       \\"nextSibling\\": {
         \\"start\\": {
-          \\"line\\": 13,
+          \\"line\\": 15,
           \\"column\\": 6
         },
         \\"end\\": {
-          \\"line\\": 13,
+          \\"line\\": 15,
           \\"column\\": 59
         },
         \\"text\\": \\"<Tabs.TabPane key={'attr'} tab={'属性'}></Tabs.TabPane>\\"
@@ -142,11 +143,11 @@ const elem = <div __mometa={{
     }}>
         <p __mometa={{
         \\"start\\": {
-          \\"line\\": 7,
+          \\"line\\": 9,
           \\"column\\": 8
         },
         \\"end\\": {
-          \\"line\\": 7,
+          \\"line\\": 9,
           \\"column\\": 17
         },
         \\"filename\\": \\"/file.jsx\\",
@@ -157,21 +158,21 @@ const elem = <div __mometa={{
         \\"isFirst\\": false,
         \\"selfClosed\\": false,
         \\"innerStart\\": {
-          \\"line\\": 7,
+          \\"line\\": 9,
           \\"column\\": 11
         },
         \\"innerEnd\\": {
-          \\"line\\": 7,
+          \\"line\\": 9,
           \\"column\\": 13
         },
-        \\"hash\\": \\"6dddde0645f54e6d77d9e1c548970516414bb006\\",
+        \\"hash\\": \\"43a6eadc98c92e0a350f62b9c8c789e0dbe20b30\\",
         \\"nextSibling\\": {
           \\"start\\": {
-            \\"line\\": 8,
+            \\"line\\": 10,
             \\"column\\": 8
           },
           \\"end\\": {
-            \\"line\\": 10,
+            \\"line\\": 12,
             \\"column\\": 11
           },
           \\"text\\": \\"{arr.map((x, i) => (\\\\n          <p key={i}>content_{i}</p>\\\\n        ))}\\"
@@ -179,11 +180,11 @@ const elem = <div __mometa={{
       }}>物料</p>
         {arr.map((x, i) => <p key={i} __mometa={{
         \\"start\\": {
-          \\"line\\": 9,
+          \\"line\\": 11,
           \\"column\\": 10
         },
         \\"end\\": {
-          \\"line\\": 9,
+          \\"line\\": 11,
           \\"column\\": 36
         },
         \\"filename\\": \\"/file.jsx\\",
@@ -194,45 +195,45 @@ const elem = <div __mometa={{
         \\"isFirst\\": true,
         \\"selfClosed\\": false,
         \\"innerStart\\": {
-          \\"line\\": 9,
+          \\"line\\": 11,
           \\"column\\": 21
         },
         \\"innerEnd\\": {
-          \\"line\\": 9,
+          \\"line\\": 11,
           \\"column\\": 32
         },
-        \\"hash\\": \\"9dc3339d64744708be63399e5ac2088f940b8489\\",
+        \\"hash\\": \\"60dbc36488371895b4e0f5d3f0d4b2d75da9c623\\",
         \\"container\\": {
           \\"isFirstElement\\": true,
           \\"text\\": \\"{arr.map((x, i) => (\\\\n          <p key={i}>content_{i}</p>\\\\n        ))}\\",
           \\"start\\": {
-            \\"line\\": 8,
+            \\"line\\": 10,
             \\"column\\": 8
           },
           \\"end\\": {
-            \\"line\\": 10,
+            \\"line\\": 12,
             \\"column\\": 11
           },
-          \\"hash\\": \\"88fb79e91ad8da26c140fcfd786cf0a3814d727b\\"
+          \\"hash\\": \\"1ad8679fafa1c233909a700ef631711e481f514d\\"
         },
         \\"previousSibling\\": {
           \\"start\\": {
-            \\"line\\": 7,
+            \\"line\\": 9,
             \\"column\\": 8
           },
           \\"end\\": {
-            \\"line\\": 7,
+            \\"line\\": 9,
             \\"column\\": 17
           },
           \\"text\\": \\"<p>物料</p>\\"
         },
         \\"nextSibling\\": {
           \\"start\\": {
-            \\"line\\": 11,
+            \\"line\\": 13,
             \\"column\\": 8
           },
           \\"end\\": {
-            \\"line\\": 11,
+            \\"line\\": 13,
             \\"column\\": 33
           },
           \\"text\\": \\"<p className='empty'></p>\\"
@@ -240,11 +241,11 @@ const elem = <div __mometa={{
       }}>content_{i}</p>)}
         <p className='empty' __mometa={{
         \\"start\\": {
-          \\"line\\": 11,
+          \\"line\\": 13,
           \\"column\\": 8
         },
         \\"end\\": {
-          \\"line\\": 11,
+          \\"line\\": 13,
           \\"column\\": 33
         },
         \\"filename\\": \\"/file.jsx\\",
@@ -255,32 +256,32 @@ const elem = <div __mometa={{
         \\"isFirst\\": false,
         \\"selfClosed\\": false,
         \\"innerStart\\": {
-          \\"line\\": 11,
+          \\"line\\": 13,
           \\"column\\": 29
         },
         \\"innerEnd\\": {
-          \\"line\\": 11,
+          \\"line\\": 13,
           \\"column\\": 29
         },
-        \\"hash\\": \\"a1a178e48be1fe4373543693edfbcc5d032cfe64\\",
+        \\"hash\\": \\"12376a2fc513029fa9743c9f21ad9dce16b8442f\\",
         \\"previousSibling\\": {
           \\"start\\": {
-            \\"line\\": 8,
+            \\"line\\": 10,
             \\"column\\": 8
           },
           \\"end\\": {
-            \\"line\\": 10,
+            \\"line\\": 12,
             \\"column\\": 11
           },
           \\"text\\": \\"{arr.map((x, i) => (\\\\n          <p key={i}>content_{i}</p>\\\\n        ))}\\"
         }
       }}><_MometaEmptyPlaceholder __mometa={{
           \\"start\\": {
-            \\"line\\": 11,
+            \\"line\\": 13,
             \\"column\\": 8
           },
           \\"end\\": {
-            \\"line\\": 11,
+            \\"line\\": 13,
             \\"column\\": 33
           },
           \\"filename\\": \\"/file.jsx\\",
@@ -291,21 +292,21 @@ const elem = <div __mometa={{
           \\"isFirst\\": false,
           \\"selfClosed\\": false,
           \\"innerStart\\": {
-            \\"line\\": 11,
+            \\"line\\": 13,
             \\"column\\": 29
           },
           \\"innerEnd\\": {
-            \\"line\\": 11,
+            \\"line\\": 13,
             \\"column\\": 29
           },
-          \\"hash\\": \\"a1a178e48be1fe4373543693edfbcc5d032cfe64\\",
+          \\"hash\\": \\"12376a2fc513029fa9743c9f21ad9dce16b8442f\\",
           \\"previousSibling\\": {
             \\"start\\": {
-              \\"line\\": 8,
+              \\"line\\": 10,
               \\"column\\": 8
             },
             \\"end\\": {
-              \\"line\\": 10,
+              \\"line\\": 12,
               \\"column\\": 11
             },
             \\"text\\": \\"{arr.map((x, i) => (\\\\n          <p key={i}>content_{i}</p>\\\\n        ))}\\"
@@ -314,11 +315,11 @@ const elem = <div __mometa={{
       </Tabs.TabPane>
       <Tabs.TabPane key={'attr'} tab={'属性'} __mometa={{
       \\"start\\": {
-        \\"line\\": 13,
+        \\"line\\": 15,
         \\"column\\": 6
       },
       \\"end\\": {
-        \\"line\\": 13,
+        \\"line\\": 15,
         \\"column\\": 59
       },
       \\"filename\\": \\"/file.jsx\\",
@@ -329,32 +330,32 @@ const elem = <div __mometa={{
       \\"isFirst\\": false,
       \\"selfClosed\\": false,
       \\"innerStart\\": {
-        \\"line\\": 13,
+        \\"line\\": 15,
         \\"column\\": 44
       },
       \\"innerEnd\\": {
-        \\"line\\": 13,
+        \\"line\\": 15,
         \\"column\\": 44
       },
-      \\"hash\\": \\"fa9b43638bd9ae99a432ba9524f8e9f50959272f\\",
+      \\"hash\\": \\"637a02ad547f5666352f8c14ff9fdd91005a78c6\\",
       \\"previousSibling\\": {
         \\"start\\": {
-          \\"line\\": 6,
+          \\"line\\": 8,
           \\"column\\": 6
         },
         \\"end\\": {
-          \\"line\\": 12,
+          \\"line\\": 14,
           \\"column\\": 21
         },
         \\"text\\": \\"<Tabs.TabPane key={'tool'} tab={'物料'}>\\\\n        <p>物料</p>\\\\n        {arr.map((x, i) => (\\\\n          <p key={i}>content_{i}</p>\\\\n        ))}\\\\n        <p className='empty'></p>\\\\n      </Tabs.TabPane>\\"
       }
     }}><_MometaEmptyPlaceholder __mometa={{
         \\"start\\": {
-          \\"line\\": 13,
+          \\"line\\": 15,
           \\"column\\": 6
         },
         \\"end\\": {
-          \\"line\\": 13,
+          \\"line\\": 15,
           \\"column\\": 59
         },
         \\"filename\\": \\"/file.jsx\\",
@@ -365,21 +366,21 @@ const elem = <div __mometa={{
         \\"isFirst\\": false,
         \\"selfClosed\\": false,
         \\"innerStart\\": {
-          \\"line\\": 13,
+          \\"line\\": 15,
           \\"column\\": 44
         },
         \\"innerEnd\\": {
-          \\"line\\": 13,
+          \\"line\\": 15,
           \\"column\\": 44
         },
-        \\"hash\\": \\"fa9b43638bd9ae99a432ba9524f8e9f50959272f\\",
+        \\"hash\\": \\"637a02ad547f5666352f8c14ff9fdd91005a78c6\\",
         \\"previousSibling\\": {
           \\"start\\": {
-            \\"line\\": 6,
+            \\"line\\": 8,
             \\"column\\": 6
           },
           \\"end\\": {
-            \\"line\\": 12,
+            \\"line\\": 14,
             \\"column\\": 21
           },
           \\"text\\": \\"<Tabs.TabPane key={'tool'} tab={'物料'}>\\\\n        <p>物料</p>\\\\n        {arr.map((x, i) => (\\\\n          <p key={i}>content_{i}</p>\\\\n        ))}\\\\n        <p className='empty'></p>\\\\n      </Tabs.TabPane>\\"

@@ -8,13 +8,11 @@
   <a href="https://lernajs.io/"><img src="https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg?style=flat-square" /></a>
   <a href="https://conventionalcommits.org"><img src="https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg?style=flat-square" /></a>
 </p>
+<p align="center">面向研发的低代码元编程（代码可视化）能力</p>
 
 <p align="center">
-面向研发的低代码元编程（代码可视化）能力</p>
-
-<p align="center">
-<a href='./README.zh_CN.md'>简体中文</a>
- | English
+简体中文
+ | <a href='./README.md'>English</a>
 </p>
 
 ## 背景
