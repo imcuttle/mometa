@@ -59,17 +59,13 @@ mometa 不是传统主流的低代码平台（如 amis/云凤蝶），mometa 是
 
 ## 操作演示
 
-#### 预览
-
-<p align="center">
-  <img src="./images/mometa-preview.gif" />
-</p>
-
 #### 编辑
 
-<p align="center">
-  <img src="./images/mometa-edit.gif" />
-</p>
+##### 反向代理
+
+![](./images/mometa-locate.gif)
+
+#### 预览
 
 更多操作说明见：https://zhuanlan.zhihu.com/p/451403178
 

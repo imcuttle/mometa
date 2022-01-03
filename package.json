@@ -114,6 +114,7 @@
     ]
   },
   "devDependencies": {
+    "markdown-toc": "^1.2.0",
     "@commitlint/cli": "^15.0.0",
     "@commitlint/config-conventional": "^15.0.0",
     "@types/jest": "^27.0.3",
