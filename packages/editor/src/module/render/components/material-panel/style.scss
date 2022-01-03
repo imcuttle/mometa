@@ -83,6 +83,13 @@
         display: flex;
         align-items: center;
         justify-content: center;
+
+        a {
+          color: inherit;
+          &:hover {
+            color: #399bf5;
+          }
+        }
       }
     }
   }

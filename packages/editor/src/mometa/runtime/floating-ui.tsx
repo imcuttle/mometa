@@ -7,7 +7,7 @@ import { getScrollParents } from '@floating-ui/dom'
 import { ArrowUpOutlined, ArrowDownOutlined, DragOutlined, DeleteOutlined } from '@ant-design/icons'
 import { css } from '../utils/emotion-css'
 import usePersistFn from '@rcp/use.persistfn'
-import { Button, Menu } from 'antd'
+import { Button, Menu, Tooltip } from 'antd'
 import { MometaHTMLElement, useProxyEvents } from './dom-api'
 import { PreventFastClick } from '@rcp/c.preventfastop'
 import MoreButton from './components/more-button'
@@ -309,38 +309,37 @@ export const OveringFloat = React.forwardRef<HTMLDivElement, OveringFloatProps>(
   const opElement = (
     <>
       {!!data.previousSibling && (
-        <PreventFastClick onClick={() => opHandler('up')}>
-          <Button className={c(btnCss)} type={'text'} size={'small'} title={'上移'} icon={<ArrowUpOutlined />} />
-        </PreventFastClick>
+        <Tooltip title={'上移'}>
+          {/*// @ts-ignore*/}
+          <PreventFastClick className={c(btnCss)} onClick={() => opHandler('up')}>
+            <Button type={'text'} size={'small'} icon={<ArrowUpOutlined />} />
+          </PreventFastClick>
+        </Tooltip>
       )}
       {!!data.nextSibling && (
-        <PreventFastClick onClick={() => opHandler('down')}>
-          <Button className={c(btnCss)} type={'text'} size={'small'} title={'下移'} icon={<ArrowDownOutlined />} />
-        </PreventFastClick>
+        <Tooltip title={'下移'}>
+          {/*// @ts-ignore*/}
+          <PreventFastClick className={c(btnCss)} onClick={() => opHandler('down')}>
+            <Button type={'text'} size={'small'} icon={<ArrowDownOutlined />} />
+          </PreventFastClick>
+        </Tooltip>
       )}
-      <PreventFastClick onClick={() => opHandler('del')}>
-        <Button
-          className={c(btnCss)}
-          type={'text'}
-          size={'small'}
-          title={'删除'}
-          icon={<DeleteOutlined title={'删除'} />}
-        />
-      </PreventFastClick>
+      <Tooltip title={'删除'}>
+        {/*// @ts-ignore*/}
+        <PreventFastClick className={c(btnCss)} onClick={() => opHandler('del')}>
+          <Button type={'text'} size={'small'} icon={<DeleteOutlined title={'删除'} />} />
+        </PreventFastClick>
+      </Tooltip>
     </>
   )
 
   const dragElem = (
-    <PreventFastClick onClick={() => opHandler('moving')}>
-      <Button
-        ref={drag}
-        className={c(btnCss)}
-        type={'text'}
-        size={'small'}
-        icon={<DragOutlined />}
-        title={'按住并拖动来进行移动；只允许同名文件内移动'}
-      />
-    </PreventFastClick>
+    <Tooltip title={'按住并拖动来进行移动；暂时只允许同名文件内移动'}>
+      {/*// @ts-ignore*/}
+      <PreventFastClick className={c(btnCss)} onClick={() => opHandler('moving')}>
+        <Button ref={drag} type={'text'} size={'small'} icon={<DragOutlined />} title={''} />
+      </PreventFastClick>
+    </Tooltip>
   )
 
   const isSimple = rect.width < 230

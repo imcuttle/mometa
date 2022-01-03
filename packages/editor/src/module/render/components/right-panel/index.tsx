@@ -83,19 +83,20 @@ const BaseInfoForm = () => {
     >
       <Form.Item label={'类型'}>
         <Typography.Title level={5}>
-          <Typography.Link
-            title={'点击进入代码'}
-            onClick={() =>
-              api.openEditor({
-                fileName: mometaData.filename,
-                lineNumber: mometaData.start?.line,
-                colNumber: mometaData.start?.column
-              })
-            }
-          >
-            <NumberOutlined style={{ marginRight: 2 }} />
-            {mometaData.name}
-          </Typography.Link>
+          <Tooltip title={'点击进入代码'}>
+            <Typography.Link
+              onClick={() =>
+                api.openEditor({
+                  fileName: mometaData.filename,
+                  lineNumber: mometaData.start?.line,
+                  colNumber: mometaData.start?.column
+                })
+              }
+            >
+              {'📌 '}
+              {mometaData.name}
+            </Typography.Link>
+          </Tooltip>
         </Typography.Title>
       </Form.Item>
       <Form.Item name={'text'} label={'代码'}>

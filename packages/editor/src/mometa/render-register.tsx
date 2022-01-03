@@ -3,19 +3,30 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { BehaviorSubject } from 'rxjs'
 import { useBehaviorSubject } from '@rcp/use.behaviorsubject'
-import { injectGlobal } from './utils/emotion-css'
+import { css, injectGlobal } from './utils/emotion-css'
 import { DndLayout } from './runtime/dnd'
 import { addUpdateCallbackListener } from '../shared/hot'
 import { getSharedFromMain } from './utils/get-from-main'
 import { lazy } from '../shared/utils'
 import { lazyDomGetter } from './config/backlist-dom'
-const { selectedNodeSubject, overingNodeSubject } = getSharedFromMain()
+const { headerStatusSubject, selectedNodeSubject, overingNodeSubject } = getSharedFromMain()
 
-injectGlobal(`
-    body {
+const handleChanged = (v) => {
+  if (!document.body) {
+    return
+  }
+  const bodyCls = css`
     padding: 30px 10px;
-    }
-`)
+  `
+  if (v?.canSelect) {
+    document.body.classList.add(bodyCls)
+  } else {
+    document.body.classList.remove(bodyCls)
+  }
+}
+headerStatusSubject.subscribe(handleChanged)
+handleChanged(headerStatusSubject.value)
+
 selectedNodeSubject.next(null)
 overingNodeSubject.next(null)
 

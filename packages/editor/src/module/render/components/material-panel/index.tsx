@@ -1,8 +1,7 @@
 import React from 'react'
 import p from 'prefix-classname'
-import { Radio, Empty, Image, Divider, Button, Tabs } from 'antd'
+import { Tooltip, Empty, Image, Divider, Tabs } from 'antd'
 import { useDrag } from 'react-dnd'
-import { LinkOutlined, DragOutlined } from '@ant-design/icons'
 import { CLS_PREFIX } from '../../../config/const'
 
 import './style.scss'
@@ -33,29 +32,26 @@ const AssetUI = React.memo<Asset>(({ homepage, cover, name, data }) => {
 
   const renderComp = ({ ref, opacity, style, className }: any) => {
     return (
-      <div
-        ref={ref}
-        title={'按住以进行拖动'}
-        className={c('__asset-group__cell', className)}
-        style={{ opacity, ...style }}
-      >
-        <Image
-          wrapperClassName={c('__asset-group__cell__img__wrapper')}
-          className={c('__asset-group__cell__img')}
-          src={cover}
-        />
-        <span className={c('__asset-group__cell__name')}>
-          <span style={{ display: 'inline-flex', padding: '2px 3px' }} ref={preview}>
-            {homepage ? (
-              <a href={homepage} target={'_blank'} style={{ color: '#399bf5' }}>
-                {name}
-              </a>
-            ) : (
-              name
-            )}
+      <Tooltip title={'按住以进行拖动'}>
+        <div ref={ref} className={c('__asset-group__cell', className)} style={{ opacity, ...style }}>
+          <Image
+            wrapperClassName={c('__asset-group__cell__img__wrapper')}
+            className={c('__asset-group__cell__img')}
+            src={cover}
+          />
+          <span className={c('__asset-group__cell__name')}>
+            <span style={{ display: 'inline-flex', padding: '2px 3px' }} ref={preview}>
+              {homepage ? (
+                <a href={homepage} target={'_blank'}>
+                  {name}
+                </a>
+              ) : (
+                name
+              )}
+            </span>
           </span>
-        </span>
-      </div>
+        </div>
+      </Tooltip>
     )
   }
 
