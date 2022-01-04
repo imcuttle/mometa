@@ -1,6 +1,6 @@
 {
   "name": "@mometa/editor",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "publishConfig": {
     "access": "public"
   },
@@ -35,9 +35,9 @@
   },
   "dependencies": {
     "@babel/helper-module-imports": "^7.16.0",
-    "@mometa/fs-handler": "^0.0.15",
-    "@mometa/materials-generator": "^0.0.15",
-    "@mometa/react-refresh-webpack-plugin": "^0.0.15",
+    "@mometa/fs-handler": "^0.0.16",
+    "@mometa/materials-generator": "^0.0.16",
+    "@mometa/react-refresh-webpack-plugin": "^0.0.16",
     "chalk": "^2.4.2",
     "copy-webpack-plugin": "^10.2.0",
     "copy-webpack-plugin-webpack4": "npm:copy-webpack-plugin@6",
@@ -63,11 +63,11 @@
     "@emotion/css": "^11.7.1",
     "@floating-ui/dom": "^0.1.7",
     "@monaco-editor/react": "^4.3.1",
-    "@rcp/use.uncontrolled": "^2.1.3",
     "@rcp/c.preventfastop": "^1.2.0",
     "@rcp/use.behaviorsubject": "^1.0.2",
     "@rcp/use.persistfn": "^1.0.2",
     "@rcp/use.shared": "^1.1.1",
+    "@rcp/use.uncontrolled": "^2.1.3",
     "@rcp/util.open": "^1.0.3",
     "antd": "^4.17.1",
     "assign-ref": "^1.0.1",
