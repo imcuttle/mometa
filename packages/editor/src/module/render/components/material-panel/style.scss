@@ -14,12 +14,21 @@
     overflow: visible !important;
 
     .mmt-ant-tabs-content-holder {
-      overflow: auto;
-      margin-right: -10px;
-      padding-right: 10px;
+      //overflow: auto;
+      //margin-right: -10px;
+      //padding-right: 10px;
+      //
+      //padding-top: 20px;
+      //padding-bottom: 40px;
 
-      padding-top: 20px;
-      padding-bottom: 40px;
+      > .mmt-ant-tabs-content {
+        height: 100%;
+      }
+
+      .mmt-ant-tabs-tabpane {
+        display: flex;
+        flex-direction: column;
+      }
     }
 
     .mmt-ant-tabs-nav {
@@ -27,9 +36,28 @@
     }
   }
 
+  &__mp {
+    overflow: auto;
+    flex: 1;
+    height: 0;
+    padding-top: 10px;
+    padding-bottom: 40px;
+    margin-right: -10px;
+    padding-right: 10px;
+  }
+
+  &__search-wrapper {
+    margin-bottom: 4px;
+    margin-top: 10px;
+  }
+  &__search {
+    margin-bottom: 4px;
+  }
+
   &__asset-group {
     display: flex;
     flex-direction: column;
+    margin-bottom: 20px;
 
     &__container {
       display: flex;

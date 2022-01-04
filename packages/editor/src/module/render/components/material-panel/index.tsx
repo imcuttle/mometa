@@ -1,11 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 import p from 'prefix-classname'
-import { Tooltip, Empty, Image, Divider, Tabs } from 'antd'
+import { Input, Empty, Image, Tabs, Typography } from 'antd'
 import { useDrag } from 'react-dnd'
+import { SearchOutlined } from '@ant-design/icons'
 import { CLS_PREFIX } from '../../../config/const'
 
 import './style.scss'
 import type { Material, Asset, AssetGroup } from '@mometa/materials-generator/types'
+import { useHeaderStatus } from '../header'
 
 const cn = p('')
 const c = p(`${CLS_PREFIX}-material-panel`)
@@ -32,26 +34,24 @@ const AssetUI = React.memo<Asset>(({ homepage, cover, name, data }) => {
 
   const renderComp = ({ ref, opacity, style, className }: any) => {
     return (
-      <Tooltip title={'按住以进行拖动'}>
-        <div ref={ref} className={c('__asset-group__cell', className)} style={{ opacity, ...style }}>
-          <Image
-            wrapperClassName={c('__asset-group__cell__img__wrapper')}
-            className={c('__asset-group__cell__img')}
-            src={cover}
-          />
-          <span className={c('__asset-group__cell__name')}>
-            <span style={{ display: 'inline-flex', padding: '2px 3px' }} ref={preview}>
-              {homepage ? (
-                <a href={homepage} target={'_blank'}>
-                  {name}
-                </a>
-              ) : (
-                name
-              )}
-            </span>
+      <div ref={ref} className={c('__asset-group__cell', className)} style={{ opacity, ...style }}>
+        <Image
+          wrapperClassName={c('__asset-group__cell__img__wrapper')}
+          className={c('__asset-group__cell__img')}
+          src={cover}
+        />
+        <span className={c('__asset-group__cell__name')}>
+          <span style={{ display: 'inline-flex', padding: '2px 3px' }} ref={preview}>
+            {homepage ? (
+              <a href={homepage} target={'_blank'}>
+                {name}
+              </a>
+            ) : (
+              name
+            )}
           </span>
-        </div>
-      </Tooltip>
+        </span>
+      </div>
     )
   }
 
@@ -72,23 +72,63 @@ const AssetGroupComp: React.FC<{ assetGroup: AssetGroup }> = React.memo(({ asset
   )
 })
 
+const MaterialUi = ({ mat }: any) => {
+  const [input, setInput] = React.useState('')
+  const [{ canSelect }] = useHeaderStatus()
+
+  const assetGroups = React.useMemo(() => {
+    if (!input || !input.trim()) {
+      return mat.assetGroups
+    }
+    if (!mat.assetGroups) {
+      return []
+    }
+    return mat.assetGroups
+      .map((g) => {
+        return {
+          ...g,
+          assets: g.assets.filter((a) => {
+            return a.name?.includes(input.trim()) || a.key?.includes(input.trim())
+          })
+        }
+      })
+      .filter((g) => g.assets?.length)
+  }, [input, mat?.assetGroups])
+
+  return (
+    <>
+      <div className={c('__search-wrapper')}>
+        <Input
+          value={input}
+          onChange={(e) => {
+            setInput(e.target.value)
+          }}
+          suffix={<SearchOutlined />}
+          className={c('__search')}
+          placeholder={'输入关键字过滤物料'}
+        />
+        {canSelect && <Typography.Text type={'secondary'}>请选择以下物料拖入「页面」中</Typography.Text>}
+      </div>
+      <div className={c('__mp')}>
+        {assetGroups?.map((group, index, { length }) => (
+          <AssetGroupComp key={group.key ?? index} assetGroup={group} />
+        ))}
+      </div>
+    </>
+  )
+}
+
 const MaterialPanel: React.FC<MaterialPanelProps> = React.memo(({ className, materials }) => {
   return (
     <div className={cn(c(), className)}>
       {!materials?.length && <Empty description={'暂无物料'} style={{ paddingTop: 40 }} />}
       {!!materials?.length && (
         <Tabs className={c('__tabs')}>
-          {materials.map((mat) => {
+          {materials.map((mat, i) => {
+            const matKey = mat.key ?? i
             return (
-              <Tabs.TabPane key={mat.key} tab={mat.name}>
-                <div className={c('__mp')}>
-                  {mat.assetGroups?.map((group, index, { length }) => (
-                    <div key={group.key}>
-                      <AssetGroupComp assetGroup={group} />
-                      {index !== length - 1 && <Divider type={'horizontal'} />}
-                    </div>
-                  ))}
-                </div>
+              <Tabs.TabPane tab={mat.name} key={matKey}>
+                <MaterialUi mat={mat} />
               </Tabs.TabPane>
             )
           })}

@@ -83,7 +83,7 @@ const BaseInfoForm = () => {
     >
       <Form.Item label={'类型'}>
         <Typography.Title level={5}>
-          <Tooltip title={'点击进入代码'}>
+          <Tooltip title={`${mometaData.relativeFilename}:${mometaData.start?.line}:${mometaData.start?.column}`}>
             <Typography.Link
               onClick={() =>
                 api.openEditor({
