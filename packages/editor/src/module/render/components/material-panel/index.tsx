@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import p from 'prefix-classname'
 import { Input, Empty, Image, Tabs, Typography } from 'antd'
 import { useDrag } from 'react-dnd'
+import Fuse from 'fuse.js'
 import { SearchOutlined } from '@ant-design/icons'
 import { CLS_PREFIX } from '../../../config/const'
 
@@ -85,11 +86,16 @@ const MaterialUi = ({ mat }: any) => {
     }
     return mat.assetGroups
       .map((g) => {
+        const fuse = new Fuse(g.assets ?? [], {
+          keys: ['name', 'key'],
+          includeScore: true,
+          findAllMatches: true,
+          threshold: 0.3,
+          isCaseSensitive: false
+        })
         return {
           ...g,
-          assets: g.assets.filter((a) => {
-            return a.name?.includes(input.trim()) || a.key?.includes(input.trim())
-          })
+          assets: fuse.search(input.trim()).map((x) => x.item)
         }
       })
       .filter((g) => g.assets?.length)

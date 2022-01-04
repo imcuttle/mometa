@@ -72,6 +72,7 @@
     "antd": "^4.17.1",
     "assign-ref": "^1.0.1",
     "axios": "^0.24.0",
+    "fuse.js": "^6.5.3",
     "lodash-es": "^4.17.21",
     "moment": "^2.29.1",
     "monaco-editor": "^0.31.1",
