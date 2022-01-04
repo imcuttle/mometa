@@ -616,7 +616,7 @@ function getSingleConfig(
         new HtmlWebpackPlugin(
           Object.assign({
             inject: true,
-            template: paths.appHtml,
+            template: opts.htmlPath || paths.appHtml,
             filename: opts.htmlName,
             minify: false
             // chunks: [name, 'main']
@@ -881,6 +881,7 @@ module.exports = function getConfig(webpackEnv) {
     getSingleConfig(webpackEnv, {
       refresh: false,
       name: 'editor',
+      htmlPath: paths.resolveApp('public/editor-app.html'),
       htmlName: 'index.html'
     })
   ]

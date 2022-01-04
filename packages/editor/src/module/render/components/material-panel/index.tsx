@@ -116,7 +116,7 @@ const MaterialUi = ({ mat }: any) => {
         {canSelect && <Typography.Text type={'secondary'}>请选择以下物料拖入「页面」中</Typography.Text>}
       </div>
       <div className={c('__mp')}>
-        {assetGroups?.map((group, index, { length }) => (
+        {assetGroups?.map((group, index) => (
           <AssetGroupComp key={group.key ?? index} assetGroup={group} />
         ))}
       </div>

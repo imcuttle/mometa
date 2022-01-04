@@ -3,7 +3,10 @@ const nps = require('path')
 const { validate: validateOptions } = require('schema-utils')
 const { createServer } = require('./create-server')
 const injectEntry = require('./injectEntry')
+const PresetCompiler = require('./preset-compiler')
+const createFileWatcherApi = require('./file-watcher-api')
 const ReactRefreshWebpackPlugin = require('@mometa/react-refresh-webpack-plugin')
+// const { resolveAsyncConfig, materialExplorer } = require('@mometa/materials-generator')
 
 const safeResolve = (path) => {
   try {
@@ -101,6 +104,26 @@ module.exports = class MometaEditorPlugin {
         }
       ]
     }).apply(compiler)
+
+    this._applyForEditorPreset(compiler)
+  }
+
+  _applyForEditorPreset(compiler) {
+    const webpack = this.getWebpack(compiler)
+    const major = this.getWebpackMajor(compiler)
+    // const watchFiles = major < 5 ? wa
+    compiler.hooks.make.tapAsync(NAME, (compilation, callback) => {
+      console.log('compiler.hooks.make')
+      const presetCompiler = new PresetCompiler({ webpack, major, options: this.options, compilation })
+      presetCompiler.compile(compiler).then(
+        (result) => {
+          callback()
+        },
+        (error) => {
+          throw error
+        }
+      )
+    })
   }
 
   applyForRuntime(compiler) {
