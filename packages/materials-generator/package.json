@@ -20,7 +20,7 @@
     "packlimit": "../../scripts/run packlimit",
     "dev": "npm run build -- --watch",
     "prepare": "npm run build",
-    "prepublishOnly": "npm run build && npm run packlimit",
+    "prepublishOnly": "npm run packlimit",
     "version": "npm test && npm run packlimit"
   },
   "dependencies": {

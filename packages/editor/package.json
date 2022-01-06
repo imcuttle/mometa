@@ -26,7 +26,8 @@
     "build": "run-p -l 'build:*'",
     "start": "cd example && npm start",
     "packlimit": "../../scripts/run packlimit",
-    "prepublishOnly": "npm run build && npm run packlimit",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm run packlimit",
     "version": "npm test && npm run packlimit"
   },
   "peerDependencies": {
