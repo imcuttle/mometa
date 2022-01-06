@@ -35,6 +35,7 @@
   - [使用 antd 物料](#%E4%BD%BF%E7%94%A8-antd-%E7%89%A9%E6%96%99)
   - [接入编辑器](#%E6%8E%A5%E5%85%A5%E7%BC%96%E8%BE%91%E5%99%A8)
 - [NPM 包](#npm-%E5%8C%85)
+- [快速开始](#%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B)
 - [作者](#%E4%BD%9C%E8%80%85)
 
 <!-- tocstop -->
@@ -180,6 +181,15 @@ module.exports = {
 - [@mometa/fs-handler](packages/fs-handler) - 代码操作转换核心逻辑，如删除、移动、替换、插入等
 - [@mometa/materials-generator](packages/materials-generator) - 物料生成 & 解析
 - [@mometa/react-refresh-webpack-plugin](packages/react-refresh-webpack-plugin) - An **EXPERIMENTAL** Webpack plugin to enable "Fast Refresh" (also previously known as _Hot Reloading_) for React components.
+
+## 快速开始
+
+```bash
+git clone https://github.com/imcuttle/mometa.git
+cd mometa
+npm install # 推荐使用 npm@6，如果使用 npm@7 需要默认开启 --legacy-peer-deps 参数
+cd packages/app && npm start # 开启本地开发预览模式
+```
 
 ## 作者
 
