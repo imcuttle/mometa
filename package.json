@@ -70,7 +70,8 @@
       "ts-jest": {
         "diagnostics": {
           "ignoreCodes": [
-            2304
+            2304,
+            2769
           ]
         }
       }
