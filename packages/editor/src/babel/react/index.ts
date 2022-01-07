@@ -1,7 +1,7 @@
 /**
  * <Comp /> => <Comp __mometa={{ start: {line: 100, column: 11}, end: {}, text: '<Comp />' }}/>
  */
-import { PluginObj, PluginPass, NodePath } from '@babel/core'
+import type { PluginObj, PluginPass, NodePath } from '@babel/core'
 import templateBuilder from '@babel/template'
 import { addDefault } from '@babel/helper-module-imports'
 import { createLineContentsByContent } from '@mometa/fs-handler'
