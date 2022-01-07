@@ -1,12 +1,13 @@
 import React from 'react'
 import { css } from '../utils/emotion-css'
 import { useDrop } from 'react-dnd'
+import getWindow from 'get-window'
 import { addCss, parseReactDomNodeDeep } from '../utils/dom-utils'
 import { OveringFloat } from './floating-ui'
 import { MometaHTMLElement, MometaDomApi } from './dom-api'
 import { Provider } from './provider'
 import { getSharedFromMain, useOveringNode, useHeaderStatus, useSelectedNode } from '../utils/get-from-main'
-import { getBlackListDom } from '../config/backlist-dom'
+import { isInIframe } from '../../shared/utils'
 const { api } = getSharedFromMain()
 
 function isDropableDom(dom: HTMLElement) {
@@ -106,7 +107,7 @@ export const DndUndropableNode = React.memo(({ dom }: { dom: HTMLElement }) => {
 })
 
 const DndNode = React.memo(function ({ dom }: any) {
-  if (dom && dom.parentNode && !getBlackListDom().includes(dom)) {
+  if (dom && dom.parentNode) {
     return isDropableDom(dom) ? <DndDropableNode dom={dom} /> : <DndUndropableNode dom={dom} />
   }
   return null
@@ -133,14 +134,25 @@ export const DndDropableNode = React.memo(({ dom }: { dom: MometaHTMLElement }) 
   const [overingNode, setOveringNode] = useOveringNode()
   const [selNode, setSelNode] = useSelectedNode()
   const isSelected = selNode === dom && !!dom
-
+  const offset = React.useMemo(() => {
+    if (isInIframe()) {
+      return [0, 0]
+    }
+    const rect = getWindow(dom).frameElement.getBoundingClientRect()
+    return [rect.x, rect.y]
+  }, [dom])
   const overingUiRef = React.useRef(null)
+  const [{ canSelect }] = useHeaderStatus()
   const [str, drop] = useDrop(
     () => ({
       accept: ['asset', 'dom'],
       drop(item: any, monitor) {
         if (monitor.isOver({ shallow: true }) && overingUiRef.current) {
-          const clientOffset = monitor.getClientOffset()
+          const _clientOffset = monitor.getClientOffset()
+          const clientOffset = {
+            x: offset[0] + _clientOffset.x,
+            y: offset[1] + _clientOffset.y
+          }
           const children: HTMLElement[] = overingUiRef.current.children
           const matchedDom = Array.from(children).find((dom: HTMLElement) => {
             const rect = dom.getBoundingClientRect()
@@ -171,6 +183,12 @@ export const DndDropableNode = React.memo(({ dom }: { dom: MometaHTMLElement }) 
         }
       },
       collect: (monitor) => {
+        if (!canSelect) {
+          return JSON.stringify({
+            isOverCurrent: false,
+            isOver: false
+          })
+        }
         const itemType = monitor.getItemType()
         const item = monitor.getItem() as any
 
@@ -194,10 +212,9 @@ export const DndDropableNode = React.memo(({ dom }: { dom: MometaHTMLElement }) 
         })
       }
     }),
-    [dom, isSelected]
+    [dom, isSelected, offset, canSelect]
   )
 
-  const [{ canSelect }] = useHeaderStatus()
   const { isOverCurrent, isOver } = React.useMemo(() => JSON.parse(str), [str])
   // eslint-disable-next-line consistent-return
   React.useLayoutEffect(() => {
@@ -283,7 +300,7 @@ export const DndDropableNode = React.memo(({ dom }: { dom: MometaHTMLElement }) 
 
 export function DndLayout({ dom }) {
   return (
-    <Provider>
+    <Provider dom={dom}>
       <DndNode dom={dom} />
     </Provider>
   )

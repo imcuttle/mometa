@@ -1,31 +1,23 @@
 // 是 iframe 环境
-import React from 'react'
-import ReactDOM from 'react-dom'
-import { BehaviorSubject } from 'rxjs'
-import { useBehaviorSubject } from '@rcp/use.behaviorsubject'
-import { css, injectGlobal } from './utils/emotion-css'
-import { DndLayout } from './runtime/dnd'
 import { addUpdateCallbackListener } from '../shared/hot'
 import { getSharedFromMain } from './utils/get-from-main'
-import { lazy } from '../shared/utils'
-import { lazyDomGetter } from './config/backlist-dom'
-const { headerStatusSubject, selectedNodeSubject, overingNodeSubject } = getSharedFromMain()
+const { iframeWindowsSubject, selectedNodeSubject, overingNodeSubject } = getSharedFromMain()
 
-const handleChanged = (v) => {
-  if (!document.body) {
-    return
-  }
-  const bodyCls = css`
-    padding: 30px 10px;
-  `
-  if (v?.canSelect) {
-    document.body.classList.add(bodyCls)
-  } else {
-    document.body.classList.remove(bodyCls)
-  }
-}
-headerStatusSubject.subscribe(handleChanged)
-handleChanged(headerStatusSubject.value)
+// const handleChanged = (v) => {
+//   if (!document.body) {
+//     return
+//   }
+//   const bodyCls = css`
+//     padding: 30px 10px;
+//   `
+//   if (v?.canSelect) {
+//     document.body.classList.add(bodyCls)
+//   } else {
+//     document.body.classList.remove(bodyCls)
+//   }
+// }
+// headerStatusSubject.subscribe(handleChanged)
+// handleChanged(headerStatusSubject.value)
 
 selectedNodeSubject.next(null)
 overingNodeSubject.next(null)
@@ -39,26 +31,8 @@ addUpdateCallbackListener((moduleExports, moduleId, webpackHot, refreshOverlay, 
   }
 })
 
-const lazyFloatingRender = lazy(() => {
-  const doc = lazyDomGetter()
-  ReactDOM.render(<DndLayoutManager />, doc)
-})
-
-const domSub = new BehaviorSubject<any[]>([])
-function DndLayoutManager() {
-  const [doms] = useBehaviorSubject(domSub)
-  return (
-    <>
-      {doms?.map((dom, i) => (
-        <DndLayout dom={dom} key={i} />
-      ))}
-    </>
-  )
-}
-
 setTimeout(() => {
-  lazyFloatingRender()
-  domSub.next([document.body])
+  iframeWindowsSubject.next(iframeWindowsSubject.value.concat([window]))
 })
 
 // const rawRender = require('$mometa-external:react-dom').render

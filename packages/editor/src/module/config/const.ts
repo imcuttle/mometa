@@ -4,6 +4,9 @@ export const CLS_PREFIX = 'mometa-editor'
 
 const { useSubject: useOveringNode, subject: overingNodeSubject } = createReactBehaviorSubject(null)
 const { useSubject: useSelectedNode, subject: selectedNodeSubject } = createReactBehaviorSubject(null, {})
+const { useSubject: useIframeWindows, subject: iframeWindowsSubject } = createReactBehaviorSubject<
+  Array<typeof window>
+>([])
 const { useSubject: useLocationAction, subject: locationActionSubject } = createReactBehaviorSubject<{
   action: 'PUSH' | 'REPLACE'
   url?: string
@@ -20,5 +23,7 @@ export {
   useOveringNode,
   useSelectedNode,
   locationActionSubject,
-  useLocationAction
+  useLocationAction,
+  iframeWindowsSubject,
+  useIframeWindows
 }

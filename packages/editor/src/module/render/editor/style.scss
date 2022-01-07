@@ -35,6 +35,7 @@
   }
 
   &__collapse {
+    z-index: 1;
     position: absolute;
     transform: translate(0, -50%);
   }

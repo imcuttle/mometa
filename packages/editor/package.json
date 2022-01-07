@@ -61,6 +61,7 @@
     "directory": "packages/editor"
   },
   "devDependencies": {
+    "get-window": "^1.1.2",
     "@emotion/css": "^11.7.1",
     "@floating-ui/dom": "^0.1.7",
     "@monaco-editor/react": "^4.3.1",

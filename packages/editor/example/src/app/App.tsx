@@ -1,6 +1,6 @@
 import React, { StrictMode } from 'react'
 import Tabs from 'antd/es/tabs'
-import { Table, Input, Typography, Button } from 'antd'
+import { Table, Input, Typography, Button, Dropdown, Menu, Layout } from 'antd'
 import 'antd/lib/table/style/css'
 import 'antd/es/tabs/style/css'
 import { body, panel } from './elements'
@@ -52,6 +52,21 @@ export default function App(props: Props) {
         />
       </>
       <Button type="default">按钮</Button>
+      <Dropdown
+        overlay={
+          <Menu>
+            <Menu.Item>
+              <a>1st Menu item</a>
+            </Menu.Item>
+            <Menu.Item>
+              <a>2nd Menu item</a>
+            </Menu.Item>
+            <Menu.Item>
+              <a>3rd Menu item</a>
+            </Menu.Item>
+          </Menu>
+        }
+      ></Dropdown>
       <Table />
       <Input placeholder="请输入 hhh" />
       <h1 title={'abc'}>Hello World👌</h1>

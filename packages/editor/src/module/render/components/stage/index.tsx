@@ -1,12 +1,15 @@
 import React, { IframeHTMLAttributes } from 'react'
 import p from 'prefix-classname'
 import { useDragDropManager } from 'react-dnd'
+import { Spin } from 'antd'
 import {
   CLS_PREFIX,
   overingNodeSubject,
   selectedNodeSubject,
   useLocationAction,
-  locationActionSubject
+  locationActionSubject,
+  iframeWindowsSubject,
+  useIframeWindows
 } from '../../../config/const'
 import { addModules } from '../../utils/externals-modules'
 import { useSharedMap, useSharedUpdateMap, SharedProvider, useShared, useSharedProvider } from '@rcp/use.shared'
@@ -27,6 +30,8 @@ export interface StageProps {
   bundlerURL?: string
   externalModules?: Record<string, any>
 }
+
+const DndManager = React.lazy(() => import('../../../render-floating').then((x) => ({ default: x.DndLayoutManager })))
 
 const StageContent: React.FC<StageProps> = React.memo(({ className, externalModules, bundlerURL }) => {
   React.useLayoutEffect(() => {
@@ -72,6 +77,7 @@ const StageContent: React.FC<StageProps> = React.memo(({ className, externalModu
     () =>
       register('shared', {
         api,
+        iframeWindowsSubject,
         overingNodeSubject,
         selectedNodeSubject,
         headerStatusSubject,
@@ -86,13 +92,33 @@ const StageContent: React.FC<StageProps> = React.memo(({ className, externalModu
   return (
     <div className={cn(c(), className)}>
       {!!showLocation && <LocationWidget iframeRef={iframeRef} />}
-      <iframe ref={iframeRef} src={iframeSrc} className={c('__iframe')} />
+      <div
+        style={{
+          backgroundColor: '#e2e5ec',
+          flex: 1,
+          display: 'flex'
+        }}
+      >
+        <div className={c('__iframe-wrapper')}>
+          <div className={c('__iframe-mask')}>
+            <Spin style={{ flex: 1 }} tip={'渲染中...'} />
+          </div>
+          <iframe ref={iframeRef} src={iframeSrc} className={c('__iframe')} />
+          <div className={c('__iframe-floating-container')}>
+            <DndManager />
+          </div>
+        </div>
+      </div>
     </div>
   )
 })
 
 const Stage = (props) => {
-  return <StageContent {...props} />
+  return (
+    <React.Suspense fallback={<Spin className={c('__spin')} tip={'加载中...'} />}>
+      <StageContent {...props} />
+    </React.Suspense>
+  )
 }
 
 Stage.defaultProps = {
