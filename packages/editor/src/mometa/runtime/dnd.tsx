@@ -255,6 +255,8 @@ export const DndDropableNode = React.memo(({ dom }: { dom: MometaHTMLElement }) 
       const disposes = [
         dom.__mometa.preventDefaultPop('click', true),
         dom.__mometa.preventDefaultPop('mousedown', true),
+        dom.__mometa.preventDefaultPop('keydown', true),
+        dom.__mometa.preventDefaultPop('keypress', true),
         dom.__mometa.preventDefaultPop('beforeinput', true)
       ]
 

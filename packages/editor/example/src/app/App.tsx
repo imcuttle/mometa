@@ -82,6 +82,7 @@ export default function App(props: Props) {
             <div style={{ flex: 1, background: '#b39dde' }}>cell1</div>
           </div>
           <p>simple 66xxxxxasdasdas6</p>
+          <p>simple 66xxxxxasdasdas6</p>
           <p>
             nested
             <strong>hahahax</strong>

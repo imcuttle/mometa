@@ -61,6 +61,9 @@
     "directory": "packages/editor"
   },
   "devDependencies": {
+    "re-resizable": "^6.9.1",
+    "element-resize-detector": "^1.2.4",
+    "@rcp/use.syncstorage": "^1.1.2",
     "get-window": "^1.1.2",
     "@emotion/css": "^11.7.1",
     "@floating-ui/dom": "^0.1.7",

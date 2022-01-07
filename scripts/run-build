@@ -12,7 +12,7 @@ const restArgs = process.argv.slice(2)
 // program.parse(process.argv)
 
 // "build": "npm run clean && run-p --print-label \"build:**\"",
-//     "build:es": "tsc --outDir es --module es6",
+//     "build:es": "tsc --outDir es --module es2020",
 //     "build:cjs": "tsc --outDir lib",
 //     "build:tds": "tsc --emitDeclarationOnly -d",
 
@@ -25,7 +25,7 @@ const buildArgStr = hasBuildJson ? '--project tsconfig.build.json' : '--project 
     execSync(`${rootBin}/rimraf es lib types`, { stdio: 'inherit' })
     const { exitCode, ...data } = await concurrently([
       {
-        command: `${rootBin}/tsc ${buildArgStr} --outDir es --module es6 ` + restArgs.join(' '),
+        command: `${rootBin}/tsc ${buildArgStr} --outDir es --module es2020 ` + restArgs.join(' '),
         prefix: 'build:es'
       },
       {

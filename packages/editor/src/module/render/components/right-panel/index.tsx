@@ -81,7 +81,7 @@ const BaseInfoForm = () => {
         // !isDirty && setIsDirty(true)
       }}
     >
-      <Form.Item label={'类型'}>
+      <Form.Item label={'定位'}>
         <Typography.Title level={5}>
           <Tooltip title={`${mometaData.relativeFilename}:${mometaData.start?.line}:${mometaData.start?.column}`}>
             <Typography.Link

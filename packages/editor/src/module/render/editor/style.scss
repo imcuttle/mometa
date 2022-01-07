@@ -70,9 +70,10 @@
   }
 
   &-hide {
+    overflow: hidden;
     width: 0;
     opacity: 0;
-    padding-left: 0px;
-    padding-right: 0px;
+    padding-left: 0;
+    padding-right: 0;
   }
 }

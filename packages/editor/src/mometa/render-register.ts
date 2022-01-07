@@ -47,21 +47,3 @@ setTimeout(() => {
 //     }
 //   ])
 // }
-
-if (__mometa_env_react_jsx_runtime__ && __mometa_env_is_dev__) {
-  const JSXDEVRuntime = require('$mometa-external:react/jsx-dev-runtime')
-  const { jsxDEV } = JSXDEVRuntime
-  // 转移 __mometa
-  JSXDEVRuntime.jsxDEV = function _jsxDev() {
-    let [type, props, key, isStaticChildren, source, ...rest] = arguments
-    if (props?.__mometa) {
-      const __mometa = props?.__mometa
-      delete props?.__mometa
-      source = {
-        ...source,
-        __mometa
-      }
-    }
-    return jsxDEV.apply(this, [type, props, key, isStaticChildren, source, ...rest])
-  }
-}
