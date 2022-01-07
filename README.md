@@ -5,7 +5,6 @@
   <a href="https://github.com/imcuttle/mometa/actions"><img src="https://img.shields.io/github/workflow/status/imcuttle/mometa/Test/master?style=flat-square" /></a>
   <a href="https://codecov.io/github/imcuttle/mometa?branch=master"><img src="https://img.shields.io/codecov/c/github/imcuttle/mometa/master.svg?style=flat-square" /></a>
   <a href="https://prettier.io/"><img src="https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square" /></a>
-  <a href="https://lernajs.io/"><img src="https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg?style=flat-square" /></a>
   <a href="https://conventionalcommits.org"><img src="https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg?style=flat-square" /></a>
 </p>
 

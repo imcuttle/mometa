@@ -6,6 +6,7 @@
     "esModuleInterop": true,
     "jsx": "react",
     "declaration": false,
+    "preserveSymlinks": true,
     "moduleResolution": "node",
     "outDir": "types",
     "skipLibCheck": true

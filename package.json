@@ -4,19 +4,17 @@
   "description": "面向研发的低代码元编程平台",
   "author": "imcuttle <imcuttle@163.com>",
   "scripts": {
-    "start": "npx lerna run start --scope=@mometa/editor",
+    "start": "pnpm start --filter=editor",
     "test": "npx jest",
     "test:watch": "npm test -- --watch",
     "preversion": "npm test",
     "postpublish": "git push --tag origin $(git rev-parse --abbrev-ref HEAD)",
     "new": "npx edam",
-    "bootstrap": "npx lerna bootstrap",
-    "postinstall": "npm run bootstrap",
-    "release": "npx lerna publish --conventional-commits -m 'chore(release): publish'"
+    "release": "pnpm publish"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npx lerna toc && npx markdown-toc README.md -i && git add README.md && pretty-quick --staged",
+      "pre-commit": "npx markdown-toc README.md -i && git add README.md && pretty-quick --staged",
       "commit-msg": "commitlint -e $HUSKY_GIT_PARAMS"
     }
   },
@@ -128,8 +126,6 @@
     "human-format": "^0.11.0",
     "husky": "^4.3.8",
     "jest": "^27.3.1",
-    "lerna-cli": "^5.0.1",
-    "lerna-command-toc": "^2.0.0",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.4.1",
     "pretty-quick": "^3.1.2",

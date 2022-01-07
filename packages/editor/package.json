@@ -61,6 +61,7 @@
     "directory": "packages/editor"
   },
   "devDependencies": {
+    "@ant-design/icons": "^4.7.0",
     "@emotion/css": "^11.7.1",
     "@floating-ui/dom": "^0.1.7",
     "@monaco-editor/react": "^4.3.1",
@@ -74,9 +75,12 @@
     "antd": "^4.17.1",
     "assign-ref": "^1.0.1",
     "axios": "^0.24.0",
+    "classnames": "^2.3.1",
     "element-resize-detector": "^1.2.4",
+    "events": "^3.3.0",
     "fuse.js": "^6.5.3",
     "get-window": "^1.1.2",
+    "lodash": "^4.17.21",
     "lodash-es": "^4.17.21",
     "moment": "^2.29.1",
     "monaco-editor": "^0.31.1",

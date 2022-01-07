@@ -314,7 +314,8 @@ function getSingleConfig(
     },
     resolve: {
       fallback: {
-        fs: require.resolve('browserify-fs')
+        fs: require.resolve('browserify-fs'),
+        events: require.resolve('events/')
       },
       // This allows you to set a fallback for where webpack should look for modules.
       // We placed these paths second because we want `node_modules` to "win"

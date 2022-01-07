@@ -1,12 +1,15 @@
-import React, { StrictMode } from 'react'
-import { Input } from 'antd'
+import React from 'react'
+import { Input, Button } from 'antd'
 import 'antd/lib/input/style/css'
 
 export default function ListPage(props: any) {
   return (
-    <>
-      <h1 title={'abc'}>ListPage</h1>
+    <div>
+      <h1 title={'abc'}>
+        ListPage<Button type="default">按钮</Button>
+      </h1>
+      <Button type="default">按钮</Button>
       <Input placeholder="请输入" />
-    </>
+    </div>
   )
 }
