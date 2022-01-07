@@ -1,5 +1,6 @@
 {
   "name": "mometa",
+  "private": true,
   "version": "1.0.0",
   "description": "面向研发的低代码元编程平台",
   "author": "imcuttle <imcuttle@163.com>",

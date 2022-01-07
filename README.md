@@ -193,8 +193,8 @@ module.exports = {
 ```bash
 git clone https://github.com/imcuttle/mometa.git
 cd mometa
-npm install # 推荐使用 npm@6，如果使用 npm@7 需要默认开启 --legacy-peer-deps 参数
-cd packages/app && npm start # 开启本地开发预览模式
+pnpm install
+cd packages/app && pnpm start # 开启本地开发预览模式
 ```
 
 ## 作者
