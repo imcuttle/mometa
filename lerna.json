@@ -1,0 +1,20 @@
+{
+  "packages": ["packages/*", "packages/editor/example"],
+  "version": "0.0.17",
+  "extendCommands": ["lerna-command-toc"],
+  "command": {
+    "publish": {
+      "conventionalCommits": true,
+      "message": "chore(release): publish"
+    },
+    "run": {
+      "stream": true
+    },
+    "bootstrap": {
+      "hoist": true,
+      "nohoist": ["webpack-manifest-plugin", "@types/react-router-dom", "@types/react-router"],
+      "npmClientArgs": []
+    }
+  },
+  "ignoreChanges": ["**/__fixtures__/**", "**/__tests__/**", "**/package.json"]
+}

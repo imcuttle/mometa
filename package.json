@@ -11,7 +11,7 @@
     "preversion": "npm test",
     "postpublish": "git push --tag origin $(git rev-parse --abbrev-ref HEAD)",
     "new": "npx edam",
-    "release": "pnpm publish"
+    "release": "pnpm lerna publish"
   },
   "husky": {
     "hooks": {
@@ -114,6 +114,8 @@
     ]
   },
   "devDependencies": {
+    "lerna-cli": "^5.0.1",
+    "lerna-command-toc": "^2.0.0",
     "markdown-toc": "^1.2.0",
     "@commitlint/cli": "^15.0.0",
     "@commitlint/config-conventional": "^15.0.0",
