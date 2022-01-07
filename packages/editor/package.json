@@ -36,6 +36,7 @@
   },
   "dependencies": {
     "@babel/helper-module-imports": "^7.16.0",
+    "@babel/template": "^7.16.7",
     "@mometa/fs-handler": "^0.0.18",
     "@mometa/materials-generator": "^0.0.18",
     "@mometa/react-refresh-webpack-plugin": "^0.0.18",
@@ -82,6 +83,7 @@
     "get-window": "^1.1.2",
     "lodash": "^4.17.21",
     "lodash-es": "^4.17.21",
+    "memfs": "^3.2.0",
     "moment": "^2.29.1",
     "monaco-editor": "^0.31.1",
     "npm-run-all": "^4.1.5",
