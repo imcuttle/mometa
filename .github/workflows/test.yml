@@ -7,7 +7,6 @@ jobs:
     name: Node.js ${{ matrix.node-version }}
     runs-on: macos-latest
     strategy:
-      fail-fast: false
       matrix:
         node-version:
           #          - 16
@@ -33,7 +32,7 @@ jobs:
       - name: Install pnpm@6
         run: npm i -g pnpm@6
 
-      - run: pnpm i
+      - run: pnpm -r i
       - run: pnpm run build --if-present
       - run: pnpm test -- --coverage
       - name: Codecov
