@@ -113,7 +113,6 @@ module.exports = class MometaEditorPlugin {
     const major = this.getWebpackMajor(compiler)
     // const watchFiles = major < 5 ? wa
     compiler.hooks.make.tapAsync(NAME, (compilation, callback) => {
-      console.log('compiler.hooks.make')
       const presetCompiler = new PresetCompiler({ webpack, major, options: this.options, compilation })
       presetCompiler.compile(compiler).then(
         (result) => {

@@ -30,20 +30,20 @@ module.exports = class PresetCompiler {
       filename: `${this.options.contentBasePath}${BUNDLER_FILENAME}`,
       chunkFilename: `${this.options.contentBasePath}mometa-editor-preset.chunk.[id].js`,
       publicPath: compiler.options.publicPath,
+      target: 'web',
       library: {
         type: 'var',
         name: 'MOMETA_EDITOR_PRESET'
       }
     }
-    const childCompiler = this.compilation.createChildCompiler(
-      symbol,
-      outputOptions,
-      major < 5 ? [] : [new webpack.library.EnableLibraryPlugin('var')]
-    )
+    const childCompiler = this.compilation.createChildCompiler(symbol, outputOptions, [])
 
     if (major < 5) {
       new webpack.LibraryTemplatePlugin(outputOptions.library.name, 'var').apply(childCompiler)
+    } else {
+      new webpack.library.EnableLibraryPlugin('var').apply(childCompiler)
     }
+    new webpack.HotModuleReplacementPlugin().apply(childCompiler)
 
     const entries = {
       [this.options.name]: [

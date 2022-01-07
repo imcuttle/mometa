@@ -11,9 +11,10 @@ module.exports.pitch = async function (request) {
   var config = ${JSON.stringify(config)};
 
   if (module.hot) {
-    module.hot.accept()
+    module.hot.addStatusHandler(status => {
+      console.log('status', status);
+    });
   }
-  console.log('hot', module.hot);
 
   module.exports = async () => {
     console.log('config', config)
