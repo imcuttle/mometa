@@ -29,6 +29,7 @@
     "mometa"
   ],
   "devDependencies": {
+    "chai": "^4.3.4",
     "typescript": "*"
   },
   "peerDependencies": {

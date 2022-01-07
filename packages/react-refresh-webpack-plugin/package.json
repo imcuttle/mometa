@@ -140,7 +140,7 @@
     "generate-types": "npx run-s types:compile types:prune-private \"format --loglevel silent\"",
     "lint": "eslint --report-unused-disable-directives --ext .js,.jsx .",
     "lint:fix": "yarn lint --fix",
-    "prepublishOnly": "run-s types:clean generate-types",
+    "prepare": "run-s types:clean generate-types",
     "__test": "npx run-s -c test:pre \"test:exec {@}\" test:post --",
     "test:exec": "node scripts/test.js",
     "test:post": "yalc remove --all",
