@@ -62,6 +62,7 @@
     "directory": "packages/editor"
   },
   "devDependencies": {
+    "@types/object-hash": "^2.2.1",
     "@ant-design/icons": "^4.7.0",
     "@emotion/css": "^11.7.1",
     "@floating-ui/dom": "^0.1.7",
