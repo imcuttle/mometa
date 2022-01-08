@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.19](https://github.com/imcuttle/mometa/compare/v0.0.18...v0.0.19) (2022-01-08)
+
+**Note:** Version bump only for package @mometa/app
+
 ## [0.0.18](https://github.com/imcuttle/mometa/compare/v0.0.17...v0.0.18) (2022-01-07)
 
 **Note:** Version bump only for package @mometa/app
