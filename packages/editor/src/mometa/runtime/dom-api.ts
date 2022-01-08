@@ -1,5 +1,6 @@
 import { EventEmitter } from 'events'
 import React from 'react'
+import getWindow from 'get-window'
 import { getLatestFiber, parseReactDomNodeDeep, ReactFiber } from '../utils/dom-utils'
 
 const findClosest = <T extends HTMLElement>(
@@ -42,6 +43,11 @@ export class MometaDomApi extends EventEmitter {
   public selectedKey: string = null
 
   protected _preventDefault = (evt) => {
+    // React SyntheticEvent
+    // if (evt.nativeEvent) {
+    //   return
+    // }
+
     const closestPass = findClosest(evt.target, (x) => x.__mometa && !x.__mometa.preventEvent)
     if (closestPass) {
       closestPass.__mometa.emit(evt.type, evt)
@@ -69,7 +75,7 @@ export class MometaDomApi extends EventEmitter {
           f = getLatestFiber(f.return)
         }
         let t = f
-        while (t && !(t.stateNode instanceof HTMLElement)) {
+        while (t && !(t.stateNode instanceof getWindow(this.dom).HTMLElement)) {
           t = t.child
         }
         if (t) {
@@ -103,7 +109,7 @@ export class MometaDomApi extends EventEmitter {
           f = getLatestFiber(f.return)
         }
         let t = f
-        while (t && !(t.stateNode instanceof HTMLElement)) {
+        while (t && !(t.stateNode instanceof getWindow(this.dom).HTMLElement)) {
           t = t.child
         }
         if (t) {
@@ -138,7 +144,6 @@ export function useProxyEvents(dom: MometaHTMLElement, events: Pick<JSX.Intrinsi
     const disposes = []
     for (const [name, fn] of Object.entries(events)) {
       let tName = name.toLowerCase()
-      // const isCapture = tName.endsWith('capture')
       tName = tName.replace(/^on/, '').replace(/capture$/, '')
 
       dom.__mometa.addListener(tName, fn)

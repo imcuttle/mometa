@@ -1,6 +1,7 @@
-import React, { Dispatch, SetStateAction, useContext } from 'react'
+import React from 'react'
 import p from 'prefix-classname'
-import { Button, Switch, Divider } from 'antd'
+import { Button, Divider, Tooltip } from 'antd'
+import { MobileOutlined, MobileTwoTone, EditOutlined, EditTwoTone, LinkOutlined } from '@ant-design/icons'
 import { createReactBehaviorSubject, UseBehaviorSubjectOpts } from '@rcp/use.behaviorsubject'
 import { CLS_PREFIX } from '../../../config/const'
 
@@ -18,6 +19,7 @@ export interface HeaderProps {
 interface Data {
   canSelect: boolean
   showLocation: boolean
+  isMobileMode: boolean
 }
 
 function createReactBehaviorSubjectStored<T>(
@@ -48,7 +50,8 @@ function createReactBehaviorSubjectStored<T>(
 const { useSubject, subject } = createReactBehaviorSubjectStored<Data>(
   {
     canSelect: false,
-    showLocation: true
+    showLocation: true,
+    isMobileMode: false
   },
   { storeKey: symbol(`headerStatus`) }
 )
@@ -57,7 +60,7 @@ export const useHeaderStatus = useSubject
 export const headerStatusSubject = subject
 
 const Header: React.FC<HeaderProps> = React.memo(({ className, bundlerURL }) => {
-  const [{ canSelect, showLocation }, setValue] = useHeaderStatus()
+  const [{ canSelect, showLocation, isMobileMode }, setValue] = useHeaderStatus()
 
   return (
     <div className={cn(c(), className)}>
@@ -70,19 +73,30 @@ const Header: React.FC<HeaderProps> = React.memo(({ className, bundlerURL }) => 
       <Divider type={'vertical'} />
 
       <div className={c('__switch')}>
-        <Switch
-          unCheckedChildren={'预览'}
-          checked={canSelect}
-          onChange={(checked) => setValue((x) => ({ ...x, canSelect: checked }))}
-          checkedChildren={'编辑'}
-        />
-
-        <Switch
-          checked={showLocation}
-          onChange={(checked) => setValue((x) => ({ ...x, showLocation: checked }))}
-          unCheckedChildren={'隐藏路由'}
-          checkedChildren={'展示路由'}
-        />
+        <Tooltip title={'编辑模式'}>
+          <Button
+            shape={'circle'}
+            onClick={() => setValue((x) => ({ ...x, canSelect: !x.canSelect }))}
+            icon={canSelect ? <EditTwoTone /> : <EditOutlined />}
+            type={'text'}
+          />
+        </Tooltip>
+        <Tooltip title={'地址栏'}>
+          <Button
+            shape={'circle'}
+            onClick={() => setValue((x) => ({ ...x, showLocation: !x.showLocation }))}
+            icon={<LinkOutlined style={{ color: showLocation ? '#1890ff' : '' }} />}
+            type={'text'}
+          />
+        </Tooltip>
+        <Tooltip title={'响应式布局'}>
+          <Button
+            shape={'circle'}
+            onClick={() => setValue((x) => ({ ...x, isMobileMode: !x.isMobileMode }))}
+            icon={isMobileMode ? <MobileTwoTone /> : <MobileOutlined />}
+            type={'text'}
+          />
+        </Tooltip>
       </div>
 
       <Divider type={'vertical'} />

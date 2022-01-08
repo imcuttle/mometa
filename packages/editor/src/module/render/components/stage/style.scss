@@ -4,6 +4,37 @@
   display: flex;
   flex-direction: column;
 
+  &__spin {
+    flex: 1;
+    margin-top: 40px;
+  }
+
+  &__iframe-wrapper {
+    position: relative;
+    background-color: #fff;
+    width: 100%;
+    display: flex;
+  }
+
+  &__iframe-mask {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    padding-top: 40px;
+    height: 100%;
+  }
+  &__iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    box-shadow: 0 2px 4px 0 rgb(0 0 0 / 12%), 0 0 6px 0 rgb(0 0 0 / 4%);
+    z-index: 100;
+  }
+  &__iframe-floating-container {
+    position: absolute;
+    z-index: 200;
+  }
+
   &__sandpack {
     &,
     .sp-wrapper,
@@ -12,13 +43,5 @@
     .sp-preview-container {
       height: 100% !important;
     }
-  }
-
-  &__iframe {
-    flex: 1;
-    display: flex;
-    width: 100%;
-    height: 100%;
-    border: 1px solid #f0f0f0;
   }
 }

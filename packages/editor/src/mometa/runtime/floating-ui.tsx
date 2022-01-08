@@ -1,7 +1,6 @@
 import React from 'react'
-import { createPortal } from 'react-dom'
 import c from 'classnames'
-import { debounce, pick } from 'lodash-es'
+import { debounce, omit, pick } from 'lodash-es'
 import { getScrollParents } from '@floating-ui/dom'
 
 import { ArrowUpOutlined, ArrowDownOutlined, DragOutlined, DeleteOutlined } from '@ant-design/icons'
@@ -13,7 +12,6 @@ import { PreventFastClick } from '@rcp/c.preventfastop'
 import MoreButton from './components/more-button'
 import { useDrag } from 'react-dnd'
 import { getSharedFromMain } from '../utils/get-from-main'
-import { globalGetContainer } from '../config/backlist-dom'
 const { api } = getSharedFromMain()
 
 function usePosition(dom: HTMLElement) {
@@ -58,7 +56,6 @@ function usePosition(dom: HTMLElement) {
 }
 
 type FloatingUiProps = JSX.IntrinsicElements['div'] & {
-  getContainer?: () => HTMLElement
   dom: MometaHTMLElement
   leftTopElement?: React.ReactNode
   rightTopElement?: React.ReactNode
@@ -76,7 +73,6 @@ export const FloatingUi = React.forwardRef<HTMLDivElement, FloatingUiProps>(func
     leftTopElement,
     children,
     dom,
-    getContainer = globalGetContainer,
     ...props
   },
   ref
@@ -90,8 +86,7 @@ export const FloatingUi = React.forwardRef<HTMLDivElement, FloatingUiProps>(func
   useProxyEvents(dom, events)
 
   return (
-    !!isReady &&
-    createPortal(
+    !!isReady && (
       <div
         ref={ref}
         style={{
@@ -102,7 +97,7 @@ export const FloatingUi = React.forwardRef<HTMLDivElement, FloatingUiProps>(func
           minHeight: rect.height,
           display: shouldHide ? 'none' : ''
         }}
-        {...props}
+        {...omit(props, handlerKeys)}
       >
         {children}
         {!!leftTopElement && (
@@ -178,15 +173,10 @@ export const FloatingUi = React.forwardRef<HTMLDivElement, FloatingUiProps>(func
             {centerBottomElement}
           </div>
         )}
-      </div>,
-      getContainer()
+      </div>
     )
   )
 })
-
-function delay(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms))
-}
 
 type OveringFloatProps = FloatingUiProps & {
   isSelected?: boolean
@@ -196,7 +186,7 @@ type OveringFloatProps = FloatingUiProps & {
 }
 
 export const OveringFloat = React.forwardRef<HTMLDivElement, OveringFloatProps>(function OveringFloat(
-  { isOverCurrent, isSelected, onDeselect, onSelect, dom, getContainer, ...props },
+  { isOverCurrent, isSelected, onDeselect, onSelect, dom, ...props },
   ref
 ) {
   React.useEffect(() => {
@@ -224,19 +214,8 @@ export const OveringFloat = React.forwardRef<HTMLDivElement, OveringFloatProps>(
   )
 
   const { isDragging } = React.useMemo(() => JSON.parse(dataStr), [dataStr])
-  // React.useLayoutEffect(() => {
-  //   const cls = css`
-  //     background-color: #fff !important;
-  //   `
-  //   if (isDragging && dom) {
-  //     dom.classList.add(cls)
-  //     return () => {
-  //       dom?.classList?.remove(cls)
-  //     }
-  //   }
-  // }, [dom, isDragging])
 
-  const onClickFn = usePersistFn(() => {
+  const onClickFn = usePersistFn((evt) => {
     // eslint-disable-next-line no-unused-expressions
     onSelect?.()
   })
@@ -388,7 +367,6 @@ export const OveringFloat = React.forwardRef<HTMLDivElement, OveringFloatProps>(
         )
       }
       dom={dom}
-      getContainer={getContainer}
       className={c(
         css`
         pointer-events: none; !important;

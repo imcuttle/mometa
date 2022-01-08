@@ -14,6 +14,7 @@
     overflow: visible !important;
 
     .mmt-ant-tabs-content-holder {
+      flex: 1;
       //overflow: auto;
       //margin-right: -10px;
       //padding-right: 10px;
@@ -91,6 +92,7 @@
         width: auto !important;
         max-height: 100%;
         max-width: 100%;
+        object-fit: contain;
 
         &__wrapper {
           display: flex;

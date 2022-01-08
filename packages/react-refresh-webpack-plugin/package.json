@@ -137,11 +137,11 @@
   "scripts": {
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
     "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,md}\"",
-    "generate-types": "npx run-s types:compile types:prune-private \"format --loglevel silent\"",
+    "generate-types": "run-s types:compile types:prune-private \"format --loglevel silent\"",
     "lint": "eslint --report-unused-disable-directives --ext .js,.jsx .",
     "lint:fix": "yarn lint --fix",
-    "prepublishOnly": "run-s types:clean generate-types",
-    "__test": "npx run-s -c test:pre \"test:exec {@}\" test:post --",
+    "prepare": "run-s types:clean generate-types",
+    "__test": "run-s -c test:pre \"test:exec {@}\" test:post --",
     "test:exec": "node scripts/test.js",
     "test:post": "yalc remove --all",
     "test:pre": "run-s yalc:publish yalc:add",
@@ -153,6 +153,6 @@
     "yalc:publish": "yalc publish --no-scripts"
   },
   "types": "types/lib/index.d.ts",
-  "version": "0.0.16",
+  "version": "0.0.18",
   "gitHead": "333b833f49286bef901694a6f84b1248131098a0"
 }

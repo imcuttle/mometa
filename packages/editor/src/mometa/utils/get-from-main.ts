@@ -1,8 +1,8 @@
 import { useBehaviorSubject } from '@rcp/use.behaviorsubject'
-import { getByRemoteById } from '../../shared/pipe'
+import { getByRemoteById, getInLocal } from '../../shared/pipe'
 
 export function getSharedFromMain() {
-  const shared = getByRemoteById('shared', 'main')
+  const shared = getByRemoteById('shared', 'main') ?? getInLocal('shared')
   if (!shared) {
     throw new Error(`未找到来自父窗口共享资源`)
   }

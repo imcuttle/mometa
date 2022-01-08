@@ -1,7 +1,7 @@
 /**
  * <Comp /> => <Comp __mometa={{ start: {line: 100, column: 11}, end: {}, text: '<Comp />' }}/>
  */
-import { PluginObj, PluginPass, NodePath } from '@babel/core'
+import type { PluginObj, PluginPass, NodePath } from '@babel/core'
 import templateBuilder from '@babel/template'
 import { addDefault } from '@babel/helper-module-imports'
 import { createLineContentsByContent } from '@mometa/fs-handler'
@@ -80,8 +80,7 @@ export default function babelPluginMometaReactInject(api) {
                   innerStart: openingElement.node.loc.end,
                   innerEnd: path.get('closingElement')?.node?.loc?.start
                 } as MometaData
-
-                mometaData.hash = hash(mometaData, { algorithm: 'md5', encoding: 'base64' })
+                mometaData.hash = hash(mometaData)
                 if (jsxExpContainerPath) {
                   const container = {
                     text: getText(jsxExpContainerPath.node.loc),
@@ -97,7 +96,7 @@ export default function babelPluginMometaReactInject(api) {
                   mometaData.container = {
                     isFirstElement,
                     ...container,
-                    hash: hash({ ...container, filename: this.filename }, { algorithm: 'md5', encoding: 'base64' })
+                    hash: hash({ ...container, filename: this.filename })
                   }
                 }
 

@@ -1,6 +1,6 @@
 {
   "name": "@mometa/react-docgen-typescript",
-  "version": "0.0.16",
+  "version": "0.0.18",
   "private": true,
   "publishConfig": {
     "access": "public"
@@ -29,6 +29,7 @@
     "mometa"
   ],
   "devDependencies": {
+    "chai": "^4.3.4",
     "typescript": "*"
   },
   "peerDependencies": {

@@ -5,7 +5,6 @@
   <a href="https://github.com/imcuttle/mometa/actions"><img src="https://img.shields.io/github/workflow/status/imcuttle/mometa/Test/master?style=flat-square" /></a>
   <a href="https://codecov.io/github/imcuttle/mometa?branch=master"><img src="https://img.shields.io/codecov/c/github/imcuttle/mometa/master.svg?style=flat-square" /></a>
   <a href="https://prettier.io/"><img src="https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square" /></a>
-  <a href="https://lernajs.io/"><img src="https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg?style=flat-square" /></a>
   <a href="https://conventionalcommits.org"><img src="https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg?style=flat-square" /></a>
 </p>
 
@@ -29,12 +28,15 @@
     - [移动视图](#%E7%A7%BB%E5%8A%A8%E8%A7%86%E5%9B%BE)
     - [编辑代码](#%E7%BC%96%E8%BE%91%E4%BB%A3%E7%A0%81)
   - [预览](#%E9%A2%84%E8%A7%88)
+    - [响应式布局](#%E5%93%8D%E5%BA%94%E5%BC%8F%E5%B8%83%E5%B1%80)
+    - [路由模拟](#%E8%B7%AF%E7%94%B1%E6%A8%A1%E6%8B%9F)
 - [如何实现](#%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0)
 - [如何使用](#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8)
   - [安装依赖](#%E5%AE%89%E8%A3%85%E4%BE%9D%E8%B5%96)
   - [使用 antd 物料](#%E4%BD%BF%E7%94%A8-antd-%E7%89%A9%E6%96%99)
   - [接入编辑器](#%E6%8E%A5%E5%85%A5%E7%BC%96%E8%BE%91%E5%99%A8)
 - [NPM 包](#npm-%E5%8C%85)
+- [快速开始](#%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B)
 - [作者](#%E4%BD%9C%E8%80%85)
 
 <!-- tocstop -->
@@ -55,7 +57,8 @@ mometa 不是传统主流的低代码平台（如 amis/云凤蝶），mometa 是
 
 ## 特性
 
-- 面向研发的代码可视化编辑，直接作用于源码
+- 🛠 面向研发的代码可视化编辑，直接作用于源码
+  - 响应式布局、路由模拟
   - 反向定位（视图定位源码）
   - 拖拽插入物料
   - 拖拽移动
@@ -63,10 +66,10 @@ mometa 不是传统主流的低代码平台（如 amis/云凤蝶），mometa 是
   - 删除
   - 替换
   - 层级选择
-- 开放物料生态，可定制团队内物料库，见 [mometa-mat](https://github.com/imcuttle/mometa-mat)
-- 多语言、多生态支持，目前暂只支持 React
-- 接入友好，Webpack>=4 插件化接入
-- 开发友好，物料库支持热更新，不破坏已有开发模式
+- 🍒 开放物料生态，可定制团队内物料库，见 [mometa-mat](https://github.com/imcuttle/mometa-mat)
+- 💎 多语言、多生态支持，目前暂只支持 React，后续有计划支持 Vue
+- 🔥 接入友好，Webpack>=4 插件化接入
+- 🌟 开发友好，物料库支持热更新，不破坏已有开发模式
 
 ## 使用场景
 
@@ -109,7 +112,11 @@ mometa 不是传统主流的低代码平台（如 amis/云凤蝶），mometa 是
 
 #### 预览
 
-单页应用中的路由跳转能够进行拦截控制，其他和正常预览保持一致
+##### 响应式布局
+
+![](./images/mometa-preview-responsive.gif)
+
+##### 路由模拟
 
 ![](./images/mometa-preview-url.gif)
 
@@ -180,6 +187,15 @@ module.exports = {
 - [@mometa/fs-handler](packages/fs-handler) - 代码操作转换核心逻辑，如删除、移动、替换、插入等
 - [@mometa/materials-generator](packages/materials-generator) - 物料生成 & 解析
 - [@mometa/react-refresh-webpack-plugin](packages/react-refresh-webpack-plugin) - An **EXPERIMENTAL** Webpack plugin to enable "Fast Refresh" (also previously known as _Hot Reloading_) for React components.
+
+## 快速开始
+
+```bash
+git clone https://github.com/imcuttle/mometa.git
+cd mometa
+pnpm install
+cd packages/app && pnpm start # 开启本地开发预览模式
+```
 
 ## 作者
 
