@@ -9,5 +9,6 @@ program
   .command('test', 'jest test')
   .command('build', 'tsc build')
   .command('packlimit', '检测包大小')
+  .command('pkgxo', 'pkgxo')
 
 program.parse(process.argv)

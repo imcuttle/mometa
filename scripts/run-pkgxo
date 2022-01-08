@@ -1,0 +1,16 @@
+#!/usr/bin/env node
+const nps = require('path')
+const { execSync } = require('child_process')
+
+const restArgs = process.argv.slice(2)
+
+const binPath = nps.join(__dirname, '../node_modules/.bin/pkgxo')
+
+try {
+  execSync(`${binPath} ${restArgs.join(' ')}`, {
+    stdio: 'inherit',
+    cwd: process.cwd()
+  })
+} catch (ex) {
+  process.exitCode = ex.status
+}

@@ -27,7 +27,8 @@
     "start": "cd example && npm start",
     "packlimit": "../../scripts/run packlimit",
     "prepare": "npm run build",
-    "prepublishOnly": "npm run packlimit",
+    "prepublishOnly": "npm run packlimit && ../../scripts/run pkgxo --submit",
+    "postpublish": "../../scripts/run pkgxo --reset",
     "version": "npm test && npm run packlimit"
   },
   "peerDependencies": {
