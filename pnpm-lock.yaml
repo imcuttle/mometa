@@ -55,6 +55,7 @@ importers:
       '@mometa-mat/antd': ^0.0.2
       '@mometa/editor': ^0.0.19
       '@mometa/materials-generator': ^0.0.19
+      '@mometa/materials-resolver': ^0.0.0
       '@pmmmwh/react-refresh-webpack-plugin': ^0.5.3
       '@rcp/use.fetcher': ^1.1.5
       '@svgr/webpack': ^5.5.0
@@ -127,6 +128,7 @@ importers:
       '@mometa-mat/antd': 0.0.2
       '@mometa/editor': link:../editor
       '@mometa/materials-generator': link:../materials-generator
+      '@mometa/materials-resolver': link:../materials-resolver
       '@pmmmwh/react-refresh-webpack-plugin': 0.5.4_2d4243aba428cacf94c452c74b8303e1
       '@rcp/use.fetcher': 1.1.5
       '@svgr/webpack': 5.5.0
@@ -201,6 +203,7 @@ importers:
       '@commitlint/cli': ^11.0.0
       '@mometa/editor': ^0.0.19
       '@mometa/materials-generator': ^0.0.19
+      '@mometa/materials-resolver': ^0.0.0
       '@moyuyc/husky': ^1.1.1
       '@pmmmwh/react-refresh-webpack-plugin': 0.4.3
       '@svgr/webpack': 5.5.0
@@ -283,6 +286,7 @@ importers:
       '@babel/core': 7.12.3
       '@mometa/editor': link:../editor
       '@mometa/materials-generator': link:../materials-generator
+      '@mometa/materials-resolver': link:../materials-resolver
       '@pmmmwh/react-refresh-webpack-plugin': 0.4.3_9f0995138d24e525eb86c097d82409c0
       '@svgr/webpack': 5.5.0
       '@testing-library/jest-dom': 5.16.1
@@ -640,9 +644,10 @@ importers:
       cosmiconfig: ^7.0.1
       globby: ^11.0.4
     dependencies:
-      '@mometa/materials-generator': link:../materials-generator
       cosmiconfig: 7.0.1
       globby: 11.0.4
+    devDependencies:
+      '@mometa/materials-generator': link:../materials-generator
 
   packages/react-docgen-typescript:
     specifiers:

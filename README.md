@@ -129,7 +129,7 @@ mometa 不是传统主流的低代码平台（如 amis/云凤蝶），mometa 是
 #### 安装依赖
 
 ```bash
-npm i @mometa/materials-generator @mometa/editor -D
+npm i @mometa/materials-resolver @mometa/editor -D
 ```
 
 #### 使用 antd 物料
@@ -143,7 +143,7 @@ npm i @mometa-mat/antd -D
 2.  在项目根目录中创建 `mometa-material.config.js`
 
 ```jsx
-const { resolveLibMatConfig } = require('@mometa/materials-generator')
+const { resolveLibMatConfig } = require('@mometa/materials-resolver')
 
 module.exports = [resolveLibMatConfig('antd')]
 ```
