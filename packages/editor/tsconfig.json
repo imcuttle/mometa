@@ -3,9 +3,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@mometa/fs-handler": ["../fs-handler/src"],
-      "@mometa/materials-generator": ["../materials-generator/src"],
-      "@mometa/materials-generator/*": ["../materials-generator/src/*"]
+      "@mometa/fs-handler": ["../fs-handler/src"]
     }
   }
 }

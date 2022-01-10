@@ -7,7 +7,7 @@ import { SearchOutlined } from '@ant-design/icons'
 import { CLS_PREFIX } from '../../../config/const'
 
 import './style.scss'
-import type { Material, Asset, AssetGroup } from '@mometa/materials-generator/types'
+import type { Material, Asset, AssetGroup } from '@mometa/materials-generator'
 import { useHeaderStatus } from '../header'
 
 const cn = p('')

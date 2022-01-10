@@ -1,5 +1,5 @@
 {
-  "extends": "{{{rootRelativeDir}}}/tsconfig.json",
+  "extends": "../../tsconfig.json",
   "compilerOptions": {},
   "exclude": ["node_modules"],
   "include": ["./src"]

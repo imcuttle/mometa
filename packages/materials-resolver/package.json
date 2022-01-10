@@ -1,0 +1,45 @@
+{
+  "name": "@mometa/materials-resolver",
+  "version": "0.0.0",
+  "publishConfig": {
+    "access": "public"
+  },
+  "author": "余聪 <yucong@yuanfudao.com>",
+  "description": "Resolve materials config",
+  "main": "lib",
+  "types": "types",
+  "module": "es",
+  "files": [
+    "lib",
+    "es",
+    "types"
+  ],
+  "scripts": {
+    "test": "../../scripts/run test",
+    "build": "../../scripts/run build",
+    "packlimit": "../../scripts/run packlimit",
+    "dev": "npm run build -- --watch",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm run packlimit && ../../scripts/run pkgxo --submit",
+    "postpublish": "../../scripts/run pkgxo --reset",
+    "version": "npm test && npm run packlimit"
+  },
+  "dependencies": {
+    "cosmiconfig": "^7.0.1",
+    "globby": "^11.0.4"
+  },
+  "devDependencies": {
+    "@mometa/materials-generator": "workspace:^0.0.19"
+  },
+  "keywords": [
+    "余聪",
+    "materials-resolver",
+    "imcuttle",
+    "mometa"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/imcuttle/mometa.git",
+    "directory": "packages/materials-resolver"
+  }
+}

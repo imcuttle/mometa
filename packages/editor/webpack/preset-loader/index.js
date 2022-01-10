@@ -1,5 +1,5 @@
 const loaderUtils = require('loader-utils')
-const { resolveLibMatConfig } = require('@mometa/materials-generator')
+const { resolveLibMatConfig } = require('@mometa/materials-resolver')
 
 module.exports.pitch = async function (request) {
   this.cacheable(false)
@@ -15,6 +15,8 @@ module.exports.pitch = async function (request) {
       console.log('status', status);
     });
   }
+  console.log('module.hot', module.hot);
+  console.log('config', config)
 
   module.exports = async () => {
     console.log('config', config)

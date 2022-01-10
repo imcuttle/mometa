@@ -2,7 +2,7 @@ const http = require('http')
 const fs = require('fs')
 const nps = require('path')
 const { createFsHandler, commonMiddlewares } = require('@mometa/fs-handler')
-const { resolveAsyncConfig, materialExplorer } = require('@mometa/materials-generator')
+const { resolveAsyncConfig, materialExplorer } = require('@mometa/materials-resolver')
 const makeHotRequire = require('hot-module-require')
 const hotRequire = makeHotRequire(__dirname)
 

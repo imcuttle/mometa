@@ -40,6 +40,7 @@
     "@babel/template": "^7.16.7",
     "@mometa/fs-handler": "^0.0.19",
     "@mometa/materials-generator": "^0.0.19",
+    "@mometa/materials-resolver": "workspace:^0.0.0",
     "@mometa/react-refresh-webpack-plugin": "^0.0.19",
     "chalk": "^2.4.2",
     "copy-webpack-plugin": "^10.2.0",

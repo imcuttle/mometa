@@ -1,5 +1,5 @@
 const createFileWatcherApi = require('./file-watcher-api')
-const { materialExplorer } = require('@mometa/materials-generator')
+const { materialExplorer } = require('@mometa/materials-resolver')
 
 module.exports = class PresetCompiler {
   constructor({ webpack, major, compilation, options }) {

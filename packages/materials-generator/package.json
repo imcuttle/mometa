@@ -2,20 +2,21 @@
   "name": "@mometa/materials-generator",
   "version": "0.0.19",
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "main": "lib",
+    "types": "types",
+    "module": "es"
   },
   "author": "imcuttle <imcuttle@163.com>",
   "description": "物料生成 & 解析",
-  "main": "lib",
-  "types": "types",
-  "module": "es",
+  "main": "src",
   "files": [
     "lib",
     "es",
     "types"
   ],
   "scripts": {
-    "test": "../../scripts/run test",
+    "test": "echo noop",
     "build": "../../scripts/run build",
     "packlimit": "../../scripts/run packlimit",
     "dev": "npm run build -- --watch",
@@ -23,14 +24,8 @@
     "prepublishOnly": "npm run packlimit",
     "version": "npm test && npm run packlimit"
   },
-  "dependencies": {
-    "change-case": "^4.1.2",
-    "cosmiconfig": "^7.0.1",
-    "globby": "^11.0.4"
-  },
-  "devDependencies": {
-    "react": "^17.0.2"
-  },
+  "dependencies": {},
+  "devDependencies": {},
   "keywords": [
     "imcuttle",
     "materials-generator",

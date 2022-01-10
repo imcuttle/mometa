@@ -1,4 +1,4 @@
-import { Material } from '../types'
+import { Material } from '@mometa/materials-generator'
 import * as nps from 'path'
 import * as fs from 'fs'
 

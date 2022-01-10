@@ -1,17 +1,17 @@
-import { AssetGroup, Material } from '../types'
-import { flatten, toArray } from '../utils/to-array'
-import { groupExplorer } from '../utils/search-core'
+import { Material } from '@mometa/materials-generator'
+import { materialExplorer } from '../utils/search-core'
 import { resolveAsyncConfig } from '../utils/resolve-async-config'
 import { resolve } from 'path'
 import { sortedGlobby } from '../utils/sorted-globby'
+import { flatten } from '../utils/to-array'
 
-export async function groups(findDirs: string[] | string, cwd?: string): Promise<AssetGroup[]> {
+export async function materials(findDirs: string[] | string, cwd?: string): Promise<Material[]> {
   const list = []
   const dirs = await sortedGlobby(findDirs, cwd)
   await Promise.all(
     dirs.map(async (dir) => {
       dir = resolve(cwd || '', dir)
-      const d = await groupExplorer.search(dir)
+      const d = await materialExplorer.search(dir)
       if (!d?.isEmpty) {
         list.push(...flatten(await resolveAsyncConfig(d.config)))
       }

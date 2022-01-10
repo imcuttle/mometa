@@ -7,7 +7,8 @@ module.exports = ({ packagePrefix, name, description, scriptBin, _, useTs }) => 
     packlimit: `${scriptBin}/run packlimit`,
     dev: `npm run build -- --watch`,
     prepare: `npm run build`,
-    prepublishOnly: `npm run packlimit`,
+    prepublishOnly: `npm run packlimit && ${scriptBin}/run pkgxo --submit`,
+    postpublish: `${scriptBin}/run pkgxo --reset`,
     version: `npm test && npm run packlimit`
   }
 
@@ -15,17 +16,18 @@ module.exports = ({ packagePrefix, name, description, scriptBin, _, useTs }) => 
     name: `${packagePrefix}${name}`,
     version: '0.0.0',
     publishConfig: {
-      access: 'public'
+      access: 'public',
+      main: 'lib',
+      types: 'types',
+      module: 'es',
     },
     author: `${_.git.name} <${_.git.email}>`,
     description,
-    main: 'lib',
-    types: 'types',
-    module: 'es',
+    main: 'src',
     files: useTs ? ['lib', 'es', 'types'] : ['src'],
     scripts,
     dependencies: {},
-    keywords: [_.git.name].concat(name.split('.')).concat(require('../../../package.json').keywords || []),
+    keywords: Array.from(new Set([_.git.name].concat(name.split('.')).concat(require('../../../package.json').keywords || [])).values()),
     repository: {
       type: 'git',
       url: 'git+' + _.git.remote,
