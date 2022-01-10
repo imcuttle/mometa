@@ -1,3 +1,11 @@
-const { resolveLibMatConfig } = require('@mometa/materials-resolver')
+// const { resolveLibMatConfig } = require('@mometa/materials-resolver')
+import React from 'react'
+// console.trace('outer', React)
 
-module.exports = [resolveLibMatConfig('antd')]
+module.exports = [
+  {
+    name: 'ABCxa',
+    key: 'component-x'
+  },
+  require('@mometa-mat/antd').default
+]

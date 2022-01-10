@@ -7,7 +7,7 @@
 
 // https://github.com/webpack-contrib/webpack-hot-middleware/blob/master/middleware.js
 
-function createEventStream(heartbeat, { onClose } = {}) {
+function createEventStream(heartbeat) {
   var clientId = 0
   var clients = {}
   function everyClient(fn) {
@@ -36,7 +36,7 @@ function createEventStream(heartbeat, { onClose } = {}) {
     size() {
       return Object.keys(clients).length
     },
-    handler: function (req, res) {
+    handler: function (req, res, { onClose } = {}) {
       var headers = {
         'Access-Control-Allow-Origin': '*',
         'Content-Type': 'text/event-stream;charset=utf-8',

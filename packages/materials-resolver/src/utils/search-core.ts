@@ -1,4 +1,4 @@
-import { cosmiconfig } from 'cosmiconfig'
+import findUp from 'find-up'
 import * as nps from 'path'
 
 function isModFile(filename: string, mod) {
@@ -9,9 +9,28 @@ function isModFile(filename: string, mod) {
   return base.includes(mod)
 }
 
-export const materialExplorer = cosmiconfig('mometa-material', {
-  searchPlaces: ['mometa-material.config.js']
-})
+export const materialExplorer = {
+  async search(dir) {
+    const filepath = await materialExplorer.findUp(dir)
+    if (!filepath) {
+      return {
+        filepath,
+        isEmpty: true,
+        config: null
+      }
+    }
+    return {
+      filepath,
+      isEmpty: false,
+      config: require(filepath)
+    }
+  },
+  findUp(dir) {
+    return findUp('mometa-material.config.js', {
+      cwd: dir
+    })
+  }
+}
 export function isMaterialsFile(filename: string) {
   return isModFile(filename, 'mometa-material')
 }

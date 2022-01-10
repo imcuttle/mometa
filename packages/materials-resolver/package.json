@@ -25,7 +25,7 @@
     "version": "npm test && npm run packlimit"
   },
   "dependencies": {
-    "cosmiconfig": "^7.0.1",
+    "find-up": "^5.0.0",
     "globby": "^11.0.4"
   },
   "devDependencies": {

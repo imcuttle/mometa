@@ -3,18 +3,8 @@ const nps = require('path')
 const { validate: validateOptions } = require('schema-utils')
 const { createServer } = require('./create-server')
 const injectEntry = require('./injectEntry')
-const PresetCompiler = require('./preset-compiler')
-const createFileWatcherApi = require('./file-watcher-api')
+const CommonPlugin = require('./common-plugin')
 const ReactRefreshWebpackPlugin = require('@mometa/react-refresh-webpack-plugin')
-// const { resolveAsyncConfig, materialExplorer } = require('@mometa/materials-generator')
-
-const safeResolve = (path) => {
-  try {
-    return require.resolve(path)
-  } catch (e) {
-    return null
-  }
-}
 
 const BUILD_PATH = nps.resolve(__dirname, '../build/standalone')
 const NAME = 'MometaEditorPlugin'
@@ -28,7 +18,7 @@ const replaceTpl = (string, flag, data) => {
   )
 }
 
-module.exports = class MometaEditorPlugin {
+module.exports = class MometaEditorPlugin extends CommonPlugin {
   constructor(options = {}) {
     options = options || {}
     options.serverOptions = Object.assign(
@@ -48,14 +38,16 @@ module.exports = class MometaEditorPlugin {
       },
       options.editorConfig
     )
-    this.options = Object.assign(
-      {
-        react: true,
-        contentBasePath: 'mometa',
-        serverOptions: {},
-        editorConfig: {}
-      },
-      options
+    super(
+      Object.assign(
+        {
+          react: true,
+          contentBasePath: 'mometa',
+          serverOptions: {},
+          editorConfig: {}
+        },
+        options
+      )
     )
     this.options.contentBasePath = (this.options.contentBasePath + '/').replace(/\/+/g, '/').replace(/^\/$/, '')
 
@@ -64,16 +56,6 @@ module.exports = class MometaEditorPlugin {
       baseDataPath: 'options'
     })
     this.server = null
-  }
-
-  getWebpack(compiler) {
-    return this.options.__webpack || compiler.webpack || require('webpack')
-  }
-
-  getWebpackMajor(compiler) {
-    const webpack = this.getWebpack(compiler)
-    const [major] = (webpack.version || '5.0.0').split('.')
-    return major
   }
 
   applyForEditor(compiler) {
@@ -104,25 +86,6 @@ module.exports = class MometaEditorPlugin {
         }
       ]
     }).apply(compiler)
-
-    this._applyForEditorPreset(compiler)
-  }
-
-  _applyForEditorPreset(compiler) {
-    const webpack = this.getWebpack(compiler)
-    const major = this.getWebpackMajor(compiler)
-    // const watchFiles = major < 5 ? wa
-    compiler.hooks.make.tapAsync(NAME, (compilation, callback) => {
-      const presetCompiler = new PresetCompiler({ webpack, major, options: this.options, compilation })
-      presetCompiler.compile(compiler).then(
-        (result) => {
-          callback()
-        },
-        (error) => {
-          throw error
-        }
-      )
-    })
   }
 
   applyForRuntime(compiler) {
@@ -171,10 +134,17 @@ module.exports = class MometaEditorPlugin {
   }
 
   applyForServer(compiler) {
+    let compilation
+    let tasks = []
+    const captureTask = (fn) => {
+      // retunr
+    }
     const beforeCompile = async (params, cb) => {
       if (this.server) {
         return cb()
       }
+      const MaterialsCompiler = require('./materials-compiler')
+      const mc = new MaterialsCompiler(this.options)
       this.server = await createServer({
         ...this.options.serverOptions,
         context: compiler.context,
@@ -186,17 +156,30 @@ module.exports = class MometaEditorPlugin {
               fn(err, data ? String(data) : data)
             }),
           writeFile: fs.writeFile
+        },
+        // experimentalMaterialsClientRender = true
+        materialsBuild: async (filename) => {
+          if (!compilation) {
+            return
+          }
+          return mc.build(filename, compiler, compilation)
         }
       })
 
       cb()
     }
     compiler.hooks.beforeCompile.tapAsync(NAME, beforeCompile)
+    compiler.hooks.make.tapAsync(NAME, (_compilation, callback) => {
+      compilation = _compilation
+
+      callback()
+    })
   }
 
   apply(compiler) {
     this.applyForEditor(compiler)
     this.applyForRuntime(compiler)
+
     this.applyForServer(compiler)
   }
 }

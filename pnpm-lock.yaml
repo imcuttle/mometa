@@ -641,10 +641,10 @@ importers:
   packages/materials-resolver:
     specifiers:
       '@mometa/materials-generator': workspace:^0.0.19
-      cosmiconfig: ^7.0.1
+      find-up: ^5.0.0
       globby: ^11.0.4
     dependencies:
-      cosmiconfig: 7.0.1
+      find-up: 5.0.0
       globby: 11.0.4
     devDependencies:
       '@mometa/materials-generator': link:../materials-generator

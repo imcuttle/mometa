@@ -1,4 +1,4 @@
-import { Material } from '@mometa/materials-generator'
+import type { Material } from '@mometa/materials-generator'
 import { materialExplorer } from '../utils/search-core'
 import { resolveAsyncConfig } from '../utils/resolve-async-config'
 import { resolve } from 'path'

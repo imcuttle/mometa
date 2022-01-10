@@ -143,9 +143,7 @@ npm i @mometa-mat/antd -D
 2.  在项目根目录中创建 `mometa-material.config.js`
 
 ```jsx
-const { resolveLibMatConfig } = require('@mometa/materials-resolver')
-
-module.exports = [resolveLibMatConfig('antd')]
+module.exports = [require('@mometa-mat/antd')]
 ```
 
 你也可以创建自己的物料库，数据结构规则见 [Material 定义](./packages/materials-generator/src/types.ts)

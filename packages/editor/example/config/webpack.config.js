@@ -864,7 +864,7 @@ module.exports = function getConfig(webpackEnv) {
     getSingleConfig(webpackEnv, {
       name: 'app',
       htmlName: 'bundler.html',
-      entry: paths.resolveApp('src/app/index.tsx'),
+      entry: [paths.resolveApp('src/app/index.tsx')],
       babelPlugins: [require.resolve('../../babel/plugin-react')],
       plugins: [
         new MometaEditorPlugin({
