@@ -15,7 +15,7 @@ importers:
       human-format: ^0.11.0
       husky: ^4.3.8
       jest: ^27.3.1
-      lerna-cli: ^5.0.1
+      lerna-cli: ^5.0.2
       lerna-command-toc: ^2.0.0
       markdown-toc: ^1.2.0
       npm-run-all: ^4.1.5
@@ -38,7 +38,7 @@ importers:
       human-format: 0.11.0
       husky: 4.3.8
       jest: 27.4.7
-      lerna-cli: 5.0.1
+      lerna-cli: 5.0.2
       lerna-command-toc: 2.0.0
       markdown-toc: 1.2.0
       npm-run-all: 4.1.5
@@ -17343,9 +17343,9 @@ packages:
     engines: { node: '>=8' }
     dev: true
 
-  /lerna-cli/5.0.1:
+  /lerna-cli/5.0.2:
     resolution:
-      { integrity: sha512-6ksoH5EJajToZlwzYuc1vEkHxWgxNU6IM9Ol4ZATX8dzEcz7UEEEK0MUehFl5kREiVWDwOj7YqmqmHv8mDpHBQ== }
+      { integrity: sha512-EHVu4ayh0lPSTNIDdbiTVs7PVFnHwLaBge+RI1dgVtnLouDgL1UTLL41QR6QE8RWh+TIrJth4BhGRsqP37QPaw== }
     engines: { node: '>=10' }
     hasBin: true
     dependencies:
@@ -17369,6 +17369,7 @@ packages:
       import-local: 3.1.0
       load-json-file: 6.2.0
       npmlog: 4.1.2
+      read-yaml-file: 2.1.0
     transitivePeerDependencies:
       - supports-color
     dev: true
