@@ -134,17 +134,16 @@ module.exports = class MometaEditorPlugin extends CommonPlugin {
   }
 
   applyForServer(compiler) {
-    let compilation
-    let tasks = []
-    const captureTask = (fn) => {
-      // retunr
-    }
     const beforeCompile = async (params, cb) => {
       if (this.server) {
         return cb()
       }
       const MaterialsCompiler = require('./materials-compiler')
-      const mc = new MaterialsCompiler(this.options)
+      let mc
+      compiler.hooks.make.tapAsync(NAME, (_compilation, callback) => {
+        mc = new MaterialsCompiler(this.options, _compilation)
+        callback()
+      })
       this.server = await createServer({
         ...this.options.serverOptions,
         context: compiler.context,
@@ -159,21 +158,16 @@ module.exports = class MometaEditorPlugin extends CommonPlugin {
         },
         // experimentalMaterialsClientRender = true
         materialsBuild: async (filename) => {
-          if (!compilation) {
+          if (!mc) {
             return
           }
-          return mc.build(filename, compiler, compilation)
+          return mc.build(filename)
         }
       })
 
       cb()
     }
     compiler.hooks.beforeCompile.tapAsync(NAME, beforeCompile)
-    compiler.hooks.make.tapAsync(NAME, (_compilation, callback) => {
-      compilation = _compilation
-
-      callback()
-    })
   }
 
   apply(compiler) {

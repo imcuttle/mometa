@@ -4,7 +4,6 @@ const nps = require('path')
 const { createFsHandler, commonMiddlewares } = require('@mometa/fs-handler')
 const { resolveAsyncConfig, materialExplorer } = require('@mometa/materials-resolver')
 const makeHotRequire = require('hot-module-require')
-const hotRequire = makeHotRequire(__dirname)
 
 const launchEditor = require('./launchEditor')
 const createEventStream = require('./event-stream/createEventStream')
@@ -35,20 +34,73 @@ const json = async (req) => {
   return JSON.parse(string)
 }
 
-exports.createServer = function createServer({
+exports.createServer = async function createServer({
   host = 'localhost',
   port = '8686',
   baseURL = '',
   fileSystem = fs,
   context = process.cwd(),
-  materialsBuild
+  materialsBuild: _materialsBuild
 }) {
+  const filepath = await materialExplorer.findUp(context)
+  if (!filepath) throw new Error('[MMS] please set "mometa-material.config.js" in your dev root directory.')
   const fsHandler = createFsHandler({
     fs: fileSystem,
     middlewares: commonMiddlewares()
   })
 
+  const cached = new Map()
+  const materialsBuild =
+    _materialsBuild &&
+    ((filepath) => {
+      if (cached.get(filepath)) {
+        return cached.get(filepath)
+      }
+      let p = Promise.resolve(_materialsBuild(filepath))
+      cached.set(filepath, p)
+      return p
+    })
+
+  const hotRequire = makeHotRequire(__dirname)
   const es = createEventStream(6000)
+
+  const getPreload = async (path) => {
+    try {
+      if (!materialsBuild) {
+        let config = require(path)
+        config = await resolveAsyncConfig(config)
+        return {
+          type: 'set-materials',
+          data: Array.isArray(config) ? config : [config]
+        }
+      } else {
+        const data = await materialsBuild(path)
+        if (!data) {
+          return
+        }
+        return {
+          type: 'set-materials-client-render',
+          data
+        }
+      }
+    } catch (err) {
+      console.error('[MMS]', err)
+      return {
+        type: 'error',
+        data: String(err)
+      }
+    }
+  }
+
+  const listener = async (oldModule, path) => {
+    cached.delete(path)
+    console.log('[MMS] updated', path)
+    const preload = await getPreload(path)
+    if (preload) {
+      es.publish(preload)
+    }
+  }
+  hotRequire.accept([filepath], listener)
 
   const server = http.createServer(async (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', '*')
@@ -101,58 +153,11 @@ exports.createServer = function createServer({
     if (req.method.toUpperCase() === 'GET') {
       switch (stripPrefix(baseURL, req.url)) {
         case '/sse': {
-          let onCloseHandlers = []
-
-          es.handler(req, res, {
-            onClose: () => {
-              onCloseHandlers.forEach((fn) => fn())
-            }
-          })
-          try {
-            const filepath = await materialExplorer.findUp(context)
-            if (filepath) {
-              const setConfig = async (path) => {
-                if (!materialsBuild) {
-                  let config = require(path)
-                  config = await resolveAsyncConfig(config)
-                  es.publish({
-                    type: 'set-materials',
-                    data: Array.isArray(config) ? config : [config]
-                  })
-                } else {
-                  const data = await materialsBuild(path)
-                  if (!data) {
-                    return
-                  }
-                  es.publish({
-                    type: 'set-materials-client-render',
-                    data
-                  })
-                }
-              }
-
-              const listener = (oldModule, path) => {
-                console.log('[MMS] updated', path)
-                setConfig(path)
-              }
-              hotRequire.accept([filepath], listener)
-
-              onCloseHandlers.push(() => {
-                hotRequire.refuse([filepath], listener)
-              })
-
-              hotRequire.hotUpdate(filepath)
-            } else {
-              throw new Error('[MMS] please set "mometa-material.config.js" in your dev root directory.')
-            }
-          } catch (err) {
-            console.error('[MMS]', err)
-            es.publish({
-              type: 'error',
-              data: String(err)
-            })
+          const esHandler = es.handler(req, res)
+          const preload = await getPreload(filepath)
+          if (preload) {
+            esHandler.publish(preload)
           }
-
           return
         }
         default: {
@@ -165,7 +170,14 @@ exports.createServer = function createServer({
   })
 
   return new Promise((res) => {
-    server.es = es
+    Object.assign(server, {
+      es,
+      hotRequire
+    })
+    server.addListener('close', () => {
+      es.close()
+      hotRequire.close()
+    })
     server.listen(port, host, () => {
       console.log(`[MMS] run on http://${host}:${port}${baseURL}`)
       res(server)

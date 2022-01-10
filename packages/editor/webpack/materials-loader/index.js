@@ -6,7 +6,7 @@ module.exports.pitch = async function (request) {
   const config = require(originRequest)
 
   return `
-  var config = null;
+  var config = ${JSON.stringify(config, null, 2)};
 
   console.log('config', config)
 

@@ -64,6 +64,12 @@ function createEventStream(heartbeat) {
           onClose(req, res)
         }
       })
+
+      return {
+        publish: (payload) => {
+          clients[id].write('data: ' + JSON.stringify(payload) + '\n\n')
+        }
+      }
     },
     publish: function (payload) {
       everyClient(function (client) {

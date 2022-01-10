@@ -4,7 +4,7 @@ import React from 'react'
 
 module.exports = [
   {
-    name: 'ABCxa',
+    name: 'PPPXXX-ABBB',
     key: 'component-x'
   },
   require('@mometa-mat/antd').default
