@@ -18,6 +18,7 @@ import './style.scss'
 import createApi from '../components/stage/create-api'
 import { createClientConnection } from './sse'
 import { Button } from 'antd'
+import { fetchPreload } from '../utils/fetch-preload'
 
 const cn = p('')
 const c = p(`${CLS_PREFIX}`)
@@ -61,18 +62,35 @@ function CollapseBtn({ hide, dir, onClick }: any) {
 
 const Body = ({ className, apiBaseURL, leftPanelProps, rightPanelProps, stageProps, bundlerURL }: EditorProps) => {
   const [mats, setMats] = React.useState([])
+  const [loading, setLoading] = React.useState(true)
   React.useEffect(() => {
     const conn = createClientConnection(apiBaseURL + 'sse')
-    conn.addHandler((data) => {
+    let dispose
+    conn.addHandler(async (data) => {
       switch (data.type) {
         case 'set-materials': {
           setMats(data.data ?? [])
+          setLoading(false)
+          break
+        }
+        case 'materials-loading': {
+          setLoading(!!data.data)
+          break
+        }
+        case 'set-materials-client-render': {
+          dispose?.()
+          const { exported, dispose: _dis } = await fetchPreload(data.data)
+          dispose = _dis
+          console.log('exported', exported)
+          setLoading(false)
+          break
         }
       }
     })
     //
     return () => {
       conn.close()
+      dispose?.()
     }
   }, [apiBaseURL])
 
@@ -98,7 +116,12 @@ const Body = ({ className, apiBaseURL, leftPanelProps, rightPanelProps, stagePro
       <Header bundlerURL={bundlerURL} />
       <div className={c('__main-content')}>
         <div className={c('__panel')}>
-          <LeftPanel {...leftPanelProps} className={c('__l-panel', hideLeft && '-hide')} materials={mats} />
+          <LeftPanel
+            {...leftPanelProps}
+            className={c('__l-panel', hideLeft && '-hide')}
+            loading={loading}
+            materials={mats}
+          />
           <CollapseBtn
             onClick={() => {
               hideChangedRef.current.left = true

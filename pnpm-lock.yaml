@@ -395,6 +395,7 @@ importers:
       classnames: ^2.3.1
       copy-webpack-plugin: ^10.2.0
       copy-webpack-plugin-webpack4: npm:copy-webpack-plugin@6
+      detect-dep: ^1.1.2
       element-resize-detector: ^1.2.4
       events: ^3.3.0
       fuse.js: ^6.5.3
@@ -402,7 +403,8 @@ importers:
       hot-module-require: ^4.0.0
       lodash: ^4.17.21
       lodash-es: ^4.17.21
-      memfs: ^3.2.0
+      memfs: ^3.4.1
+      memoize-fn: ^2.0.1
       moment: ^2.29.1
       monaco-editor: ^0.31.1
       npm-run-all: ^4.1.5
@@ -427,7 +429,9 @@ importers:
       chalk: 2.4.2
       copy-webpack-plugin: 10.2.0
       copy-webpack-plugin-webpack4: /copy-webpack-plugin/6.4.1
+      detect-dep: 1.1.2
       hot-module-require: 4.0.0
+      memoize-fn: 2.0.1
       object-hash: 2.2.0
       schema-utils: 3.1.1
       shell-quote: 1.7.3

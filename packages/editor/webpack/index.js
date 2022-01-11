@@ -5,6 +5,8 @@ const { createServer } = require('./create-server')
 const injectEntry = require('./injectEntry')
 const CommonPlugin = require('./common-plugin')
 const ReactRefreshWebpackPlugin = require('@mometa/react-refresh-webpack-plugin')
+const { materialExplorer } = require('@mometa/materials-resolver')
+const { robust } = require('memoize-fn')
 
 const BUILD_PATH = nps.resolve(__dirname, '../build/standalone')
 const NAME = 'MometaEditorPlugin'
@@ -42,6 +44,7 @@ module.exports = class MometaEditorPlugin extends CommonPlugin {
       Object.assign(
         {
           react: true,
+          experimentalMaterialsClientRender: false,
           contentBasePath: 'mometa',
           serverOptions: {},
           editorConfig: {}
@@ -134,40 +137,78 @@ module.exports = class MometaEditorPlugin extends CommonPlugin {
   }
 
   applyForServer(compiler) {
+    const MaterialsCompiler = require('./materials-compiler')
+    const serverOptions = {
+      ...this.options.serverOptions,
+      context: compiler.context,
+      fileSystem: {
+        // 兼容 webpack4/5
+        readFile: (filename, encode, cb) =>
+          compiler.inputFileSystem.readFile(filename, (err, data) => {
+            const fn = typeof encode === 'function' ? encode : cb
+            fn(err, data ? String(data) : data)
+          }),
+        writeFile: fs.writeFile
+      }
+    }
+    const experimentalMaterialsClientRender = this.options.experimentalMaterialsClientRender
+    let filepath
+    let materialsBuildRef = { current: null }
     const beforeCompile = async (params, cb) => {
       if (this.server) {
         return cb()
       }
-      const MaterialsCompiler = require('./materials-compiler')
-      let mc
-      compiler.hooks.make.tapAsync(NAME, (_compilation, callback) => {
-        mc = new MaterialsCompiler(this.options, _compilation)
-        callback()
-      })
+      filepath = await materialExplorer.findUp(compiler.context)
       this.server = await createServer({
-        ...this.options.serverOptions,
-        context: compiler.context,
-        fileSystem: {
-          // 兼容 webpack4/5
-          readFile: (filename, encode, cb) =>
-            compiler.inputFileSystem.readFile(filename, (err, data) => {
-              const fn = typeof encode === 'function' ? encode : cb
-              fn(err, data ? String(data) : data)
-            }),
-          writeFile: fs.writeFile
-        },
-        // experimentalMaterialsClientRender = true
-        materialsBuild: async (filename) => {
-          if (!mc) {
-            return
-          }
-          return mc.build(filename)
-        }
+        ...serverOptions,
+        filepath,
+        materialsWatch: !experimentalMaterialsClientRender,
+        materialsBuild:
+          experimentalMaterialsClientRender &&
+          (async (filename) => {
+            return materialsBuildRef.current(filename, true)
+          })
       })
-
       cb()
     }
     compiler.hooks.beforeCompile.tapAsync(NAME, beforeCompile)
+
+    if (!experimentalMaterialsClientRender) {
+      return
+    }
+
+    compiler.hooks.make.tapPromise(NAME, async (compilation) => {
+      console.log('compiler.hooks.make')
+
+      const mc = new MaterialsCompiler(this.options, compilation)
+      const mcBuild = robust(mc.build.bind(mc))
+      materialsBuildRef.current = async (filepath, isFromClient = false) => {
+        const data = await mcBuild(filepath)
+
+        if (!isFromClient) {
+          if (data.assets) {
+            console.log(Object.keys(data.assets))
+            for (const [k, v] of Object.entries(data.assets)) {
+              compilation.emitAsset(k, v)
+            }
+          }
+          setTimeout(() => {
+            if (this.server) {
+              this.server.es.publish({
+                type: 'set-materials-client-render',
+                data: data.client
+              })
+            }
+          })
+        }
+        return data.client
+      }
+
+      compilation.hooks.additionalAssets.tapPromise(NAME, async () => {
+        console.log('compilation.hooks.additionalAssets')
+        return materialsBuildRef.current(filepath)
+      })
+    })
   }
 
   apply(compiler) {

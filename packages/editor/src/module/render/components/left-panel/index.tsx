@@ -11,12 +11,13 @@ const c = p(`${CLS_PREFIX}-left-panel`)
 
 export interface LeftPanelProps extends Pick<MaterialPanelProps, 'materials'> {
   className?: string
+  loading?: boolean
 }
 
-const LeftPanel: React.FC<LeftPanelProps> = React.memo(({ className, materials }) => {
+const LeftPanel: React.FC<LeftPanelProps> = React.memo(({ loading, className, materials }) => {
   return (
     <div className={cn(c(), className)}>
-      <MaterialPanel materials={materials} />
+      <MaterialPanel loading={loading} materials={materials} />
     </div>
   )
 })

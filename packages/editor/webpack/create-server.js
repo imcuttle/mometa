@@ -38,33 +38,21 @@ exports.createServer = async function createServer({
   host = 'localhost',
   port = '8686',
   baseURL = '',
+  materialsWatch = true,
   fileSystem = fs,
+  filepath,
   context = process.cwd(),
-  materialsBuild: _materialsBuild
+  materialsBuild
 }) {
-  const filepath = await materialExplorer.findUp(context)
-  if (!filepath) throw new Error('[MMS] please set "mometa-material.config.js" in your dev root directory.')
+  if (!filepath) throw new Error('[MMS] Please set "mometa-material.config.js" in your dev root directory.')
   const fsHandler = createFsHandler({
     fs: fileSystem,
     middlewares: commonMiddlewares()
   })
 
-  const cached = new Map()
-  const materialsBuild =
-    _materialsBuild &&
-    ((filepath) => {
-      if (cached.get(filepath)) {
-        return cached.get(filepath)
-      }
-      let p = Promise.resolve(_materialsBuild(filepath))
-      cached.set(filepath, p)
-      return p
-    })
-
-  const hotRequire = makeHotRequire(__dirname)
   const es = createEventStream(6000)
 
-  const getPreload = async (path) => {
+  const getMaterialsPreload = async (path) => {
     try {
       if (!materialsBuild) {
         let config = require(path)
@@ -91,16 +79,31 @@ exports.createServer = async function createServer({
       }
     }
   }
-
-  const listener = async (oldModule, path) => {
-    cached.delete(path)
-    console.log('[MMS] updated', path)
-    const preload = await getPreload(path)
+  const setMaterialsPreload = async (path, esHandler = es) => {
+    esHandler.publish({
+      type: 'materials-loading',
+      data: true
+    })
+    const preload = await getMaterialsPreload(path)
     if (preload) {
-      es.publish(preload)
+      esHandler.publish(preload)
+    } else {
+      esHandler.publish({
+        type: 'materials-loading',
+        data: false
+      })
     }
   }
-  hotRequire.accept([filepath], listener)
+
+  const listener = async (oldModule, path) => {
+    console.log('[MMS] updated', path)
+    await setMaterialsPreload(path)
+  }
+
+  const hotRequire = makeHotRequire(__dirname)
+  if (materialsWatch) {
+    hotRequire.accept([filepath], listener)
+  }
 
   const server = http.createServer(async (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', '*')
@@ -154,10 +157,7 @@ exports.createServer = async function createServer({
       switch (stripPrefix(baseURL, req.url)) {
         case '/sse': {
           const esHandler = es.handler(req, res)
-          const preload = await getPreload(filepath)
-          if (preload) {
-            esHandler.publish(preload)
-          }
+          await setMaterialsPreload(filepath, esHandler)
           return
         }
         default: {

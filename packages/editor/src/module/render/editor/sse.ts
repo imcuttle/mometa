@@ -10,7 +10,7 @@ export function createClientConnection(url) {
       let data: any = {}
       try {
         data = JSON.parse(ev.data)
-        console.log('data', data)
+        console.log('Received Data from remote:', data)
         evtEmitter.emit('message', data)
       } catch (e) {}
     })

@@ -50,6 +50,9 @@ module.exports = {
     contentBasePath: {
       type: 'string'
     },
+    experimentalMaterialsClientRender: {
+      type: 'boolean'
+    },
     __webpack: {},
     serverOptions: { $ref: '#/definitions/ServerOptions' },
     editorConfig: { $ref: '#/definitions/EditorConfig' },

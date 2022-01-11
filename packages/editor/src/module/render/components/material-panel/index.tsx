@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import p from 'prefix-classname'
-import { Input, Empty, Image, Tabs, Typography } from 'antd'
+import { Input, Empty, Image, Tabs, Typography, Spin } from 'antd'
 import { useDrag } from 'react-dnd'
 import Fuse from 'fuse.js'
 import { SearchOutlined } from '@ant-design/icons'
@@ -16,6 +16,7 @@ const c = p(`${CLS_PREFIX}-material-panel`)
 export interface MaterialPanelProps {
   className?: string
   materials: Material[]
+  loading?: boolean
 }
 
 const AssetUI = React.memo<Asset>(({ homepage, cover, name, data }) => {
@@ -124,9 +125,9 @@ const MaterialUi = ({ mat }: any) => {
   )
 }
 
-const MaterialPanel: React.FC<MaterialPanelProps> = React.memo(({ className, materials }) => {
+const MaterialPanel: React.FC<MaterialPanelProps> = React.memo(({ loading, className, materials }) => {
   return (
-    <div className={cn(c(), className)}>
+    <Spin spinning={loading} delay={200} className={cn(c(), className)}>
       {!materials?.length && <Empty description={'暂无物料'} style={{ paddingTop: 40 }} />}
       {!!materials?.length && (
         <Tabs className={c('__tabs')}>
@@ -140,7 +141,7 @@ const MaterialPanel: React.FC<MaterialPanelProps> = React.memo(({ className, mat
           })}
         </Tabs>
       )}
-    </div>
+    </Spin>
   )
 })
 

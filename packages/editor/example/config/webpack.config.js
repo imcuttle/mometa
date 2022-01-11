@@ -869,6 +869,7 @@ module.exports = function getConfig(webpackEnv) {
       plugins: [
         new MometaEditorPlugin({
           react: true,
+          experimentalMaterialsClientRender: true,
           editorConfig: {
             bundlerURL: '/bundler.html'
           }
