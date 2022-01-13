@@ -1,6 +1,6 @@
 module.exports = require('../../app/mometa-material.config').concat([
   {
-    name: 'XWWW',
+    name: 'HHH',
     key: 'component'
   }
 ])

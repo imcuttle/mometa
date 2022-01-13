@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React from 'react'
 import p from 'prefix-classname'
-import { Input, Empty, Image, Tabs, Typography, Spin } from 'antd'
+import { Input, Empty, Image, Tabs, Typography, Spin, Popover } from 'antd'
 import { useDrag } from 'react-dnd'
 import Fuse from 'fuse.js'
-import { SearchOutlined } from '@ant-design/icons'
+import { SearchOutlined, InfoCircleOutlined } from '@ant-design/icons'
+
 import { CLS_PREFIX } from '../../../config/const'
 
 import './style.scss'
@@ -19,7 +20,48 @@ export interface MaterialPanelProps {
   loading?: boolean
 }
 
-const AssetUI = React.memo<Asset>(({ homepage, cover, name, data }) => {
+const PreviewRender = ({ runtime }: Pick<Asset, 'runtime'>) => {
+  const containerRef = React.useRef<HTMLDivElement>()
+  React.useEffect(() => {
+    const render = runtime?.previewRender ?? runtime?.__fallbackPreviewRender
+    const dispose = render(containerRef.current)
+    if (dispose) {
+      return dispose
+    }
+  }, [runtime?.__fallbackPreviewRender, runtime?.previewRender])
+
+  return <div ref={containerRef} />
+}
+
+const InfoIcon = ({ runtime, homepage, name, key }: Asset) => {
+  if (!runtime) {
+    return null
+  }
+  return (
+    <Popover
+      trigger={['click']}
+      content={<PreviewRender runtime={runtime} />}
+      onVisibleChange={(v) => {}}
+      placement={'rightBottom'}
+      overlayInnerStyle={{ minWidth: 200, minHeight: 100 }}
+      title={
+        <span style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <span>{`${name}${key ? `(${key})` : ''}`}</span>
+          {!!homepage && (
+            <a style={{ fontWeight: 'normal' }} href={homepage} target={'_blank'}>
+              查看详情
+            </a>
+          )}
+        </span>
+      }
+    >
+      <InfoCircleOutlined style={{ marginRight: 2, fontSize: 12 }} />
+    </Popover>
+  )
+}
+
+const AssetUI = React.memo<Asset>((asset) => {
+  const { homepage, cover, name, data, runtime } = asset
   const item = React.useMemo(() => ({ cover, name, data }), [cover, name, data])
   const [{ isDragging }, drag, preview] = useDrag(
     () => ({
@@ -38,14 +80,16 @@ const AssetUI = React.memo<Asset>(({ homepage, cover, name, data }) => {
     return (
       <div ref={ref} className={c('__asset-group__cell', className)} style={{ opacity, ...style }}>
         <Image
+          preview={false}
           wrapperClassName={c('__asset-group__cell__img__wrapper')}
           className={c('__asset-group__cell__img')}
           src={cover}
         />
         <span className={c('__asset-group__cell__name')}>
-          <span style={{ display: 'inline-flex', padding: '2px 3px' }} ref={preview}>
-            {homepage ? (
-              <a href={homepage} target={'_blank'}>
+          <InfoIcon {...asset} />
+          <span style={{ display: 'inline-flex', padding: '2px 3px', fontSize: 12 }} ref={preview}>
+            {homepage && !runtime ? (
+              <a href={homepage} style={{ lineHeight: 1 }} target={'_blank'}>
                 {name}
               </a>
             ) : (

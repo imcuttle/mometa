@@ -8,7 +8,7 @@ import { createLineContentsByContent } from '@mometa/fs-handler'
 import { sha1 as hash } from 'object-hash'
 import * as nps from 'path'
 
-const scopePath = nps.resolve(__dirname, '../../')
+const scopePaths = [nps.resolve(__dirname, '../../'), nps.resolve(__dirname, '../../../webpack')]
 
 export default function babelPluginMometaReactInject(api) {
   const { types: t } = api
@@ -24,7 +24,7 @@ export default function babelPluginMometaReactInject(api) {
     visitor: {
       Program: {
         enter(path, state: any) {
-          if (!this.filename || this.filename.startsWith(scopePath)) {
+          if (!this.filename || scopePaths.some((scopePath) => this.filename.startsWith(scopePath))) {
             return
           }
 

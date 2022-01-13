@@ -1,3 +1,1 @@
-const { resolveLibMatConfig } = require('@mometa/materials-resolver');
-
-module.exports = [resolveLibMatConfig('antd')];
+module.exports = [require('@mometa-mat/antd').default];

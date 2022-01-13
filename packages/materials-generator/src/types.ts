@@ -29,4 +29,9 @@ export interface Asset {
     dependencies?: Record<string, AssetImport> // { ANT_BUTTON: { name: 'Button', mode: 'named', source: 'antd' } }
     sideEffectDependencies?: Array<string>
   }
+
+  runtime?: {
+    previewRender?: (dom: HTMLElement) => void | (() => void)
+    __fallbackPreviewRender?: (dom: HTMLElement) => void | (() => void)
+  }
 }

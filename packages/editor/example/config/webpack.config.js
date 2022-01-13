@@ -73,6 +73,8 @@ const lessLoader = {
 // Check if TypeScript is setup
 const useTypeScript = fs.existsSync(paths.appTsConfig)
 
+console.log('paths.appSrc', paths.appSrc)
+
 // Get the path to the uncompiled service worker (if it exists).
 const swSrc = paths.swSrc
 
@@ -599,6 +601,13 @@ function getSingleConfig(
             // Make sure to add the new loader(s) before the "file" loader.
           ]
         }
+        // {
+        //   enforce: 'pre',
+        //   include: [
+        //     '/Users/congyu/github/mometa/packages/editor/webpack/materials-compiler/client-render-noop-entry.js'
+        //   ],
+        //   loader: '/Users/congyu/github/mometa/packages/editor/webpack/materials-compiler/client-render-loader/index.js'
+        // },
       ].filter(Boolean)
     },
     externals,
@@ -623,6 +632,22 @@ function getSingleConfig(
             // chunks: [name, 'main']
           })
         ),
+      {
+        apply: (compiler) => {
+          compiler.hooks.compilation.tap('SORTED_LINK', (compilation) => {
+            HtmlWebpackPlugin.getHooks(compilation).alterAssetTagGroups.tapPromise('SORTED_LINK', async (data) => {
+              const getScore = (x) =>
+                ({
+                  link: 1,
+                  script: 2
+                }[x.tagName] || 2)
+              data.headTags.sort((a, b) => {
+                return getScore(a) - getScore(b)
+              })
+            })
+          })
+        }
+      },
       // Inlines the webpack runtime script. This script is too small to warrant
       // a network request.
       // https://github.com/facebook/create-react-app/issues/5358
@@ -801,7 +826,7 @@ module.exports = function getConfig(webpackEnv) {
         cssExtract: false,
         refresh: false,
         entry: {
-          entry: [nps.resolve(__dirname, '../../webpack/assets/runtime-entry.js')],
+          entry: [nps.resolve(__dirname, '../../webpack/runtime/runtime-entry.js')],
           'empty-placeholder': [nps.resolve(__dirname, '../../src/mometa/runtime/empty-placeholder.tsx')]
         },
         optimization: {
@@ -883,7 +908,12 @@ module.exports = function getConfig(webpackEnv) {
     getSingleConfig(webpackEnv, {
       refresh: false,
       name: 'editor',
-      htmlPath: paths.resolveApp('public/editor-app.html'),
+      entry: [
+        // experimentalMaterialsClientRender 开启时，临时修复；build 后不会出现该问题
+        'antd/dist/antd.css',
+        paths.appIndexJs
+      ],
+      htmlPath: paths.resolveApp('public/editor-runtime.html'),
       htmlName: 'index.html'
     })
   ]

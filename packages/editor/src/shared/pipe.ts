@@ -1,6 +1,6 @@
-const data = new Map()
+export const data = new Map()
 let pipeId
-let remoteGlobalThisSet = new Set()
+export let remoteGlobalThisSet = new Set()
 
 const SYMBOL_NAME = `__MOMETA_PIPE__`
 
@@ -63,5 +63,6 @@ const exps = {
   removeRemoteGlobalThis,
   data
 }
-// 防止重入，如 empty-placeholder 再次加载
-globalThis[SYMBOL_NAME] = globalThis[SYMBOL_NAME] ?? exps
+
+// console.log('globalThis[SYMBOL_NAME]', document.currentScript)
+globalThis[SYMBOL_NAME] = exps

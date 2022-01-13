@@ -21,11 +21,16 @@ type DeepPartial<T> = {
   [P in keyof T]?: DeepPartial<T[P]>
 }
 
+type Config = {
+  esModule?: boolean
+}
+
 const importPlugin = ({ types: t }) =>
   ({
     visitor: {
       Program(path, state) {
-        const { material, pos, ops } = state.opts
+        const { material, pos, ops, config } = state.opts
+        const { esModule = true } = config || {}
 
         // @ts-ignore
         const rawCode = this.file.code
@@ -56,7 +61,7 @@ const importPlugin = ({ types: t }) =>
                 preload: {
                   to: sideEffectImportVisitorState.endImportLoc.end,
                   data: {
-                    newText: `;import ${JSON.stringify(depName)};`
+                    newText: esModule ? `;import ${JSON.stringify(depName)};` : `;require(${JSON.stringify(depName)});`
                   }
                 }
               })
@@ -140,7 +145,12 @@ const importPlugin = ({ types: t }) =>
                     preload: {
                       to: sideEffectImportVisitorState.endImportLoc.end,
                       data: {
-                        newText: `;import ${name} from ${JSON.stringify(source)};`
+                        newText: esModule
+                          ? `;import ${name} from ${JSON.stringify(source)};`
+                          : `;var ${name} = (function () {
+                        var mod = require(${JSON.stringify(source)});
+                        return mod.__esModule ? mod.default : mod
+                        })();`
                       }
                     }
                   })
@@ -157,7 +167,9 @@ const importPlugin = ({ types: t }) =>
                     preload: {
                       to: sideEffectImportVisitorState.endImportLoc.end,
                       data: {
-                        newText: `;import * as ${name} from ${JSON.stringify(source)};`
+                        newText: esModule
+                          ? `;import * as ${name} from ${JSON.stringify(source)};`
+                          : `;var ${name} = require(${JSON.stringify(source)});`
                       }
                     }
                   })
@@ -195,27 +207,41 @@ const importPlugin = ({ types: t }) =>
 
                 if (newNamedPathSet.size) {
                   for (const importPath of newNamedPathSet.values()) {
+                    let cjsCodes = []
+                    // @ts-ignore
+                    importPath.node?.specifiers?.forEach((x) => {
+                      if (x.local.name === x.imported.name) {
+                        cjsCodes.push(x.local.name)
+                      } else {
+                        cjsCodes.push(`${x.imported.name}: ${x.local.name}`)
+                      }
+                    })
                     ops.insertDeps.push({
                       type: OpType.REPLACE_NODE,
                       preload: {
                         ...importPath.node.loc,
                         text: getText(importPath.node.loc),
                         data: {
-                          newText: `;${importPath.toString()};`.replace(/;+$/, ';')
+                          newText: (esModule
+                            ? `;${importPath.toString()};`
+                            : // @ts-ignore
+                              `;var { ${cjsCodes.join(',')} } = require(${importPath.node.source.value});`
+                          ).replace(/;+$/, ';')
                         }
                       }
                     })
                   }
                 }
                 if (newNamedSet.size) {
+                  const stringifiedSource = JSON.stringify(source)
                   ops.insertDeps.push({
                     type: OpType.INSERT_NODE,
                     preload: {
                       to: sideEffectImportVisitorState.endImportLoc.end,
                       data: {
-                        newText: `;import { ${Array.from(newNamedSet.values()).join(',')} } from ${JSON.stringify(
-                          source
-                        )};`
+                        newText: esModule
+                          ? `;import { ${Array.from(newNamedSet.values()).join(',')} } from ${stringifiedSource};`
+                          : `;var { ${Array.from(newNamedSet.values()).join(',')} } = require(${stringifiedSource});`
                       }
                     }
                   })
@@ -247,6 +273,7 @@ const importPlugin = ({ types: t }) =>
     }
   } as PluginObj<{
     opts: {
+      config?: Config
       pos: Point
       material: InsertNodePreload['data']['material']
       lineContents: LineContents
@@ -260,7 +287,8 @@ const importPlugin = ({ types: t }) =>
 export async function getAddMaterialOps(
   lineContents: LineContents,
   pos: Point,
-  material: InsertNodePreload['data']['material']
+  material: InsertNodePreload['data']['material'],
+  config?: Config
 ) {
   const ops: {
     insertDeps: Array<RequestData>
@@ -308,7 +336,7 @@ export async function getAddMaterialOps(
       ]
     },
     babelrc: false,
-    plugins: [[importPlugin, { lineContents, material, pos, ops }]],
+    plugins: [[importPlugin, { lineContents, material, pos, ops, config }]],
     ast: false,
     code: false
   })

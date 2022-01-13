@@ -1,9 +1,11 @@
 const fs = require('fs')
 const nps = require('path')
 const { validate: validateOptions } = require('schema-utils')
+const isEqual = require('lodash.isequal')
 const { createServer } = require('./create-server')
-const injectEntry = require('./injectEntry')
 const CommonPlugin = require('./common-plugin')
+const { modifyModuleRules } = require('./materials-compiler/client-render-compile')
+const { runtimePreviewRender } = require('./paths')
 const ReactRefreshWebpackPlugin = require('@mometa/react-refresh-webpack-plugin')
 const { materialExplorer } = require('@mometa/materials-resolver')
 const { robust } = require('memoize-fn')
@@ -21,6 +23,8 @@ const replaceTpl = (string, flag, data) => {
 }
 
 module.exports = class MometaEditorPlugin extends CommonPlugin {
+  static runtimeClientDirs = [runtimePreviewRender]
+
   constructor(options = {}) {
     options = options || {}
     options.serverOptions = Object.assign(
@@ -94,10 +98,17 @@ module.exports = class MometaEditorPlugin extends CommonPlugin {
   applyForRuntime(compiler) {
     const webpack = this.getWebpack(compiler)
     const { DefinePlugin } = webpack
+    const EntryPlugin = webpack.EntryPlugin || webpack.SingleEntryPlugin
 
-    compiler.options.entry = injectEntry(compiler.options.entry, {
-      prependEntries: [require.resolve('./assets/runtime-entry')]
-    })
+    let entryNames = [undefined]
+    if (compiler.options.entry) {
+      if (!Array.isArray(compiler.options.entry) && typeof compiler.options.entry === 'object') {
+        entryNames = Object.keys(compiler.options.entry)
+      }
+    }
+    entryNames.forEach((name) =>
+      new EntryPlugin(compiler.context, require.resolve('./runtime/runtime-entry'), name).apply(compiler)
+    )
 
     new DefinePlugin({
       __mometa_env_is_local__: !!process.env.__MOMETA_LOCAL__,
@@ -136,6 +147,14 @@ module.exports = class MometaEditorPlugin extends CommonPlugin {
     }
   }
 
+  logError(error) {
+    // console.error('[MM]', error)
+    throw error
+  }
+
+  /**
+   * @param compiler {import('webpack').Compiler}
+   */
   applyForServer(compiler) {
     const MaterialsCompiler = require('./materials-compiler')
     const serverOptions = {
@@ -152,6 +171,9 @@ module.exports = class MometaEditorPlugin extends CommonPlugin {
       }
     }
     const experimentalMaterialsClientRender = this.options.experimentalMaterialsClientRender
+    if (experimentalMaterialsClientRender) {
+      console.log('[MM] Using experimentalMaterialsClientRender feature.')
+    }
     let filepath
     let materialsBuildRef = { current: null }
     const beforeCompile = async (params, cb) => {
@@ -177,36 +199,43 @@ module.exports = class MometaEditorPlugin extends CommonPlugin {
       return
     }
 
-    compiler.hooks.make.tapPromise(NAME, async (compilation) => {
-      console.log('compiler.hooks.make')
+    compiler.hooks.beforeCompile.tapAsync(NAME, async (params, cb) => {
+      modifyModuleRules(compiler).then(() => cb())
+    })
 
-      const mc = new MaterialsCompiler(this.options, compilation)
+    const memoPublish = robust(
+      (preload) => {
+        if (this.server) {
+          this.server.es.publish(preload)
+        }
+      },
+      { once: true, eq: isEqual }
+    )
+
+    compiler.hooks.make.tap(NAME, (compilation) => {
+      const mc = new MaterialsCompiler(this.options, compilation, this.getWebpack(compiler))
       const mcBuild = robust(mc.build.bind(mc))
       materialsBuildRef.current = async (filepath, isFromClient = false) => {
         const data = await mcBuild(filepath)
 
         if (!isFromClient) {
           if (data.assets) {
-            console.log(Object.keys(data.assets))
             for (const [k, v] of Object.entries(data.assets)) {
               compilation.emitAsset(k, v)
             }
           }
           setTimeout(() => {
-            if (this.server) {
-              this.server.es.publish({
-                type: 'set-materials-client-render',
-                data: data.client
-              })
-            }
+            memoPublish({
+              type: 'set-materials-client-render',
+              data: data.client
+            })
           })
         }
         return data.client
       }
 
-      compilation.hooks.additionalAssets.tapPromise(NAME, async () => {
-        console.log('compilation.hooks.additionalAssets')
-        return materialsBuildRef.current(filepath)
+      compilation.hooks.additionalAssets.tapAsync(NAME, (cb) => {
+        Promise.resolve(materialsBuildRef.current(filepath)).then(() => cb())
       })
     })
   }
@@ -214,7 +243,6 @@ module.exports = class MometaEditorPlugin extends CommonPlugin {
   apply(compiler) {
     this.applyForEditor(compiler)
     this.applyForRuntime(compiler)
-
     this.applyForServer(compiler)
   }
 }

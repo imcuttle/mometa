@@ -159,21 +159,22 @@ const StageContent: React.FC<StageProps> = React.memo(({ className, externalModu
   const ddManager = useDragDropManager()
   const _sharedMap = useSharedMap()
   const _sharedUpdateMap = useSharedUpdateMap()
-  React.useLayoutEffect(
-    () =>
-      register('shared', {
-        api,
-        iframeWindowsSubject,
-        overingNodeSubject,
-        selectedNodeSubject,
-        headerStatusSubject,
-        locationActionSubject,
-        ddManager,
-        _sharedMap,
-        _sharedUpdateMap
-      }),
+
+  const shared = React.useMemo(
+    () => ({
+      api,
+      iframeWindowsSubject,
+      overingNodeSubject,
+      selectedNodeSubject,
+      headerStatusSubject,
+      locationActionSubject,
+      ddManager,
+      _sharedMap,
+      _sharedUpdateMap
+    }),
     [ddManager, _sharedMap, _sharedUpdateMap, api]
   )
+  React.useLayoutEffect(() => register('shared', shared), [shared])
 
   const [resizeValues, setResizeValues] = useLocalStorageStateSync(symbol('resize-widget'), defaultValue)
   const paddingSize = 20

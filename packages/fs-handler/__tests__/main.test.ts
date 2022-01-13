@@ -227,6 +227,41 @@ describe('fsHandler', function () {
       )
       expect(ops).toMatchSnapshot()
     })
+
+    it('spec cjs', async function () {
+      const lineContents = createLineContentsByContent(readContent('simple.tsx'), { filename: '/a.js' })
+
+      const ops = await getAddMaterialOps(
+        lineContents,
+        {
+          line: 6,
+          column: 3
+        },
+        {
+          code: `
+    <>
+      <$MY_COMP$ />
+      <$ANT_BUTTON$ type="default">按钮</$ANT_BUTTON$>
+    </>
+    `.trim(),
+          dependencies: {
+            ANT_BUTTON: {
+              source: 'antd',
+              mode: 'named',
+              imported: 'Button'
+            },
+            MY_COMP: {
+              source: 'antd',
+              mode: 'default',
+              local: 'Antd'
+            }
+          } as any,
+          sideEffectDependencies: ['antd/lib/button/style', 'antd/lib/button/style/css']
+        },
+        { esModule: false }
+      )
+      expect(ops).toMatchSnapshot()
+    })
     it('spec fsHandler', async function () {
       await fsHandler({
         type: OpType.INSERT_NODE,

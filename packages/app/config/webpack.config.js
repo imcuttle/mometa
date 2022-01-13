@@ -530,6 +530,7 @@ module.exports = function (webpackEnv) {
     plugins: [
       isEnvDevelopment &&
         new MometaEditorPlugin({
+          experimentalMaterialsClientRender: !!process.env.CLIENT_RENDER,
           serverOptions: {
             port: 8787
           }

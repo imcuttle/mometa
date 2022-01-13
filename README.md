@@ -28,6 +28,7 @@
     - [移动视图](#%E7%A7%BB%E5%8A%A8%E8%A7%86%E5%9B%BE)
     - [编辑代码](#%E7%BC%96%E8%BE%91%E4%BB%A3%E7%A0%81)
   - [预览](#%E9%A2%84%E8%A7%88)
+    - [物料预览](#%E7%89%A9%E6%96%99%E9%A2%84%E8%A7%88)
     - [响应式布局](#%E5%93%8D%E5%BA%94%E5%BC%8F%E5%B8%83%E5%B1%80)
     - [路由模拟](#%E8%B7%AF%E7%94%B1%E6%A8%A1%E6%8B%9F)
 - [如何实现](#%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0)
@@ -58,7 +59,7 @@ mometa 不是传统主流的低代码平台（如 amis/云凤蝶），mometa 是
 ## 特性
 
 - 🛠 面向研发的代码可视化编辑，直接作用于源码
-  - 响应式布局、路由模拟
+  - 响应式布局、路由模拟、物料预览
   - 反向定位（视图定位源码）
   - 拖拽插入物料
   - 拖拽移动
@@ -112,6 +113,10 @@ mometa 不是传统主流的低代码平台（如 amis/云凤蝶），mometa 是
 
 #### 预览
 
+##### 物料预览
+
+![](./images/mometa-preview-clientrender.gif)
+
 ##### 响应式布局
 
 ![](./images/mometa-preview-responsive.gif)
@@ -143,7 +148,7 @@ npm i @mometa-mat/antd -D
 2.  在项目根目录中创建 `mometa-material.config.js`
 
 ```jsx
-module.exports = [require('@mometa-mat/antd')]
+module.exports = [require('@mometa-mat/antd').default]
 ```
 
 你也可以创建自己的物料库，数据结构规则见 [Material 定义](./packages/materials-generator/src/types.ts)
@@ -169,7 +174,14 @@ module.exports = {
       }
     ]
   },
-  plugins: [isEnvDevelopment && new MometaEditorPlugin()]
+  plugins: [
+    isEnvDevelopment &&
+      new MometaEditorPlugin({
+        react: true,
+        // 开启物料预览
+        experimentalMaterialsClientRender: true
+      })
+  ]
 }
 ```
 

@@ -26,6 +26,12 @@
     opacity: 1;
     height: 100%;
     transition: all ease 0.2s;
+    > .mmt-ant-spin-nested-loading {
+      height: 100%;
+      > .mmt-ant-spin-container {
+        height: 100%;
+      }
+    }
   }
   &__l-panel {
     box-shadow: 0 0 6px 0 rgb(0 0 0 / 4%), 0 2px 4px 0 rgb(0 0 0 / 12%);

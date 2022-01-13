@@ -1,7 +1,7 @@
 import React from 'react'
 import p from 'prefix-classname'
 import zhCN from 'antd/lib/locale/zh_CN'
-import { ConfigProvider } from 'antd'
+import { ConfigProvider, message } from 'antd'
 import { CLS_PREFIX } from '../../config/const'
 import Header, { useHeaderStatus } from '../components/header'
 import Stage, { StageProps } from '../components/stage'
@@ -19,6 +19,7 @@ import createApi from '../components/stage/create-api'
 import { createClientConnection } from './sse'
 import { Button } from 'antd'
 import { fetchPreload } from '../utils/fetch-preload'
+import AppErrorBoundary from '../components/error-boundary'
 
 const cn = p('')
 const c = p(`${CLS_PREFIX}`)
@@ -67,24 +68,29 @@ const Body = ({ className, apiBaseURL, leftPanelProps, rightPanelProps, stagePro
     const conn = createClientConnection(apiBaseURL + 'sse')
     let dispose
     conn.addHandler(async (data) => {
-      switch (data.type) {
-        case 'set-materials': {
-          setMats(data.data ?? [])
-          setLoading(false)
-          break
+      try {
+        switch (data.type) {
+          case 'set-materials': {
+            setMats(data.data ?? [])
+            setLoading(false)
+            break
+          }
+          case 'materials-loading': {
+            setLoading(!!data.data)
+            break
+          }
+          case 'set-materials-client-render': {
+            dispose?.()
+            const { exported, dispose: _dis } = await fetchPreload(data.data)
+            dispose = _dis
+            console.log('materials-client-render exported', exported)
+            setMats(exported ?? [])
+            setLoading(false)
+            break
+          }
         }
-        case 'materials-loading': {
-          setLoading(!!data.data)
-          break
-        }
-        case 'set-materials-client-render': {
-          dispose?.()
-          const { exported, dispose: _dis } = await fetchPreload(data.data)
-          dispose = _dis
-          console.log('exported', exported)
-          setLoading(false)
-          break
-        }
+      } catch (err) {
+        message.error(err.message)
       }
     })
     //
@@ -160,9 +166,11 @@ const Editor: React.FC<EditorProps> = React.memo((props) => {
   return (
     <SharedProvider>
       <ConfigProvider locale={zhCN} prefixCls={'mmt-ant'}>
-        <DndProvider backend={HTML5Backend}>
-          <Body {...props} />
-        </DndProvider>
+        <AppErrorBoundary>
+          <DndProvider backend={HTML5Backend}>
+            <Body {...props} />
+          </DndProvider>
+        </AppErrorBoundary>
       </ConfigProvider>
     </SharedProvider>
   )

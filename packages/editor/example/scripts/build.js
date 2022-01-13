@@ -198,6 +198,10 @@ function build(config, previousFileSizes) {
 }
 
 function copyPublicFolder(config) {
+  if (process.env.DISABLE_COPY_PUBLIC) {
+    return
+  }
+
   fs.copySync(paths.appPublic, config.output.path, {
     dereference: true,
     filter: (file) => file !== paths.appHtml

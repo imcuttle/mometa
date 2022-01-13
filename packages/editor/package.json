@@ -36,7 +36,7 @@
     "webpack": "^4 || ^5"
   },
   "dependencies": {
-    "@babel/helper-module-imports": "^7.16.0",
+    "@babel/helper-module-imports": "^7.16.7",
     "@babel/template": "^7.16.7",
     "@mometa/fs-handler": "^0.0.19",
     "@mometa/materials-generator": "^0.0.19",
@@ -45,8 +45,11 @@
     "chalk": "^2.4.2",
     "copy-webpack-plugin": "^10.2.0",
     "copy-webpack-plugin-webpack4": "npm:copy-webpack-plugin@6",
-    "detect-dep": "^1.1.2",
+    "filenamify": "^4.3.0",
+    "fs-extra": "^10.0.0",
     "hot-module-require": "^4.0.0",
+    "loader-utils": "^2.0.2",
+    "lodash.isequal": "^4.5.0",
     "memoize-fn": "^2.0.1",
     "object-hash": "^2.2.0",
     "schema-utils": "^3.0.0",
@@ -67,6 +70,7 @@
   },
   "devDependencies": {
     "@ant-design/icons": "^4.7.0",
+    "@babel/core": "^7.16.7",
     "@emotion/css": "^11.7.1",
     "@floating-ui/dom": "^0.1.7",
     "@monaco-editor/react": "^4.3.1",
@@ -98,6 +102,7 @@
     "react": "^17.0.2",
     "react-dnd": "^14.0.4",
     "react-dnd-html5-backend": "^14.0.2",
+    "react-error-boundary": "^3.1.4",
     "rxjs": "^7.4.0",
     "sass": "^1.43.4"
   },

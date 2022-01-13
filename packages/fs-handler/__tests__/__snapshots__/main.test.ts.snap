@@ -313,6 +313,90 @@ Object {
 }
 `;
 
+exports[`fsHandler getAddMaterialOps spec cjs 1`] = `
+Object {
+  "insertCode": Object {
+    "preload": Object {
+      "data": Object {
+        "newText": "<>
+      <Antd />
+      <Button type=\\"default\\">按钮</Button>
+    </>",
+      },
+      "filename": "/a.js",
+      "to": Object {
+        "column": 3,
+        "line": 6,
+      },
+    },
+    "type": 3,
+  },
+  "insertDeps": Array [
+    Object {
+      "preload": Object {
+        "data": Object {
+          "newText": ";require(\\"antd/lib/button/style\\");",
+        },
+        "filename": "/a.js",
+        "to": Position {
+          "column": 20,
+          "line": 2,
+        },
+      },
+      "type": 3,
+    },
+    Object {
+      "preload": Object {
+        "data": Object {
+          "newText": ";require(\\"antd/lib/button/style/css\\");",
+        },
+        "filename": "/a.js",
+        "to": Position {
+          "column": 20,
+          "line": 2,
+        },
+      },
+      "type": 3,
+    },
+    Object {
+      "preload": Object {
+        "data": Object {
+          "newText": ";var { Input,Button } = require(antd);",
+        },
+        "end": Position {
+          "column": 28,
+          "line": 1,
+        },
+        "filename": "/a.js",
+        "identifierName": undefined,
+        "start": Position {
+          "column": 0,
+          "line": 1,
+        },
+        "text": "import { Input } from 'antd'",
+      },
+      "type": 1,
+    },
+    Object {
+      "preload": Object {
+        "data": Object {
+          "newText": ";var Antd = (function () {
+                        var mod = require(\\"antd\\");
+                        return mod.__esModule ? mod.default : mod
+                        })();",
+        },
+        "filename": "/a.js",
+        "to": Position {
+          "column": 20,
+          "line": 2,
+        },
+      },
+      "type": 3,
+    },
+  ],
+}
+`;
+
 exports[`fsHandler getAddMaterialOps spec fsHandler 1`] = `
 "import { Input, Button } from 'antd'
 import 'side-effect'
@@ -331,6 +415,87 @@ const elem = (
 )
 
 export { Button } from 'antd'"
+`;
+
+exports[`fsHandler getAddMaterialOps spec suffixLabel 1`] = `
+Object {
+  "insertCode": Object {
+    "preload": Object {
+      "data": Object {
+        "newText": "<>
+      <Antd_asds />
+      <Button_asds type=\\"default\\">按钮</Button_asds>
+    </>",
+      },
+      "filename": "/a.js",
+      "to": Object {
+        "column": 3,
+        "line": 6,
+      },
+    },
+    "type": 3,
+  },
+  "insertDeps": Array [
+    Object {
+      "preload": Object {
+        "data": Object {
+          "newText": ";import \\"antd/lib/button/style\\";",
+        },
+        "filename": "/a.js",
+        "to": Position {
+          "column": 20,
+          "line": 2,
+        },
+      },
+      "type": 3,
+    },
+    Object {
+      "preload": Object {
+        "data": Object {
+          "newText": ";import \\"antd/lib/button/style/css\\";",
+        },
+        "filename": "/a.js",
+        "to": Position {
+          "column": 20,
+          "line": 2,
+        },
+      },
+      "type": 3,
+    },
+    Object {
+      "preload": Object {
+        "data": Object {
+          "newText": ";import { Input, Button as Button_asds } from 'antd';",
+        },
+        "end": Position {
+          "column": 28,
+          "line": 1,
+        },
+        "filename": "/a.js",
+        "identifierName": undefined,
+        "start": Position {
+          "column": 0,
+          "line": 1,
+        },
+        "text": "import { Input } from 'antd'",
+      },
+      "type": 1,
+    },
+    Object {
+      "preload": Object {
+        "data": Object {
+          "newText": ";import Antd_asds from \\"antd\\";",
+        },
+        "filename": "/a.js",
+        "to": Position {
+          "column": 20,
+          "line": 2,
+        },
+      },
+      "type": 3,
+    },
+  ],
+}
 `;
 
 exports[`fsHandler nest REPLACE_NODE 1`] = `
