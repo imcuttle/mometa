@@ -421,6 +421,7 @@ importers:
       react-dnd: ^14.0.4
       react-dnd-html5-backend: ^14.0.2
       react-error-boundary: ^3.1.4
+      react-error-overlay: 6.0.9
       rxjs: ^7.4.0
       sass: ^1.43.4
       schema-utils: ^3.0.0
@@ -479,6 +480,7 @@ importers:
       react-dnd: 14.0.5_react@17.0.2
       react-dnd-html5-backend: 14.1.0
       react-error-boundary: 3.1.4_react@17.0.2
+      react-error-overlay: 6.0.9
       rxjs: 7.5.1
       sass: 1.46.0
 
@@ -21327,6 +21329,10 @@ packages:
   /react-error-overlay/6.0.10:
     resolution: {integrity: sha512-mKR90fX7Pm5seCOfz8q9F+66VCc1PGsWSBxKbITjfKVQHMNF2zudxHnMdJiB1fRCb+XsbQV9sO9DCkgsMQgBIA==}
     dev: false
+
+  /react-error-overlay/6.0.9:
+    resolution: {integrity: sha512-nQTTcUu+ATDbrSD1BZHr5kgSD4oF8OFjxun8uAaL8RwPBacGBNPf/yAuVVdx17N8XNzRDMrZ9XcKZHCjPW+9ew==}
+    dev: true
 
   /react-error-overlay/7.0.0-next.54:
     resolution: {integrity: sha512-b96CiTnZahXPDNH9MKplvt5+jD+BkxDw7q5R3jnkUXze/ux1pLv32BBZmlj0OfCUeMqyz4sAmF+0ccJGVMlpXw==}

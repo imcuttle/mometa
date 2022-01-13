@@ -3,13 +3,21 @@ const writeRuntimePreviewRender = require('./write-runtime-preview-render')
 
 /**
  * @param react
+ * @param materialsConfig {*}
  * @param configFilename {string}
  * @param loaderContext {import('webpack').LoaderContext}
  * @returns {function(*, *): string}
  */
-const getPreviewCodeGenerator = ({ configFilename, react, loaderContext }) => {
+const getPreviewCodeGenerator = ({ configFilename, materialsConfig, react, loaderContext }) => {
   return async (asset, path) => {
-    const filename = await writeRuntimePreviewRender({ loaderContext, configFilename, react, asset, path })
+    const filename = await writeRuntimePreviewRender({
+      materialsConfig,
+      loaderContext,
+      configFilename,
+      react,
+      asset,
+      path
+    })
     const reqPath = loaderUtils.stringifyRequest(loaderContext, filename)
 
     return `(function () {
@@ -39,6 +47,7 @@ module.exports.pitch = async function () {
   )
 
   const getPreviewCode = getPreviewCodeGenerator({
+    materialsConfig,
     configFilename,
     loaderContext: this,
     react

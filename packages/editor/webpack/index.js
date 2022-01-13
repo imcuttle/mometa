@@ -147,11 +147,6 @@ module.exports = class MometaEditorPlugin extends CommonPlugin {
     }
   }
 
-  logError(error) {
-    // console.error('[MM]', error)
-    throw error
-  }
-
   /**
    * @param compiler {import('webpack').Compiler}
    */

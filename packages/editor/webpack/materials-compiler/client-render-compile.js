@@ -202,6 +202,7 @@ exports.clientRenderCompile = async function clientRenderCompile(
     },
     [new EntryPlugin(compilation.compiler.context, entryFilename)]
   )
+  childCompiler.context = compilation.compiler.context
   childCompiler.hooks.compilation.tap(compilerName, (childCompilation) => {
     clientRenderPatchLoader(webpack, childCompilation)
   })

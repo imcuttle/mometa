@@ -6,6 +6,7 @@ const { sha1 } = require('object-hash')
 const paths = require('../../paths')
 const genCode = require('./preview-code-gen')
 const goodbye = require('./bye')
+const locateMaterialParents = require('./../../runtime/locate-material-parents')
 
 const roots = new Set()
 // goodbye(() => {
@@ -16,27 +17,31 @@ const roots = new Set()
 
 /**
  * @param react {boolean}
- * @param loaderContext {import('webpack').LoaderContext}
+ * @param materialsConfig {*}
+ * @param asset {*}
  * @param configFilename {string}
+ * @param path {number[]}
  * @returns {string}
  */
-module.exports = async function writeRuntimePreviewRender({ configFilename, loaderContext, react, asset, path }) {
+module.exports = async function writeRuntimePreviewRender({ materialsConfig, configFilename, react, asset, path }) {
   const code = await genCode({ asset, react, path })
+  const parents = locateMaterialParents(materialsConfig, path)
+  if (!parents) {
+    throw new Error(`Path [${path.join(',')}] locate materials failed.`)
+  }
 
+  const keys = parents.map((x, i) => x.key || x.name || path[i])
   const root = nps.join(paths.runtimePreviewRender, filenamify(configFilename, { replacement: '~' }))
   await fsExtra.ensureDir(root)
-  const filename = nps.join(
-    root,
-    `preview-render-${asset.key || asset.name || ''}_${path.join('.')}_${sha1({ path, asset }).slice(0, 8)}.js`
-  )
+  const filename = nps.join(root, `preview-render-${keys.join('_')}_${sha1(asset).slice(0, 8)}.js`)
 
   if (fs.existsSync(filename) && fs.statSync(filename).isFile()) {
-    const content = await fsExtra.readFile(filename, 'utf8')
+    const content = await fs.promises.readFile(filename, 'utf8')
     if (content !== code) {
-      await fsExtra.writeFile(filename, code, 'utf8')
+      await fs.promises.writeFile(filename, code, 'utf8')
     }
   } else {
-    await fsExtra.writeFile(filename, code, 'utf8')
+    await fs.promises.writeFile(filename, code, 'utf8')
   }
 
   roots.add(root)

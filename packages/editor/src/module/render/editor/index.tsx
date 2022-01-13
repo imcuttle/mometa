@@ -20,6 +20,7 @@ import { createClientConnection } from './sse'
 import { Button } from 'antd'
 import { fetchPreload } from '../utils/fetch-preload'
 import AppErrorBoundary from '../components/error-boundary'
+import { handleErrors } from '../utils/error-overlay'
 
 const cn = p('')
 const c = p(`${CLS_PREFIX}`)
@@ -67,6 +68,17 @@ const Body = ({ className, apiBaseURL, leftPanelProps, rightPanelProps, stagePro
   React.useEffect(() => {
     const conn = createClientConnection(apiBaseURL + 'sse')
     let dispose
+    let disposeError
+    async function handleBuildProcess(fn) {
+      try {
+        await fn()
+        disposeError?.()
+        disposeError = null
+      } catch (err) {
+        disposeError = handleErrors([err])
+      }
+    }
+
     conn.addHandler(async (data) => {
       try {
         switch (data.type) {
@@ -80,16 +92,24 @@ const Body = ({ className, apiBaseURL, leftPanelProps, rightPanelProps, stagePro
             break
           }
           case 'set-materials-client-render': {
-            dispose?.()
-            const { exported, dispose: _dis } = await fetchPreload(data.data)
-            dispose = _dis
-            console.log('materials-client-render exported', exported)
-            setMats(exported ?? [])
-            setLoading(false)
+            await handleBuildProcess(async () => {
+              dispose?.()
+              const { exported, dispose: _dis } = await fetchPreload(data.data)
+              dispose = _dis
+              console.log('materials-client-render exports', exported)
+              setMats(exported ?? [])
+              setLoading(false)
+            })
             break
+          }
+          case 'error': {
+            await handleBuildProcess(() => {
+              throw new Error(data.data)
+            })
           }
         }
       } catch (err) {
+        console.error(err)
         message.error(err.message)
       }
     })

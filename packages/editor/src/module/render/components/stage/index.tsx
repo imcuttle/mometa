@@ -27,6 +27,7 @@ import ResizeWidget, { defaultValue } from '../resize-widget'
 import { symbol } from '../../utils/utils'
 import usePersistFn from '@rcp/use.persistfn'
 import ResizeHandler from '../resize-handler'
+import { setEditorHandler } from '../../utils/error-overlay'
 
 setId(`main`)
 
@@ -156,6 +157,13 @@ const StageContent: React.FC<StageProps> = React.memo(({ className, externalModu
 
   const [{ isMobileMode, showLocation }] = useHeaderStatus()
   const [api] = useShared('api')
+  React.useLayoutEffect(() => {
+    setEditorHandler((loc) => {
+      // @ts-ignore
+      api.openEditor(loc)
+    })
+  }, [api])
+
   const ddManager = useDragDropManager()
   const _sharedMap = useSharedMap()
   const _sharedUpdateMap = useSharedUpdateMap()

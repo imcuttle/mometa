@@ -3,6 +3,7 @@ import { get, has, unset } from 'lodash-es'
 function loadJs(src: string, name?: string | string[]) {
   const script = document.createElement('script')
   script.src = src
+  script.defer = true
   document.head.appendChild(script)
 
   const url = new URL(src, location.href)
@@ -12,6 +13,7 @@ function loadJs(src: string, name?: string | string[]) {
       function windowErrorHandler(err) {
         if (err.filename === url.href) {
           reject(err.error)
+          err.preventDefault()
         }
       }
       script.onload = () => {
@@ -40,9 +42,11 @@ export async function fetchPreload(preload: { files: string[]; name: string | st
     return p
   }
 
-  const serialPromise = preload.files.reduce((p, file) => {
-    return p.then(() => _loadJs(file))
-  }, Promise.resolve())
+  const serialPromise = Promise.all(
+    preload.files.map((file) => {
+      return _loadJs(file)
+    })
+  )
 
   await serialPromise
 

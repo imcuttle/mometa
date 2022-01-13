@@ -7,9 +7,17 @@ module.exports = class CommonPlugin {
     return this.options.__webpack || compiler.webpack || require('webpack')
   }
 
+  /**
+   * @param compiler {import('webpack').Compiler}
+   * @return {number}
+   */
   getWebpackMajor(compiler) {
-    const webpack = this.getWebpack(compiler)
-    const [major] = (webpack.version || '5.0.0').split('.')
-    return major
+    if (!compiler.hooks) {
+      throw new Error(`[MometaEditorPlugin] don't support the webpack version.`)
+    }
+    if ('cache' in compiler) {
+      return 5
+    }
+    return 4
   }
 }

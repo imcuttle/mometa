@@ -11,6 +11,9 @@ module.exports = class MaterialsCompiler extends CommonPlugin {
 
   async build(filename) {
     return new Promise((resolve, reject) => {
+      /**
+       * @type {import('webpack').Compilation}
+       */
       const compilation = this.compilation
       const compiler = this.compilation.compiler
       /**
@@ -19,7 +22,6 @@ module.exports = class MaterialsCompiler extends CommonPlugin {
       const webpack = this.getWebpack(compiler)
       const major = this.getWebpackMajor(compiler)
       const EntryPlugin = webpack.EntryPlugin || webpack.SingleEntryPlugin
-
       const symbol = 'mometa-materials'
       const BUNDLER_FILENAME = `${this.options.contentBasePath}${symbol}.[contenthash].bundler.js`
       const name = symbol.replace(/-/g, '_').toUpperCase()
