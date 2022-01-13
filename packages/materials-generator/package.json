@@ -1,6 +1,6 @@
 {
   "name": "@mometa/materials-generator",
-  "version": "0.0.19",
+  "version": "0.0.20",
   "publishConfig": {
     "access": "public",
     "main": "lib",
@@ -24,8 +24,6 @@
     "prepublishOnly": "npm run packlimit",
     "version": "npm test && npm run packlimit"
   },
-  "dependencies": {},
-  "devDependencies": {},
   "keywords": [
     "imcuttle",
     "materials-generator",
