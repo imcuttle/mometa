@@ -134,7 +134,7 @@ mometa 不是传统主流的低代码平台（如 amis/云凤蝶），mometa 是
 #### 安装依赖
 
 ```bash
-npm i @mometa/materials-resolver @mometa/editor -D
+npm i @mometa/editor -D
 ```
 
 #### 使用 antd 物料
