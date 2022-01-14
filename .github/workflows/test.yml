@@ -12,6 +12,7 @@ jobs:
           #          - 16
           - 14
           - 12
+    if: "!contains(github.event.head_commit.message, 'skip-test') && !contains(github.event.head_commit.message, 'skip-ci') && !contains(github.event.head_commit.message, 'chore(release): publish')"
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
