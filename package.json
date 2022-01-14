@@ -5,6 +5,7 @@
   "description": "面向研发的低代码元编程平台",
   "author": "imcuttle <imcuttle@163.com>",
   "scripts": {
+    "preinstall": "npx only-allow pnpm",
     "start": "pnpm start --filter=editor",
     "test": "npx jest",
     "test:watch": "npm test -- --watch",
