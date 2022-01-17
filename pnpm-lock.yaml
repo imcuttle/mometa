@@ -54,9 +54,9 @@ importers:
     specifiers:
       '@babel/core': ^7.16.0
       '@mometa-mat/antd': ^0.0.4
-      '@mometa/editor': ^0.0.21
-      '@mometa/materials-generator': ^0.0.21
-      '@mometa/materials-resolver': ^0.0.21
+      '@mometa/editor': ^0.0.22
+      '@mometa/materials-generator': ^0.0.22
+      '@mometa/materials-resolver': ^0.0.22
       '@pmmmwh/react-refresh-webpack-plugin': ^0.5.3
       '@rcp/use.fetcher': ^1.1.5
       '@svgr/webpack': ^5.5.0
@@ -200,9 +200,9 @@ importers:
     specifiers:
       '@babel/core': 7.12.3
       '@commitlint/cli': ^11.0.0
-      '@mometa/editor': ^0.0.21
-      '@mometa/materials-generator': ^0.0.21
-      '@mometa/materials-resolver': ^0.0.21
+      '@mometa/editor': ^0.0.22
+      '@mometa/materials-generator': ^0.0.22
+      '@mometa/materials-resolver': ^0.0.22
       '@moyuyc/husky': ^1.1.1
       '@pmmmwh/react-refresh-webpack-plugin': 0.4.3
       '@svgr/webpack': 5.5.0
@@ -373,10 +373,10 @@ importers:
       '@babel/template': ^7.16.7
       '@emotion/css': ^11.7.1
       '@floating-ui/dom': ^0.1.7
-      '@mometa/fs-handler': ^0.0.21
-      '@mometa/materials-generator': ^0.0.21
-      '@mometa/materials-resolver': ^0.0.21
-      '@mometa/react-refresh-webpack-plugin': ^0.0.21
+      '@mometa/fs-handler': ^0.0.22
+      '@mometa/materials-generator': ^0.0.22
+      '@mometa/materials-resolver': ^0.0.22
+      '@mometa/react-refresh-webpack-plugin': ^0.0.22
       '@monaco-editor/react': ^4.3.1
       '@rcp/c.preventfastop': ^1.2.0
       '@rcp/use.behaviorsubject': ^1.0.2
@@ -483,7 +483,7 @@ importers:
   packages/editor/example:
     specifiers:
       '@babel/core': ^7.14.2
-      '@mometa/editor': ^0.0.21
+      '@mometa/editor': ^0.0.22
       '@pmmmwh/react-refresh-webpack-plugin': ^0.5.1
       '@svgr/webpack': ^5.5.0
       '@testing-library/jest-dom': ^5.15.1
@@ -632,7 +632,7 @@ importers:
   packages/fs-handler:
     specifiers:
       '@babel/core': ^7.16.5
-      '@mometa/materials-generator': ^0.0.21
+      '@mometa/materials-generator': ^0.0.22
       lodash.groupby: ^4.6.0
       memoize-fn: ^2.0.1
       pify: ^4.0.1
@@ -653,7 +653,7 @@ importers:
 
   packages/materials-resolver:
     specifiers:
-      '@mometa/materials-generator': ^0.0.21
+      '@mometa/materials-generator': ^0.0.22
       find-up: ^5.0.0
       globby: ^11.0.4
     dependencies:
