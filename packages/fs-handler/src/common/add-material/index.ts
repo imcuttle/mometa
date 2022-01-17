@@ -1,6 +1,5 @@
-import { NodePath, PluginObj, Visitor, transformAsync } from '@babel/core'
+import { NodePath, PluginObj, Visitor, transformAsync, transformSync } from '@babel/core'
 import groupBy from 'lodash.groupby'
-import escapeString from 'escape-string-regexp'
 import { InsertNodePreload, OpType, Point, RequestData } from '../../index'
 import { createLineContentsByContent, LineContents, Range } from '../../utils/line-contents'
 
@@ -23,6 +22,87 @@ type DeepPartial<T> = {
 
 type Config = {
   esModule?: boolean
+}
+
+const parserOptsPlugins: any[] = [
+  'jsx',
+  'asyncDoExpressions',
+  'asyncGenerators',
+  'bigInt',
+  'classPrivateMethods',
+  'classPrivateProperties',
+  'classProperties',
+  'classStaticBlock',
+  'decimal',
+  'decorators-legacy',
+  'doExpressions',
+  'dynamicImport',
+  'exportDefaultFrom',
+  'exportNamespaceFrom',
+  'functionBind',
+  'functionSent',
+  'importMeta',
+  'logicalAssignment',
+  'importAssertions',
+  'moduleBlocks',
+  'moduleStringNames',
+  'nullishCoalescingOperator',
+  'numericSeparator',
+  'objectRestSpread',
+  'optionalCatchBinding',
+  'optionalChaining',
+  'partialApplication',
+  'placeholders',
+  'privateIn',
+  'throwExpressions',
+  'topLevelAwait',
+  'typescript'
+]
+
+const replaceCodePlugin = ({ types: t }) => {
+  const handleIdentifier = (path: NodePath<any>, opts: any, rawCode: string) => {
+    opts.output.code = opts.output.code ?? rawCode
+    opts.state = opts.state ?? {
+      deltaOffset: 0
+    }
+
+    const prevCode = opts.output.code
+    if (opts.input.validData && Reflect.has(opts.input.validData, path.node.name)) {
+      const oldVal = path.node.name
+      const newVal = opts.input.validData[path.node.name]
+      const deltaOffset = opts.state.deltaOffset
+
+      opts.output.code =
+        prevCode.slice(0, path.node.start + deltaOffset) +
+        opts.input.validData[path.node.name] +
+        prevCode.slice(path.node.end + deltaOffset)
+
+      opts.state.deltaOffset += newVal.length - oldVal.length
+    }
+  }
+
+  return {
+    visitor: {
+      Program(p, { opts }) {},
+      JSXIdentifier(path, { opts }) {
+        // @ts-ignore
+        handleIdentifier(path, opts, this.file.code)
+      },
+      Identifier(path, { opts }) {
+        // @ts-ignore
+        handleIdentifier(path, opts, this.file.code)
+      }
+    }
+  } as PluginObj<{
+    opts: {
+      input: {
+        validData: Record<string, string>
+      }
+      output: {
+        code?: string
+      }
+    }
+  }>
 }
 
 const importPlugin = ({ types: t }) =>
@@ -176,7 +256,7 @@ const importPlugin = ({ types: t }) =>
                 }
               } else if (mode === 'named') {
                 const newNamedPathSet = new Set<NodePath>()
-                const newNamedSet = new Set<string>()
+                const newNamedSet = new Set<{ local: string; imported: string }>()
                 ;(dataList as any).forEach((data) => {
                   const key = `${cachedKey}:${data.imported}`
                   const cached = map.get(key)
@@ -184,6 +264,7 @@ const importPlugin = ({ types: t }) =>
                     tplData[data.tplName] = cached?.name
                   } else {
                     let importPath
+                    // insert into the last importPath
                     if (namedUnionMap.get(source)?.length) {
                       importPath = namedUnionMap.get(source)[namedUnionMap.get(source)?.length - 1]
                     }
@@ -200,11 +281,15 @@ const importPlugin = ({ types: t }) =>
                     if (importPath) {
                       newNamedPathSet.add(importPath)
                     } else {
-                      newNamedSet.add(name)
+                      newNamedSet.add({
+                        local: name,
+                        imported: data.imported
+                      })
                     }
                   }
                 })
 
+                // 在已有的 import 中进行替换
                 if (newNamedPathSet.size) {
                   for (const importPath of newNamedPathSet.values()) {
                     let cjsCodes = []
@@ -234,14 +319,28 @@ const importPlugin = ({ types: t }) =>
                 }
                 if (newNamedSet.size) {
                   const stringifiedSource = JSON.stringify(source)
+
+                  const values = []
+                  newNamedSet.forEach(({ local, imported }) => {
+                    if (local === imported) {
+                      values.push(local)
+                      return
+                    }
+                    if (esModule) {
+                      values.push(`${imported} as ${local}`)
+                    } else {
+                      values.push(`${imported} : ${local}`)
+                    }
+                  })
+
                   ops.insertDeps.push({
                     type: OpType.INSERT_NODE,
                     preload: {
                       to: sideEffectImportVisitorState.endImportLoc.end,
                       data: {
                         newText: esModule
-                          ? `;import { ${Array.from(newNamedSet.values()).join(',')} } from ${stringifiedSource};`
-                          : `;var { ${Array.from(newNamedSet.values()).join(',')} } = require(${stringifiedSource});`
+                          ? `;import { ${values.join(',')} } from ${stringifiedSource};`
+                          : `;var { ${values.join(',')} } = require(${stringifiedSource});`
                       }
                     }
                   })
@@ -251,11 +350,28 @@ const importPlugin = ({ types: t }) =>
           }
 
           let newCode: string = material.code
-          Object.keys(tplData).forEach((tplName) => {
-            if (newCode) {
-              newCode = newCode.replace(new RegExp(escapeString(`$${tplName}$`), 'g'), tplData[tplName])
+          if (newCode) {
+            const validData = Object.create(null)
+            Object.keys(tplData).forEach((tplName) => {
+              if (newCode && tplName !== tplData[tplName]) {
+                validData[tplName] = tplData[tplName]
+              }
+            })
+
+            if (Object.keys(validData)?.length) {
+              const output: any = {}
+              transformSync(newCode, {
+                parserOpts: {
+                  plugins: parserOptsPlugins
+                },
+                babelrc: false,
+                plugins: [[replaceCodePlugin, { input: { validData }, output }]],
+                ast: false,
+                code: false
+              })
+              newCode = output.code ?? newCode
             }
-          })
+          }
 
           ops.insertCode = {
             type: OpType.INSERT_NODE,
@@ -297,43 +413,27 @@ export async function getAddMaterialOps(
     insertDeps: [],
     insertCode: null
   }
+
+  if (material?.dependencies) {
+    const dependencies = material?.dependencies
+    material = {
+      ...material,
+      dependencies: Object.keys(dependencies).reduce((acc, name) => {
+        const vo = dependencies[name]
+        acc[name] = {
+          ...vo,
+          local: vo.local ?? name,
+          imported: vo.mode === 'named' ? vo.imported ?? name : vo.imported
+        }
+        return acc
+      }, {})
+    }
+  }
+
   await transformAsync(lineContents.toString(false), {
     filename: lineContents.options?.filename,
     parserOpts: {
-      plugins: [
-        'jsx',
-        'asyncDoExpressions',
-        'asyncGenerators',
-        'bigInt',
-        'classPrivateMethods',
-        'classPrivateProperties',
-        'classProperties',
-        'classStaticBlock',
-        'decimal',
-        'decorators-legacy',
-        'doExpressions',
-        'dynamicImport',
-        'exportDefaultFrom',
-        'exportNamespaceFrom',
-        'functionBind',
-        'functionSent',
-        'importMeta',
-        'logicalAssignment',
-        'importAssertions',
-        'moduleBlocks',
-        'moduleStringNames',
-        'nullishCoalescingOperator',
-        'numericSeparator',
-        'objectRestSpread',
-        'optionalCatchBinding',
-        'optionalChaining',
-        'partialApplication',
-        'placeholders',
-        'privateIn',
-        'throwExpressions',
-        'topLevelAwait',
-        'typescript'
-      ]
+      plugins: parserOptsPlugins
     },
     babelrc: false,
     plugins: [[importPlugin, { lineContents, material, pos, ops, config }]],

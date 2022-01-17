@@ -32,12 +32,12 @@
     - [响应式布局](#%E5%93%8D%E5%BA%94%E5%BC%8F%E5%B8%83%E5%B1%80)
     - [路由模拟](#%E8%B7%AF%E7%94%B1%E6%A8%A1%E6%8B%9F)
 - [如何实现](#%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0)
+- [快速开始](#%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B)
 - [如何使用](#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8)
   - [安装依赖](#%E5%AE%89%E8%A3%85%E4%BE%9D%E8%B5%96)
   - [使用 antd 物料](#%E4%BD%BF%E7%94%A8-antd-%E7%89%A9%E6%96%99)
   - [接入编辑器](#%E6%8E%A5%E5%85%A5%E7%BC%96%E8%BE%91%E5%99%A8)
 - [NPM 包](#npm-%E5%8C%85)
-- [快速开始](#%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B)
 - [作者](#%E4%BD%9C%E8%80%85)
 
 <!-- tocstop -->
@@ -129,6 +129,17 @@ mometa 不是传统主流的低代码平台（如 amis/云凤蝶），mometa 是
 
 见 [mometa 实现原理](./docs/how-to-work.md)
 
+## 快速开始
+
+由于 mometa 依赖本地开发环境，只使用在本地开发环境，所以没有搭建在线 demo；在本地开发的时候可以进行使用
+
+```bash
+git clone https://github.com/imcuttle/mometa.git
+cd mometa
+pnpm install
+pnpm run start:app:cr # 开启本地开发预览模式
+```
+
 ## 如何使用
 
 #### 安装依赖
@@ -198,15 +209,6 @@ module.exports = {
 - [@mometa/materials-generator](packages/materials-generator) - 物料生成 & 解析
 - [@mometa/materials-resolver](packages/materials-resolver) - Resolve materials config
 - [@mometa/react-refresh-webpack-plugin](packages/react-refresh-webpack-plugin) - An **EXPERIMENTAL** Webpack plugin to enable "Fast Refresh" (also previously known as _Hot Reloading_) for React components.
-
-## 快速开始
-
-```bash
-git clone https://github.com/imcuttle/mometa.git
-cd mometa
-pnpm install
-cd packages/app && pnpm start # 开启本地开发预览模式
-```
 
 ## 作者
 
