@@ -16,7 +16,9 @@ module.exports = async function previewCodeGen({ asset, react, path }) {
       esModule: true
     }
   )
-  importCodes.push(ops.insertDeps?.map((x) => x.preload.data.newText.replace(/^;/, '')).join('\n') ?? '')
+  if (ops.insertDeps) {
+    importCodes.push(ops.insertDeps.map((x) => x.preload.data.newText.replace(/^;/, '')).join('\n') || '')
+  }
 
   return `
 /* preview-render ${asset.name || ''} ${asset.key || ''} */

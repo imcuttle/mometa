@@ -122,12 +122,34 @@ describe('fsHandler', function () {
         to: { line: 18, column: 10 },
         data: {
           material: {
-            code: '<ANT_BUTTON type="default">按钮</ANT_BUTTON>',
+            code: '<Button type="default">按钮</Button>',
             dependencies: {
-              ANT_BUTTON: {
+              Button: {
                 source: 'antd',
-                mode: 'named',
-                imported: 'Button'
+                mode: 'named'
+              }
+            }
+          }
+        }
+      }
+    })
+    expect(result).toMatchSnapshot()
+  })
+
+  it('INSERT_NODE material existed name', async function () {
+    await fsHandler({
+      type: OpType.INSERT_NODE,
+      preload: {
+        text: '<p>单独 p</p>',
+        filename: fixture('react-comp.tsx'),
+        to: { line: 18, column: 10 },
+        data: {
+          material: {
+            code: '<Tabs><Tabs.Panel></Tabs.Panel></Tabs>',
+            dependencies: {
+              Tabs: {
+                source: 'antd',
+                mode: 'named'
               }
             }
           }
@@ -206,20 +228,18 @@ describe('fsHandler', function () {
         {
           code: `
     <>
-      <$MY_COMP$ />
-      <$ANT_BUTTON$ type="default">按钮</$ANT_BUTTON$>
+      <Antd />
+      <Button type="default">按钮</Button>
     </>
     `.trim(),
           dependencies: {
-            ANT_BUTTON: {
+            Button: {
               source: 'antd',
-              mode: 'named',
-              imported: 'Button'
+              mode: 'named'
             },
-            MY_COMP: {
+            Antd: {
               source: 'antd',
-              mode: 'default',
-              local: 'Antd'
+              mode: 'default'
             }
           } as any,
           sideEffectDependencies: ['antd/lib/button/style', 'antd/lib/button/style/css']
@@ -240,20 +260,18 @@ describe('fsHandler', function () {
         {
           code: `
     <>
-      <$MY_COMP$ />
-      <$ANT_BUTTON$ type="default">按钮</$ANT_BUTTON$>
+      <Antd />
+      <Button type="default">按钮</Button>
     </>
     `.trim(),
           dependencies: {
-            ANT_BUTTON: {
+            Button: {
               source: 'antd',
-              mode: 'named',
-              imported: 'Button'
+              mode: 'named'
             },
-            MY_COMP: {
+            Antd: {
               source: 'antd',
-              mode: 'default',
-              local: 'Antd'
+              mode: 'default'
             }
           } as any,
           sideEffectDependencies: ['antd/lib/button/style', 'antd/lib/button/style/css']
@@ -275,20 +293,18 @@ describe('fsHandler', function () {
             material: {
               code: `
     <>
-      <$MY_COMP$ />
-      <$ANT_BUTTON$ type="default">按钮</$ANT_BUTTON$>
+      <Antd />
+      <Button type="default">按钮</Button>
     </>
     `.trim(),
               dependencies: {
-                ANT_BUTTON: {
+                Button: {
                   source: 'antd',
-                  mode: 'named',
-                  imported: 'Button'
+                  mode: 'named'
                 },
-                MY_COMP: {
+                Antd: {
                   source: 'antd',
-                  mode: 'default',
-                  local: 'Antd'
+                  mode: 'default'
                 }
               } as any,
               sideEffectDependencies: ['antd/lib/button/style', 'antd/lib/button/style/css']
@@ -315,20 +331,18 @@ describe('fsHandler', function () {
             material: {
               code: `
     <>
-      <$MY_COMP$ />
-      <$ANT_BUTTON$ type="default">按钮</$ANT_BUTTON$>
+      <Antd />
+      <Button type="default">按钮</Button>
     </>
     `.trim(),
               dependencies: {
-                ANT_BUTTON: {
+                Button: {
                   source: 'antd',
-                  mode: 'named',
-                  imported: 'Button'
+                  mode: 'named'
                 },
-                MY_COMP: {
+                Antd: {
                   source: 'antd',
-                  mode: 'default',
-                  local: 'Antd'
+                  mode: 'default'
                 }
               } as any,
               sideEffectDependencies: ['antd/lib/button/style', 'antd/lib/button/style/css']

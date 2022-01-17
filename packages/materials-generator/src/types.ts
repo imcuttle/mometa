@@ -25,8 +25,8 @@ export interface Asset {
   homepage?: string
 
   data: {
-    code: string // '<$ANT_BUTTON$></$ANT_BUTTON$>'
-    dependencies?: Record<string, AssetImport> // { ANT_BUTTON: { name: 'Button', mode: 'named', source: 'antd' } }
+    code: string // '<Button></Button>'
+    dependencies?: Record<string, AssetImport> // { Button: { mode: 'named', source: 'antd' } }
     sideEffectDependencies?: Array<string>
   }
 

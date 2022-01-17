@@ -6,7 +6,8 @@
   "author": "imcuttle <imcuttle@163.com>",
   "scripts": {
     "preinstall": "npx only-allow pnpm",
-    "start": "pnpm start --filter=editor",
+    "start": "pnpm start --filter=@mometa/editor",
+    "start:app:cr": "pnpm run start:cr --filter=@mometa/app",
     "test": "npx jest",
     "test:watch": "npm test -- --watch",
     "preversion": "npm test",
