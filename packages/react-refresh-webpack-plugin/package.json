@@ -127,10 +127,7 @@
       "optional": true
     }
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/pmmmwh/react-refresh-webpack-plugin.git"
-  },
+  "repository": "imcuttle/mometa",
   "resolutions": {
     "type-fest": "1.4.0"
   },
