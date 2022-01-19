@@ -1,6 +1,6 @@
 import { useBehaviorSubject } from '@rcp/use.behaviorsubject'
+// @ts-ignore
 import { remoteGlobalThisSet, getByRemoteById, getInLocal, data, getByRemoteOnce } from '../../shared/pipe'
-import { isInIframe } from '../../shared/utils'
 
 export function getSharedFromMain() {
   const shared = getByRemoteById('shared', 'main') ?? getInLocal('shared')

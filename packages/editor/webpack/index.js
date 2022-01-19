@@ -9,6 +9,9 @@ const { runtimePreviewRender } = require('./paths')
 const ReactRefreshWebpackPlugin = require('@mometa/react-refresh-webpack-plugin')
 const { materialExplorer } = require('@mometa/materials-resolver')
 const { robust } = require('memoize-fn')
+const injectEntry = require('./inject-entry')
+
+const pkg = require('../package.json')
 
 const BUILD_PATH = nps.resolve(__dirname, '../build/standalone')
 const NAME = 'MometaEditorPlugin'
@@ -97,18 +100,25 @@ module.exports = class MometaEditorPlugin extends CommonPlugin {
 
   applyForRuntime(compiler) {
     const webpack = this.getWebpack(compiler)
+    const major = this.getWebpackMajor(compiler)
     const { DefinePlugin } = webpack
     const EntryPlugin = webpack.EntryPlugin || webpack.SingleEntryPlugin
 
-    let entryNames = [undefined]
-    if (compiler.options.entry) {
-      if (!Array.isArray(compiler.options.entry) && typeof compiler.options.entry === 'object') {
-        entryNames = Object.keys(compiler.options.entry)
+    if (major >= 5) {
+      let entryNames = [undefined]
+      if (compiler.options.entry) {
+        if (!Array.isArray(compiler.options.entry) && typeof compiler.options.entry === 'object') {
+          entryNames = Object.keys(compiler.options.entry)
+        }
       }
+      entryNames.forEach((name) => {
+        new EntryPlugin(compiler.context, require.resolve('./runtime/runtime-entry'), name).apply(compiler)
+      })
+    } else {
+      compiler.options.entry = injectEntry(compiler.options.entry, {
+        prependEntries: [require.resolve('./runtime/runtime-entry')]
+      })
     }
-    entryNames.forEach((name) =>
-      new EntryPlugin(compiler.context, require.resolve('./runtime/runtime-entry'), name).apply(compiler)
-    )
 
     new DefinePlugin({
       __mometa_env_is_local__: !!process.env.__MOMETA_LOCAL__,
@@ -214,11 +224,6 @@ module.exports = class MometaEditorPlugin extends CommonPlugin {
         const data = await mcBuild(filepath)
 
         if (!isFromClient) {
-          if (data.assets) {
-            for (const [k, v] of Object.entries(data.assets)) {
-              compilation.emitAsset(k, v)
-            }
-          }
           setTimeout(() => {
             memoPublish({
               type: 'set-materials-client-render',
@@ -229,13 +234,37 @@ module.exports = class MometaEditorPlugin extends CommonPlugin {
         return data.client
       }
 
-      compilation.hooks.additionalAssets.tapAsync(NAME, (cb) => {
-        Promise.resolve(materialsBuildRef.current(filepath)).then(() => cb())
-      })
+      const webpack = this.getWebpack(compiler)
+      const major = this.getWebpackMajor(compiler)
+      const handleAdditionalAssets = (cb) => Promise.resolve(materialsBuildRef.current(filepath)).then(() => cb())
+      if (major < 5) {
+        compilation.hooks.additionalAssets.tapAsync(NAME, (cb) => {
+          handleAdditionalAssets(cb)
+        })
+      } else {
+        compilation.hooks.processAssets.tapAsync(
+          {
+            name: NAME,
+            stage: webpack.Compilation.PROCESS_ASSETS_STAGE_ADDITIONAL
+          },
+          (_, cb) => {
+            handleAdditionalAssets(cb)
+          }
+        )
+      }
     })
   }
 
   apply(compiler) {
+    if (this.getWebpackMajor(compiler) === 5) {
+      require('please-upgrade-node')({
+        name: pkg.name,
+        engines: {
+          node: '>= 12.20.0'
+        }
+      })
+    }
+
     this.applyForEditor(compiler)
     this.applyForRuntime(compiler)
     this.applyForServer(compiler)

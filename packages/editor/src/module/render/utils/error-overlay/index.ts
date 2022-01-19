@@ -28,7 +28,7 @@ ErrorOverlay.startReportingRuntimeErrors({
   filename: '/static/js/bundle.js'
 })
 
-if (module.hot && typeof module.hot.dispose === 'function') {
+if (module.hot && typeof module?.hot?.dispose === 'function') {
   module.hot.dispose(function () {
     // TODO: why do we need this?
     ErrorOverlay.stopReportingRuntimeErrors()

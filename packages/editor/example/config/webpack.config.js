@@ -812,9 +812,9 @@ const localPlugins = [
       return cb(null, `commonjs ${RegExp.$1}`)
     }
 
-    // if (/^\$(react|react-dom|react\/jsx-runtime)$/.test(request)) {
-    //   return cb(null, `commonjs ${RegExp.$1}`)
-    // }
+    if (/^(react|react-dom|react\/jsx-runtime)$/.test(request)) {
+      return cb(null, `commonjs ${RegExp.$1}`)
+    }
     return cb()
   })
 ]

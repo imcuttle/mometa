@@ -75,6 +75,7 @@ const Body = ({ className, apiBaseURL, leftPanelProps, rightPanelProps, stagePro
         disposeError?.()
         disposeError = null
       } catch (err) {
+        // console.error(err)
         disposeError = handleErrors([err])
       }
     }

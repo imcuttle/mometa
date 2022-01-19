@@ -8,6 +8,8 @@ import { MometaHTMLElement, MometaDomApi } from './dom-api'
 import { Provider } from './provider'
 import { getSharedFromMain, useOveringNode, useHeaderStatus, useSelectedNode } from '../utils/get-from-main'
 import { isInIframe } from '../../shared/utils'
+// @ts-ignore
+import { getByRemoteOnce, getInLocal } from '../../shared/pipe'
 const { api } = getSharedFromMain()
 
 function isDropableDom(dom: HTMLElement) {
@@ -212,10 +214,14 @@ export const DndDropableNode = React.memo(({ dom }: { dom: MometaHTMLElement }) 
   const { isOverCurrent, isOver } = React.useMemo(() => JSON.parse(str), [str])
   // eslint-disable-next-line consistent-return
   React.useLayoutEffect(() => {
-    if (isOver) {
+    if (isOver && dom) {
+      const emotion = getByRemoteOnce('@emotion/css') ?? getInLocal('@emotion/css')
+      if (!emotion) {
+        return
+      }
       return addCss(
         dom,
-        css`
+        emotion.css`
           ${EMPTY_PLACEHOLDER_NAME} {
             display: block !important;
           }

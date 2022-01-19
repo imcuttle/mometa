@@ -1,6 +1,6 @@
 {
   "name": "@mometa/react-docgen-typescript",
-  "version": "0.0.23",
+  "version": "0.0.24",
   "private": true,
   "publishConfig": {
     "access": "public"
