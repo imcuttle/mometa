@@ -21,6 +21,7 @@ const c = p(`${CLS_PREFIX}-stage`)
 import './style.scss'
 
 import { headerStatusSubject, useHeaderStatus } from '../header'
+// @ts-ignore
 import { register, addRemoteGlobalThis, removeRemoteGlobalThis, setId } from '../../../../shared/pipe'
 import LocationWidget from '../location-widget'
 import ResizeWidget, { defaultValue } from '../resize-widget'

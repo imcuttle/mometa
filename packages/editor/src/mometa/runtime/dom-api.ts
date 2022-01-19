@@ -75,7 +75,7 @@ export class MometaDomApi extends EventEmitter {
           f = getLatestFiber(f.return)
         }
         let t = f
-        while (t && !(t.stateNode instanceof getWindow(this.dom).HTMLElement)) {
+        while (t && getWindow(this.dom) && !(t.stateNode instanceof getWindow(this.dom).HTMLElement)) {
           t = t.child
         }
         if (t) {
@@ -109,7 +109,7 @@ export class MometaDomApi extends EventEmitter {
           f = getLatestFiber(f.return)
         }
         let t = f
-        while (t && !(t.stateNode instanceof getWindow(this.dom).HTMLElement)) {
+        while (t && getWindow(this.dom) && !(t.stateNode instanceof getWindow(this.dom).HTMLElement)) {
           t = t.child
         }
         if (t) {

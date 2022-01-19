@@ -2,9 +2,9 @@
 // const React from 'react'
 
 module.exports = [
-  // {
-  //   name: 'HHH',
-  //   key: 'component-x'
-  // },
+  {
+    name: 'WWWXX',
+    key: 'component-x'
+  },
   require('@mometa-mat/antd').default
 ]

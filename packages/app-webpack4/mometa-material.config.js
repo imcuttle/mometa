@@ -1,1 +1,7 @@
-module.exports = [require('@mometa-mat/antd').default];
+module.exports = [
+  {
+    name: 'WWWppX',
+    key: 'component-x',
+  },
+  require('@mometa-mat/antd').default,
+];

@@ -1,3 +1,4 @@
+// @ts-ignore
 import { getByRemoteOnce, getInLocal } from './pipe'
 
 export function addUpdateCallbackListener(fn) {
