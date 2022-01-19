@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### [0.0.24](https://github.com/imcuttle/mometa/compare/v0.0.23...v0.0.24) (2022-01-19)
+
+### Bug Fixes
+
+- module.hot.dispose cause error ([139377f](https://github.com/imcuttle/mometa/commit/139377f2b78331fdad0937082cd50af81665fdd7))
+
+### Performance Improvements
+
+- node requires >= 12.20.0 when using webpack@5 ([386bfc6](https://github.com/imcuttle/mometa/commit/386bfc6f43d65e24b6302809553bfaab72ac4141))
+
 ### [0.0.23](https://github.com/imcuttle/mometa/compare/v0.0.22...v0.0.23) (2022-01-19)
 
 ### Performance Improvements
