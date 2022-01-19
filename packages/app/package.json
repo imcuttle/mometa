@@ -76,7 +76,8 @@
     "workbox-webpack-plugin": "^6.4.1"
   },
   "scripts": {
-    "start:cr": "CLIENT_RENDER=1 node scripts/start.js",
+    "start:cr": "NODE_OPTIONS=\"$INNER_NODE_OPTIONS\" CLIENT_RENDER=1 node scripts/start.js",
+    "start:cr:debug": "INNER_NODE_OPTIONS=--inspect npm run start:cr",
     "start": "node scripts/start.js",
     "build": "node scripts/build.js"
   },

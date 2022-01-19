@@ -52,6 +52,7 @@
     "lodash.isequal": "^4.5.0",
     "memoize-fn": "^2.0.1",
     "object-hash": "^2.2.0",
+    "please-upgrade-node": "^3.2.0",
     "schema-utils": "^3.0.0",
     "shell-quote": "^1.7.2"
   },

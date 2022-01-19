@@ -10,6 +10,8 @@ const ReactRefreshWebpackPlugin = require('@mometa/react-refresh-webpack-plugin'
 const { materialExplorer } = require('@mometa/materials-resolver')
 const { robust } = require('memoize-fn')
 
+const pkg = require('../package.json')
+
 const BUILD_PATH = nps.resolve(__dirname, '../build/standalone')
 const NAME = 'MometaEditorPlugin'
 
@@ -236,6 +238,15 @@ module.exports = class MometaEditorPlugin extends CommonPlugin {
   }
 
   apply(compiler) {
+    if (this.getWebpackMajor(compiler) === 5) {
+      require('please-upgrade-node')({
+        name: pkg.name,
+        engines: {
+          node: '>= 12.20.0'
+        }
+      })
+    }
+
     this.applyForEditor(compiler)
     this.applyForRuntime(compiler)
     this.applyForServer(compiler)

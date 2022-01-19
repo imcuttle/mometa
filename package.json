@@ -7,6 +7,7 @@
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "start": "pnpm start --filter=@mometa/editor",
+    "start:app:cr:debug": "pnpm run start:cr:debug --filter=@mometa/app",
     "start:app:cr": "pnpm run start:cr --filter=@mometa/app",
     "test": "npx jest",
     "test:watch": "npm test -- --watch",
