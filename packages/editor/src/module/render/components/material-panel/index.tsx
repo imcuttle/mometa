@@ -1,9 +1,9 @@
 import React from 'react'
 import p from 'prefix-classname'
-import { Input, Empty, Image, Tabs, Typography, Spin, Popover } from 'antd'
+import { Input, Empty, Image, Tabs, Typography, Spin, Popover, Button, Tooltip } from 'antd'
 import { useDrag } from 'react-dnd'
 import Fuse from 'fuse.js'
-import { SearchOutlined, InfoCircleOutlined } from '@ant-design/icons'
+import { SearchOutlined, InfoCircleOutlined, PlusOutlined } from '@ant-design/icons'
 
 import { CLS_PREFIX } from '../../../config/const'
 
@@ -174,7 +174,14 @@ const MaterialPanel: React.FC<MaterialPanelProps> = React.memo(({ loading, class
     <Spin spinning={loading} delay={200} className={cn(c(), className)}>
       {!materials?.length && <Empty description={'暂无物料'} style={{ paddingTop: 40 }} />}
       {!!materials?.length && (
-        <Tabs className={c('__tabs')}>
+        <Tabs
+          className={c('__tabs')}
+          tabBarExtraContent={
+            <Tooltip title={'添加远端物料'}>
+              <Button type={'text'} shape={'circle'} size={'small'} icon={<PlusOutlined />} />
+            </Tooltip>
+          }
+        >
           {materials.map((mat, i) => {
             const matKey = mat.key ?? i
             return (
