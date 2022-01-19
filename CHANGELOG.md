@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### [0.0.23](https://github.com/imcuttle/mometa/compare/v0.0.22...v0.0.23) (2022-01-19)
+
+### Performance Improvements
+
+- 只读模式下，也支持物料拖拽编辑 & 优化小组件拖拽展示 ([ae1939c](https://github.com/imcuttle/mometa/commit/ae1939cffa8115cb60e615029ad5b90eca4784e0))
+
 ## [0.0.22](https://github.com/imcuttle/mometa/compare/v0.0.21...v0.0.22) (2022-01-17)
 
 **Note:** Version bump only for package mometa
