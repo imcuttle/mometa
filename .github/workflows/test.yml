@@ -33,7 +33,7 @@ jobs:
       - name: Install pnpm@6
         run: npm i -g pnpm@6
 
-      - run: pnpm i
+      - run: pnpm i --no-frozen-lockfile
       - run: pnpm run build --if-present
       - run: pnpm test -- --coverage
       - name: Codecov

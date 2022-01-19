@@ -183,12 +183,6 @@ export const DndDropableNode = React.memo(({ dom }: { dom: MometaHTMLElement }) 
         }
       },
       collect: (monitor) => {
-        if (!canSelect) {
-          return JSON.stringify({
-            isOverCurrent: false,
-            isOver: false
-          })
-        }
         const itemType = monitor.getItemType()
         const item = monitor.getItem() as any
 

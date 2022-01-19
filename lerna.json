@@ -4,6 +4,9 @@
   "extendCommands": ["lerna-command-toc"],
   "command": {
     "publish": {
+      "changelogPreset": {
+        "name": "conventional-changelog-conventionalcommits"
+      },
       "conventionalCommits": true,
       "message": "chore(release): publish"
     },

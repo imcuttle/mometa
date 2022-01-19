@@ -277,6 +277,7 @@ export const OveringFloat = React.forwardRef<HTMLDivElement, OveringFloatProps>(
   `
 
   const widthGte = true //rect.width >= rect.height
+  const widthSm = rect.width <= 120
 
   const flagElem = (
     <div ref={preview} className={c(commonCss)} title={data.text}>
@@ -393,7 +394,7 @@ export const OveringFloat = React.forwardRef<HTMLDivElement, OveringFloatProps>(
               `
             )}
           >
-            放置在上
+            {widthSm ? '' : '放置在上'}
           </div>
           {!data.selfClosed && (
             <div
@@ -414,7 +415,7 @@ export const OveringFloat = React.forwardRef<HTMLDivElement, OveringFloatProps>(
                     `
               )}
             >
-              放置在这
+              {widthSm ? '' : '放置在这'}
             </div>
           )}
           <div
@@ -427,7 +428,7 @@ export const OveringFloat = React.forwardRef<HTMLDivElement, OveringFloatProps>(
               `
             )}
           >
-            放置在下
+            {widthSm ? '' : '放置在下'}
           </div>
         </>
       )}
