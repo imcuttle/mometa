@@ -17,7 +17,7 @@ importers:
       human-format: ^0.11.0
       husky: ^4.3.8
       jest: ^27.3.1
-      lerna-cli: ^5.0.3
+      lerna-cli: ^5.0.4
       lerna-command-toc: ^2.0.0
       markdown-toc: ^1.2.0
       npm-run-all: ^4.1.5
@@ -41,7 +41,7 @@ importers:
       human-format: 0.11.0
       husky: 4.3.8
       jest: 27.4.7
-      lerna-cli: 5.0.3
+      lerna-cli: 5.0.4
       lerna-command-toc: 2.0.0
       markdown-toc: 1.2.0
       npm-run-all: 4.1.5
@@ -56,9 +56,9 @@ importers:
     specifiers:
       '@babel/core': ^7.16.0
       '@mometa-mat/antd': ^0.0.4
-      '@mometa/editor': ^0.0.24
-      '@mometa/materials-generator': ^0.0.24
-      '@mometa/materials-resolver': ^0.0.24
+      '@mometa/editor': ^0.0.25
+      '@mometa/materials-generator': ^0.0.25
+      '@mometa/materials-resolver': ^0.0.25
       '@pmmmwh/react-refresh-webpack-plugin': ^0.5.3
       '@rcp/use.fetcher': ^1.1.5
       '@svgr/webpack': ^5.5.0
@@ -202,9 +202,9 @@ importers:
     specifiers:
       '@babel/core': 7.12.3
       '@commitlint/cli': ^11.0.0
-      '@mometa/editor': ^0.0.24
-      '@mometa/materials-generator': ^0.0.24
-      '@mometa/materials-resolver': ^0.0.24
+      '@mometa/editor': ^0.0.25
+      '@mometa/materials-generator': ^0.0.25
+      '@mometa/materials-resolver': ^0.0.25
       '@moyuyc/husky': ^1.1.1
       '@pmmmwh/react-refresh-webpack-plugin': 0.4.3
       '@svgr/webpack': 5.5.0
@@ -375,10 +375,10 @@ importers:
       '@babel/template': ^7.16.7
       '@emotion/css': ^11.7.1
       '@floating-ui/dom': ^0.1.7
-      '@mometa/fs-handler': ^0.0.24
-      '@mometa/materials-generator': ^0.0.24
-      '@mometa/materials-resolver': ^0.0.24
-      '@mometa/react-refresh-webpack-plugin': ^0.0.24
+      '@mometa/fs-handler': ^0.0.25
+      '@mometa/materials-generator': ^0.0.25
+      '@mometa/materials-resolver': ^0.0.25
+      '@mometa/react-refresh-webpack-plugin': ^0.0.25
       '@monaco-editor/react': ^4.3.1
       '@rcp/c.preventfastop': ^1.2.0
       '@rcp/use.behaviorsubject': ^1.0.2
@@ -487,7 +487,7 @@ importers:
   packages/editor/example:
     specifiers:
       '@babel/core': ^7.14.2
-      '@mometa/editor': ^0.0.24
+      '@mometa/editor': ^0.0.25
       '@pmmmwh/react-refresh-webpack-plugin': ^0.5.1
       '@svgr/webpack': ^5.5.0
       '@testing-library/jest-dom': ^5.15.1
@@ -636,7 +636,7 @@ importers:
   packages/fs-handler:
     specifiers:
       '@babel/core': ^7.16.5
-      '@mometa/materials-generator': ^0.0.24
+      '@mometa/materials-generator': ^0.0.25
       lodash.groupby: ^4.6.0
       memoize-fn: ^2.0.1
       pify: ^4.0.1
@@ -657,7 +657,7 @@ importers:
 
   packages/materials-resolver:
     specifiers:
-      '@mometa/materials-generator': ^0.0.24
+      '@mometa/materials-generator': ^0.0.25
       find-up: ^5.0.0
       globby: ^11.0.4
     dependencies:
@@ -15748,8 +15748,8 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /lerna-cli/5.0.3:
-    resolution: {integrity: sha512-+3Z2KikEzlN3yXnNfsME82isofQ5fjh76Xj9xh1orBPaPHqfMRTW9vw2HoMaobSUM6SlD2bvI0BKeaytwkw3yA==}
+  /lerna-cli/5.0.4:
+    resolution: {integrity: sha512-Zigyhzj8OWa+zL2t/sz+HgEeBwbGFNwz2SivdCb4nEH03x53tttvzuYsZTnn7Ne7LLJrlbiTVx/aTA/lt/c5lw==}
     engines: {node: '>=10'}
     hasBin: true
     dependencies:
@@ -15758,6 +15758,7 @@ packages:
       '@lerna/changed': 4.0.0
       '@lerna/clean': 4.0.0
       '@lerna/cli': 4.0.0
+      '@lerna/conventional-commits': 4.0.0
       '@lerna/create': 4.0.0
       '@lerna/diff': 4.0.0
       '@lerna/exec': 4.0.0
@@ -15776,6 +15777,7 @@ packages:
       lodash.clonedeep: 4.5.0
       npmlog: 4.1.2
       read-yaml-file: 2.1.0
+      write-yaml-file: 4.2.0
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -17972,7 +17974,7 @@ packages:
     dependencies:
       is-ssh: 1.3.3
       protocols: 1.4.8
-      qs: 6.10.2
+      qs: 6.10.3
       query-string: 6.14.1
     dev: true
 
@@ -19871,13 +19873,6 @@ packages:
   /q/1.5.1:
     resolution: {integrity: sha1-fjL3W0E4EpHQRhHxvxQQmsAGUdc=}
     engines: {node: '>=0.6.0', teleport: '>=0.2.0'}
-
-  /qs/6.10.2:
-    resolution: {integrity: sha512-mSIdjzqznWgfd4pMii7sHtaYF8rx8861hBO80SraY5GT0XQibWZWJSid0avzHGkDIZLImux2S5mXO0Hfct2QCw==}
-    engines: {node: '>=0.6'}
-    dependencies:
-      side-channel: 1.0.4
-    dev: true
 
   /qs/6.10.3:
     resolution: {integrity: sha512-wr7M2E0OFRfIfJZjKGieI8lBKb7fRCH4Fv5KNPEs7gJ8jadvotdsS08PzOKR7opXhZ/Xkjtt3WF9g38drmyRqQ==}
