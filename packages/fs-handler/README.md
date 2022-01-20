@@ -18,7 +18,75 @@ yarn add @mometa/fs-handler
 ## Usage
 
 ```javascript
-import fsHandler from '@mometa/fs-handler'
+const { createFsHandler, commonMiddlewares } = require('@mometa/fs-handler')
+const handle = createFsHandler({
+  middlewares: commonMiddlewares(),
+  fs: require('fs')
+})
+
+handle(requestData).then(console.log)
+```
+
+### RequestData
+
+```typescript
+export interface CommonPreload extends Range {
+  filename: string
+  text: string
+}
+
+// 删除
+export interface DelPreload extends CommonPreload {}
+// 替换
+export interface ReplacePreload extends CommonPreload {
+  data: {
+    // 替换为哪个文本
+    newText: string
+  }
+}
+// 移动
+export interface MoveNodePreload extends CommonPreload {
+  data: {
+    // 移动到哪个位置
+    to: Point
+  }
+}
+// 插入
+export interface InsertNodePreload {
+  // 插入在哪个文件
+  filename: string
+  // 插入在哪个位置
+  to: Point
+  data: {
+    // 插入文本
+    newText?: string
+    wrap?: {
+      anotherTo: Point
+      startStr: string
+      endStr: string
+    }
+    // 插入物料
+    material?: Asset['data']
+  }
+}
+
+export type RequestData =
+  | {
+      type: OpType.DEL
+      preload: DelPreload
+    }
+  | {
+      type: OpType.REPLACE_NODE
+      preload: ReplacePreload
+    }
+  | {
+      type: OpType.MOVE_NODE
+      preload: MoveNodePreload
+    }
+  | {
+      type: OpType.INSERT_NODE
+      preload: InsertNodePreload
+    }
 ```
 
 ## Contributing
