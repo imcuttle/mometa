@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### [0.0.25](https://github.com/imcuttle/mometa/compare/v0.0.24...v0.0.25) (2022-01-20)
+
+### Bug Fixes
+
+- webpack@4 entry insert & show empty when draging ([aea24e1](https://github.com/imcuttle/mometa/commit/aea24e1b5983c2e50e1adab775e0221d31fef176))
+
 ### [0.0.24](https://github.com/imcuttle/mometa/compare/v0.0.23...v0.0.24) (2022-01-19)
 
 ### Bug Fixes
