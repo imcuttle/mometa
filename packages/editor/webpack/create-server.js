@@ -134,6 +134,14 @@ exports.createServer = async function createServer({
               return
             }
 
+            case '/search-materials': {
+              const body = await json(req)
+              res.statusCode = 200
+              res.write('true')
+              // deboun
+              return
+            }
+
             case '/open-editor': {
               const body = await json(req)
               const fileName = nps.resolve(context, body.fileName)
@@ -157,6 +165,11 @@ exports.createServer = async function createServer({
     if (req.method.toUpperCase() === 'GET') {
       switch (stripPrefix(baseURL, req.url)) {
         case '/sse': {
+          const esHandler = es.handler(req, res)
+          await setMaterialsPreload(filepath, esHandler)
+          return
+        }
+        case '/add-material': {
           const esHandler = es.handler(req, res)
           await setMaterialsPreload(filepath, esHandler)
           return

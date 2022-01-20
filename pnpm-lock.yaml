@@ -397,6 +397,7 @@ importers:
       copy-webpack-plugin-webpack4: npm:copy-webpack-plugin@6
       element-resize-detector: ^1.2.4
       events: ^3.3.0
+      execa: ^5.1.1
       filenamify: ^4.3.0
       fs-extra: ^10.0.0
       fuse.js: ^6.5.3
@@ -405,6 +406,7 @@ importers:
       loader-utils: ^2.0.2
       lodash: ^4.17.21
       lodash-es: ^4.17.21
+      lodash.debounce: ^4.0.8
       lodash.isequal: ^4.5.0
       memfs: ^3.4.1
       memoize-fn: ^2.0.1
@@ -415,6 +417,7 @@ importers:
       p-queue: ^7.1.0
       please-upgrade-node: ^3.2.0
       prefix-classname: ^1.0.3
+      quick-lru: '5'
       re-resizable: ^6.9.1
       react: ^17.0.2
       react-dnd: ^14.0.4
@@ -435,14 +438,17 @@ importers:
       chalk: 2.4.2
       copy-webpack-plugin: 10.2.0
       copy-webpack-plugin-webpack4: /copy-webpack-plugin/6.4.1
+      execa: 5.1.1
       filenamify: 4.3.0
       fs-extra: 10.0.0
       hot-module-require: 4.0.0
       loader-utils: 2.0.2
+      lodash.debounce: 4.0.8
       lodash.isequal: 4.5.0
       memoize-fn: 2.0.1
       object-hash: 2.2.0
       please-upgrade-node: 3.2.0
+      quick-lru: 5.1.1
       schema-utils: 3.1.1
       shell-quote: 1.7.3
     devDependencies:

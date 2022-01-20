@@ -10,6 +10,7 @@ import { CLS_PREFIX } from '../../../config/const'
 import './style.scss'
 import type { Material, Asset, AssetGroup } from '@mometa/materials-generator'
 import { useHeaderStatus } from '../header'
+import AddMaterialDialog from '../add-material-dialog'
 
 const cn = p('')
 const c = p(`${CLS_PREFIX}-material-panel`)
@@ -170,29 +171,39 @@ const MaterialUi = ({ mat }: any) => {
 }
 
 const MaterialPanel: React.FC<MaterialPanelProps> = React.memo(({ loading, className, materials }) => {
+  const [addMatVisible, setAddMatVisible] = React.useState(true)
   return (
-    <Spin spinning={loading} delay={200} className={cn(c(), className)}>
-      {!materials?.length && <Empty description={'暂无物料'} style={{ paddingTop: 40 }} />}
-      {!!materials?.length && (
-        <Tabs
-          className={c('__tabs')}
-          tabBarExtraContent={
-            <Tooltip title={'添加远端物料'}>
-              <Button type={'text'} shape={'circle'} size={'small'} icon={<PlusOutlined />} />
-            </Tooltip>
-          }
-        >
-          {materials.map((mat, i) => {
-            const matKey = mat.key ?? i
-            return (
-              <Tabs.TabPane tab={mat.name} key={matKey}>
-                <MaterialUi mat={mat} />
-              </Tabs.TabPane>
-            )
-          })}
-        </Tabs>
-      )}
-    </Spin>
+    <>
+      <Spin spinning={loading} delay={200} className={cn(c(), className)}>
+        {!materials?.length && <Empty description={'暂无物料'} style={{ paddingTop: 40 }} />}
+        {!!materials?.length && (
+          <Tabs
+            className={c('__tabs')}
+            tabBarExtraContent={
+              <Tooltip title={'添加远端物料'}>
+                <Button
+                  type={'text'}
+                  shape={'circle'}
+                  size={'small'}
+                  icon={<PlusOutlined />}
+                  onClick={() => setAddMatVisible(true)}
+                />
+              </Tooltip>
+            }
+          >
+            {materials.map((mat, i) => {
+              const matKey = mat.key ?? i
+              return (
+                <Tabs.TabPane tab={mat.name} key={matKey}>
+                  <MaterialUi mat={mat} />
+                </Tabs.TabPane>
+              )
+            })}
+          </Tabs>
+        )}
+      </Spin>
+      <AddMaterialDialog visible={addMatVisible} />
+    </>
   )
 })
 
