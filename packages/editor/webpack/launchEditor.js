@@ -171,35 +171,10 @@ function getArgumentsForLineNumber(editor, fileName, lineNumber, colNumber, work
   return [fileName]
 }
 
-function aliasTransform(mometaEditor) {
-  let commonEditors;
-  if (process.platform === 'darwin') {
-    commonEditors = Object.values(COMMON_EDITORS_OSX)
-  } else if (process.platform === 'win32') {
-    commonEditors = Object.values(COMMON_EDITORS_WIN)
-  } else if (process.platform === 'linux') {
-    commonEditors = Object.values(COMMON_EDITORS_LINUX)
-  }
-  const editors = Object.values(commonEditors)
-  for (let i = 0; i < editors.length; i++) {
-    const editor = editors[i]
-    if (editor === mometaEditor) return editor
-  }
-  console.log()
-  console.log(chalk.red('Don\'t find editor: ' + mometaEditor))
-  console.log()
-  console.log(
-    chalk.green('Editor should be one of these: ') + editors.join(" | ")
-  )
-  console.log()
-  throw new Error('Could not open ' + mometaEditor)
-}
-
 function guessEditor() {
   // Explicit config always wins
   if (process.env.MOMETA_EDITOR) {
-    const editor = aliasTransform(process.env.MOMETA_EDITOR)
-    return shellQuote.parse(editor)
+    return shellQuote.parse(process.env.MOMETA_EDITOR)
   }
 
   // We can find out which editor is currently running by:
@@ -357,16 +332,26 @@ function launchEditor(fileName, lineNumber, colNumber) {
   } else {
     _childProcess = child_process.spawn(editor, args, { stdio: 'inherit' })
   }
-  _childProcess.on('exit', function (errorCode) {
-    _childProcess = null
+  return new Promise((resolve, reject) => {
+    _childProcess.on('exit', function (errorCode) {
+      _childProcess = null
 
-    if (errorCode) {
-      printInstructions(fileName, '(code ' + errorCode + ')')
-    }
-  })
+      console.warn('errorCode', errorCode)
+      if (errorCode) {
+        const e = Object.assign(new Error(`Open ${editor} failed`), {
+          code: errorCode
+        })
+        reject(e)
+        printInstructions(fileName, '(code ' + errorCode + ')')
+      } else {
+        resolve()
+      }
+    })
 
-  _childProcess.on('error', function (error) {
-    printInstructions(fileName, error.message)
+    _childProcess.on('error', function (error) {
+      reject(error)
+      printInstructions(fileName, error.message)
+    })
   })
 }
 

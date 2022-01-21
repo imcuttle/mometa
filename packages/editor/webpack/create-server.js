@@ -137,7 +137,7 @@ exports.createServer = async function createServer({
             case '/open-editor': {
               const body = await json(req)
               const fileName = nps.resolve(context, body.fileName)
-              launchEditor(fileName, body.lineNumber, body.colNumber)
+              await launchEditor(fileName, body.lineNumber, body.colNumber)
               res.statusCode = 200
               res.write('true')
               return
