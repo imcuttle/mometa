@@ -171,10 +171,35 @@ function getArgumentsForLineNumber(editor, fileName, lineNumber, colNumber, work
   return [fileName]
 }
 
+function aliasTransform(mometaEditor) {
+  let commonEditors;
+  if (process.platform === 'darwin') {
+    commonEditors = Object.values(COMMON_EDITORS_OSX)
+  } else if (process.platform === 'win32') {
+    commonEditors = Object.values(COMMON_EDITORS_WIN)
+  } else if (process.platform === 'linux') {
+    commonEditors = Object.values(COMMON_EDITORS_LINUX)
+  }
+  const editors = Object.values(commonEditors)
+  for (let i = 0; i < editors.length; i++) {
+    const editor = editors[i]
+    if (editor === mometaEditor) return editor
+  }
+  console.log()
+  console.log(chalk.red('Don\'t find editor: ' + mometaEditor))
+  console.log()
+  console.log(
+    chalk.green('Editor should be one of these: ') + editors.join(" | ")
+  )
+  console.log()
+  throw new Error('Could not open ' + mometaEditor)
+}
+
 function guessEditor() {
   // Explicit config always wins
   if (process.env.MOMETA_EDITOR) {
-    return shellQuote.parse(process.env.MOMETA_EDITOR)
+    const editor = aliasTransform(process.env.MOMETA_EDITOR)
+    return shellQuote.parse(editor)
   }
 
   // We can find out which editor is currently running by:
