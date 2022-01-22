@@ -335,8 +335,6 @@ function launchEditor(fileName, lineNumber, colNumber) {
   return new Promise((resolve, reject) => {
     _childProcess.on('exit', function (errorCode) {
       _childProcess = null
-
-      console.warn('errorCode', errorCode)
       if (errorCode) {
         const e = Object.assign(new Error(`Open ${editor} failed`), {
           code: errorCode

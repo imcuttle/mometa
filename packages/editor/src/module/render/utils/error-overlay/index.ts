@@ -20,13 +20,13 @@ export function setEditorHandler(fn) {
 //   )
 // })
 
-var hadRuntimeError = false
-ErrorOverlay.startReportingRuntimeErrors({
-  onError: function () {
-    hadRuntimeError = true
-  },
-  filename: '/static/js/bundle.js'
-})
+// var hadRuntimeError = false
+// ErrorOverlay.startReportingRuntimeErrors({
+//   onError: function () {
+//     hadRuntimeError = true
+//   },
+//   filename: '/static/js/bundle.js'
+// })
 
 if (module.hot && typeof module?.hot?.dispose === 'function') {
   module.hot.dispose(function () {
@@ -56,8 +56,6 @@ export function handleErrors(errors) {
     errors,
     warnings: []
   })
-
-  console.log(formatted, errors)
 
   // Only show the first error.
   ErrorOverlay.reportBuildError(formatted.errors[0])

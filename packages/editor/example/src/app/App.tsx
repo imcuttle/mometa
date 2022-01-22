@@ -1,6 +1,6 @@
 import React, { StrictMode } from 'react'
 import Tabs from 'antd/es/tabs'
-import { Table, Input, Typography, Button, Dropdown, Menu, Layout, Breadcrumb } from 'antd'
+import { Table, Input, Typography, Button, Dropdown, Menu, Layout, Breadcrumb, Result } from 'antd'
 import 'antd/lib/table/style/css'
 import 'antd/es/tabs/style/css'
 import 'antd/es/breadcrumb/style/css'
