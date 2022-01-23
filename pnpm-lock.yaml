@@ -535,10 +535,10 @@ importers:
       postcss-normalize: ^10.0.1
       postcss-preset-env: ^6.7.0
       prompts: ^2.4.1
-      react: ^17.0.2
+      react: ^16.13.1
       react-app-polyfill: 3.0.0-next.91+1465357b
       react-dev-utils: 12.0.0-next.47+1465357b
-      react-dom: ^17.0.2
+      react-dom: ^16.13.1
       react-refresh: ^0.10.0
       react-router: ^6.2.1
       react-router-dom: ^6.2.1
@@ -564,7 +564,7 @@ importers:
       '@pmmmwh/react-refresh-webpack-plugin': 0.5.4_1a5c66a6789ef5174a5e69b66ad50710
       '@svgr/webpack': 5.5.0
       '@testing-library/jest-dom': 5.16.1
-      '@testing-library/react': 12.1.2_react-dom@17.0.2+react@17.0.2
+      '@testing-library/react': 12.1.2_react-dom@16.14.0+react@16.14.0
       '@testing-library/user-event': 13.5.0
       '@types/jest': 27.4.0
       '@types/node': 16.11.19
@@ -602,13 +602,13 @@ importers:
       postcss-normalize: 10.0.1_328fa76e2e12da084b12cca0dce079e9
       postcss-preset-env: 6.7.0
       prompts: 2.4.2
-      react: 17.0.2
+      react: 16.14.0
       react-app-polyfill: 3.0.0-next.91
       react-dev-utils: 12.0.0-next.47_cec916e57feec1ac8a47d339e52ab905
-      react-dom: 17.0.2_react@17.0.2
+      react-dom: 16.14.0_react@16.14.0
       react-refresh: 0.10.0
-      react-router: 6.2.1_react@17.0.2
-      react-router-dom: 6.2.1_react-dom@17.0.2+react@17.0.2
+      react-router: 6.2.1_react@16.14.0
+      react-router-dom: 6.2.1_react-dom@16.14.0+react@16.14.0
       resolve: 1.21.0
       resolve-url-loader: 4.0.0
       sass-loader: 12.4.0_webpack@5.65.0
@@ -636,7 +636,7 @@ importers:
   packages/fs-handler:
     specifiers:
       '@babel/core': ^7.16.5
-      '@mometa/materials-generator': ^0.0.26
+      '@mometa/materials-generator': ^0.0.27
       lodash.groupby: ^4.6.0
       memoize-fn: ^2.0.1
       pify: ^4.0.1
@@ -657,7 +657,7 @@ importers:
 
   packages/materials-resolver:
     specifiers:
-      '@mometa/materials-generator': ^0.0.26
+      '@mometa/materials-generator': ^0.0.27
       find-up: ^5.0.0
       globby: ^11.0.4
     dependencies:
@@ -5626,6 +5626,19 @@ packages:
       '@testing-library/dom': 7.31.2
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
+    dev: false
+
+  /@testing-library/react/12.1.2_react-dom@16.14.0+react@16.14.0:
+    resolution: {integrity: sha512-ihQiEOklNyHIpo2Y8FREkyD1QAea054U0MVbwH1m8N9TxeFz+KoJ9LkqoKqJlzx2JDm56DVwaJ1r36JYxZM05g==}
+    engines: {node: '>=12'}
+    peerDependencies:
+      react: '*'
+      react-dom: '*'
+    dependencies:
+      '@babel/runtime': 7.16.7
+      '@testing-library/dom': 8.11.1
+      react: 16.14.0
+      react-dom: 16.14.0_react@16.14.0
     dev: false
 
   /@testing-library/react/12.1.2_react-dom@17.0.2+react@17.0.2:
@@ -21060,6 +21073,18 @@ packages:
       react: 17.0.2
     dev: true
 
+  /react-dom/16.14.0_react@16.14.0:
+    resolution: {integrity: sha512-1gCeQXDLoIqMgqD3IO2Ah9bnf0w9kzhwN5q4FGnHZ67hBm9yePzB5JJAIQCc8x3pFnNlwFq4RidZggNAAkzWWw==}
+    peerDependencies:
+      react: ^16.14.0
+    dependencies:
+      loose-envify: 1.4.0
+      object-assign: 4.1.1
+      prop-types: 15.8.1
+      react: 16.14.0
+      scheduler: 0.19.1
+    dev: false
+
   /react-dom/17.0.2_react@17.0.2:
     resolution: {integrity: sha512-s4h96KtLDUQlsENhMn1ar8t2bEa+q/YAtj8pPPdIjPDGBDIVNsrD9aXNWqspUe6AzKCIG0C1HZZLqLV7qpOBGA==}
     peerDependencies:
@@ -21138,16 +21163,16 @@ packages:
       tiny-warning: 1.0.3
     dev: false
 
-  /react-router-dom/6.2.1_react-dom@17.0.2+react@17.0.2:
+  /react-router-dom/6.2.1_react-dom@16.14.0+react@16.14.0:
     resolution: {integrity: sha512-I6Zax+/TH/cZMDpj3/4Fl2eaNdcvoxxHoH1tYOREsQ22OKDYofGebrNm6CTPUcvLvZm63NL/vzCYdjf9CUhqmA==}
     peerDependencies:
       react: '>=16.8'
       react-dom: '>=16.8'
     dependencies:
       history: 5.2.0
-      react: 17.0.2
-      react-dom: 17.0.2_react@17.0.2
-      react-router: 6.2.1_react@17.0.2
+      react: 16.14.0
+      react-dom: 16.14.0_react@16.14.0
+      react-router: 6.2.1_react@16.14.0
     dev: false
 
   /react-router/5.2.1_react@17.0.2:
@@ -21168,13 +21193,13 @@ packages:
       tiny-warning: 1.0.3
     dev: false
 
-  /react-router/6.2.1_react@17.0.2:
+  /react-router/6.2.1_react@16.14.0:
     resolution: {integrity: sha512-2fG0udBtxou9lXtK97eJeET2ki5//UWfQSl1rlJ7quwe6jrktK9FCCc8dQb5QY6jAv3jua8bBQRhhDOM/kVRsg==}
     peerDependencies:
       react: '>=16.8'
     dependencies:
       history: 5.2.0
-      react: 17.0.2
+      react: 16.14.0
     dev: false
 
   /react-webpack-lazyloader/2.0.2:
@@ -21188,6 +21213,15 @@ packages:
       loader-utils: 2.0.2
     transitivePeerDependencies:
       - supports-color
+    dev: false
+
+  /react/16.14.0:
+    resolution: {integrity: sha512-0X2CImDkJGApiAlcf0ODKIneSwBPhqJawOa5wCtKbu7ZECrmS26NvtSILynQ66cgkT/RJ4LidJOc3bUESwmU8g==}
+    engines: {node: '>=0.10.0'}
+    dependencies:
+      loose-envify: 1.4.0
+      object-assign: 4.1.1
+      prop-types: 15.8.1
     dev: false
 
   /react/17.0.2:
@@ -22051,6 +22085,13 @@ packages:
     engines: {node: '>=10'}
     dependencies:
       xmlchars: 2.2.0
+
+  /scheduler/0.19.1:
+    resolution: {integrity: sha512-n/zwRWRYSUj0/3g/otKDRPMh6qv2SYMWNq85IEa8iZyAv8od9zDYpGSnpBEjNgcMNq6Scbu5KfIPxNF72R/2EA==}
+    dependencies:
+      loose-envify: 1.4.0
+      object-assign: 4.1.1
+    dev: false
 
   /scheduler/0.20.2:
     resolution: {integrity: sha512-2eWfGgAqqWFGqtdMmcL5zCMK1U8KlXv8SQFGglL3CEtd0aDVDWgeF/YoCmvln55m5zSk3J/20hTaSBeSObsQDQ==}
