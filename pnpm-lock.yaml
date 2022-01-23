@@ -636,7 +636,7 @@ importers:
   packages/fs-handler:
     specifiers:
       '@babel/core': ^7.16.5
-      '@mometa/materials-generator': ^0.0.26
+      '@mometa/materials-generator': ^0.0.27
       lodash.groupby: ^4.6.0
       memoize-fn: ^2.0.1
       pify: ^4.0.1
@@ -657,7 +657,7 @@ importers:
 
   packages/materials-resolver:
     specifiers:
-      '@mometa/materials-generator': ^0.0.26
+      '@mometa/materials-generator': ^0.0.27
       find-up: ^5.0.0
       globby: ^11.0.4
     dependencies:
