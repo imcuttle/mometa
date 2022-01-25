@@ -33,7 +33,10 @@ module.exports = async function writeRuntimePreviewRender({ materialsConfig, con
   const keys = parents.map((x, i) => x.key || x.name || path[i])
   const root = nps.join(paths.runtimePreviewRender, filenamify(configFilename, { replacement: '~' }))
   await fsExtra.ensureDir(root)
-  const filename = nps.join(root, `preview-render-${keys.join('_')}_${sha1(asset).slice(0, 8)}.js`)
+  const filename = nps.join(
+    root,
+    filenamify(`preview-render-${keys.join('_')}_${sha1(asset).slice(0, 8)}.js`, { replacement: '~' })
+  )
 
   if (fs.existsSync(filename) && fs.statSync(filename).isFile()) {
     const content = await fs.promises.readFile(filename, 'utf8')
