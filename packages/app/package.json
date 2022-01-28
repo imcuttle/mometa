@@ -154,5 +154,8 @@
     "presets": [
       "react-app"
     ]
+  },
+  "devDependencies": {
+    "alias-hq": "^5.3.2"
   }
 }

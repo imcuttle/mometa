@@ -5,6 +5,7 @@ const path = require('path')
 const paths = require('./paths')
 const chalk = require('react-dev-utils/chalk')
 const resolve = require('resolve')
+const aliasHQ = require('alias-hq')
 
 /**
  * Get additional module paths based on the baseUrl of a compilerOptions object.
@@ -60,6 +61,8 @@ function getWebpackAliases(options = {}) {
   if (!baseUrl) {
     return {}
   }
+
+  return aliasHQ.get('webpack')
 
   const baseUrlResolved = path.resolve(paths.appPath, baseUrl)
 
