@@ -1,6 +1,6 @@
 {
   "name": "@mometa/editor",
-  "version": "0.0.27",
+  "version": "0.0.28",
   "publishConfig": {
     "access": "public"
   },
@@ -38,10 +38,10 @@
   "dependencies": {
     "@babel/helper-module-imports": "^7.16.7",
     "@babel/template": "^7.16.7",
-    "@mometa/fs-handler": "^0.0.27",
-    "@mometa/materials-generator": "^0.0.27",
-    "@mometa/materials-resolver": "^0.0.27",
-    "@mometa/react-refresh-webpack-plugin": "^0.0.27",
+    "@mometa/fs-handler": "^0.0.28",
+    "@mometa/materials-generator": "^0.0.28",
+    "@mometa/materials-resolver": "^0.0.28",
+    "@mometa/react-refresh-webpack-plugin": "^0.0.28",
     "chalk": "^2.4.2",
     "copy-webpack-plugin": "^10.2.0",
     "copy-webpack-plugin-webpack4": "npm:copy-webpack-plugin@6",

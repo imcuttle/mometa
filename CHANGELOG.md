@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### [0.0.28](https://github.com/imcuttle/mometa/compare/v0.0.27...v0.0.28) (2022-01-28)
+
+### Bug Fixes
+
+- key with `/` ([6396401](https://github.com/imcuttle/mometa/commit/6396401ada4d823c8924a3fe2f2c8195e0654e0a)), closes [#26](https://github.com/imcuttle/mometa/issues/26)
+- react 16 adapter ([469730e](https://github.com/imcuttle/mometa/commit/469730e7c309163305ea58f34cb10741bbb2e79b))
+
 ### [0.0.27](https://github.com/imcuttle/mometa/compare/v0.0.26...v0.0.27) (2022-01-22)
 
 **Note:** Version bump only for package mometa
