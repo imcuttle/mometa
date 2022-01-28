@@ -87,7 +87,9 @@ export function parseReactDomNode(dom: HTMLElement) {
     }
   }
 
-  const fiberName = Object.keys(dom).find((name) => /^__reactFiber\$.+$/.test(name))
+  const fiberName = Object.keys(dom).find(
+    (name) => /^__reactFiber\$.+$/.test(name) || /^__reactInternalInstance\$.+$/.test(name)
+  )
   if (fiberName && dom[fiberName]?._debugSource?.__mometa) {
     domMap.set(dom, { fiberName })
     return {
