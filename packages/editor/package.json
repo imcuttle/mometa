@@ -1,6 +1,6 @@
 {
   "name": "@mometa/editor",
-  "version": "0.0.28",
+  "version": "0.0.29",
   "publishConfig": {
     "access": "public"
   },
@@ -38,10 +38,10 @@
   "dependencies": {
     "@babel/helper-module-imports": "^7.16.7",
     "@babel/template": "^7.16.7",
-    "@mometa/fs-handler": "^0.0.28",
-    "@mometa/materials-generator": "^0.0.28",
-    "@mometa/materials-resolver": "^0.0.28",
-    "@mometa/react-refresh-webpack-plugin": "^0.0.28",
+    "@mometa/fs-handler": "^0.0.29",
+    "@mometa/materials-generator": "^0.0.29",
+    "@mometa/materials-resolver": "^0.0.29",
+    "@mometa/react-refresh-webpack-plugin": "^0.0.29",
     "chalk": "^2.4.2",
     "copy-webpack-plugin": "^10.2.0",
     "copy-webpack-plugin-webpack4": "npm:copy-webpack-plugin@6",
@@ -101,9 +101,9 @@
     "prefix-classname": "^1.0.3",
     "re-resizable": "^6.9.1",
     "react": "^17.0.2",
-    "react-dom": "^17.0.2",
     "react-dnd": "^14.0.4",
     "react-dnd-html5-backend": "^14.0.2",
+    "react-dom": "^17.0.2",
     "react-error-boundary": "^3.1.4",
     "react-error-overlay": "6.0.9",
     "rxjs": "^7.4.0",

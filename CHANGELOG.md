@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### [0.0.29](https://github.com/imcuttle/mometa/compare/v0.0.28...v0.0.29) (2022-01-29)
+
+### Bug Fixes
+
+- 使用 react 17 ([2a7060e](https://github.com/imcuttle/mometa/commit/2a7060e2812dce9b73d95bba8012902cb3460fb0))
+
 ### [0.0.28](https://github.com/imcuttle/mometa/compare/v0.0.27...v0.0.28) (2022-01-28)
 
 ### Bug Fixes

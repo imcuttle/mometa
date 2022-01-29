@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### [0.0.29](https://github.com/imcuttle/mometa/compare/v0.0.28...v0.0.29) (2022-01-29)
+
+**Note:** Version bump only for package @mometa/app-webpack4
+
 ### [0.0.28](https://github.com/imcuttle/mometa/compare/v0.0.27...v0.0.28) (2022-01-28)
 
 **Note:** Version bump only for package @mometa/app-webpack4
