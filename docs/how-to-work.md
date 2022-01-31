@@ -146,12 +146,12 @@ interface MometaData extends RangeLocation {
 3. 物料热更新  
    有两种热更新模式：服务端序列化数据热更新 或 客户端渲染热更新(开启 `experimentalMaterialsClientRender`)
 
-   **服务端序列化数据热更新**：  
-   物料文件的改动监听都在服务端内自己处理，首次或一旦检测到改动，则推送最新数据至浏览器进行更新，实现见 https://github.com/imcuttle/hot-module-require
-   返回为可序列化的物料数据。
+   - **服务端序列化数据热更新**：  
+     物料文件的改动监听都在服务端 Node.js 内自己处理，首次或一旦检测到改动，则推送最新数据至浏览器进行更新，热更新 Node.js 实现见 https://github.com/imcuttle/hot-module-require ，返回为可序列化的物料数据。
 
-   **客户端渲染热更新**：  
-   物料文件的改动监听交由 webpack，首次或一旦检测到改动，则触发 webpack 构建编译，返回为前端可执行代码；所以使用该方式可以达到物料动态预览的效果
+   - **客户端渲染热更新**：  
+     物料文件的改动监听交由 webpack，首次或一旦检测到改动，则触发 webpack 编译（第一次子编译），Node.js VM 环境执行编译后代码，得到 materials 配置；通过 materials 配置计算得到前端可执行代码，进行 webpack 编译（第二次子编译）；所以使用该方式可以达到物料动态预览的效果
+     ![](client-render.svg)
 
 #### 编辑器加载
 
