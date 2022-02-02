@@ -14,7 +14,7 @@ const elem = <div __mometa={{
   },
   \\"filename\\": \\"/file.jsx\\",
   \\"name\\": \\"div\\",
-  \\"text\\": \\"<div>\\\\n      <h1 title={'abc'}>Hello World</h1>\\\\n      <Tabs\\\\n        // @ts-expect-error\\\\n      >\\\\n      <Tabs.TabPane key={'tool'} tab={'物料'}>\\\\n        <p>物料</p>\\\\n        {arr.map((x, i) => (\\\\n          <p key={i}>content_{i}</p>\\\\n        ))}\\\\n        <p className='empty'></p>\\\\n      </Tabs.TabPane>\\\\n      <Tabs.TabPane key={'attr'} tab={'属性'}></Tabs.TabPane>\\\\n      </Tabs>\\\\n    </div>\\",
+  \\"text\\": \\"<div>\\\\n      <ONE title={'abc'}>Hello World</ONE>\\\\n      <Tabs\\\\n        // @ts-expect-error\\\\n      >\\\\n      <Tabs.TabPane key={'tool'} tab={'物料'}>\\\\n        <p>物料</p>\\\\n        {arr.map((x, i) => (\\\\n          <p key={i}>content_{i}</p>\\\\n        ))}\\\\n        <p className='empty'></p>\\\\n      </Tabs.TabPane>\\\\n      <Tabs.TabPane key={'attr'} tab={'属性'}></Tabs.TabPane>\\\\n      </Tabs>\\\\n    </div>\\",
   \\"relativeFilename\\": \\"file.jsx\\",
   \\"emptyChildren\\": false,
   \\"isFirst\\": true,
@@ -27,33 +27,33 @@ const elem = <div __mometa={{
     \\"line\\": 17,
     \\"column\\": 4
   },
-  \\"hash\\": \\"093fcc4d9a120c1159bef5b241d5b8ee320d37f9\\"
+  \\"hash\\": \\"ce69de36b0fcd26b3b09312d5e17f37dd9daa109\\"
 }}>
-      <h1 title={'abc'} __mometa={{
+      <ONE title={'abc'} __mometa={{
     \\"start\\": {
       \\"line\\": 4,
       \\"column\\": 6
     },
     \\"end\\": {
       \\"line\\": 4,
-      \\"column\\": 40
+      \\"column\\": 42
     },
     \\"filename\\": \\"/file.jsx\\",
-    \\"name\\": \\"h1\\",
-    \\"text\\": \\"<h1 title={'abc'}>Hello World</h1>\\",
+    \\"name\\": \\"ONE\\",
+    \\"text\\": \\"<ONE title={'abc'}>Hello World</ONE>\\",
     \\"relativeFilename\\": \\"file.jsx\\",
     \\"emptyChildren\\": false,
     \\"isFirst\\": false,
     \\"selfClosed\\": false,
     \\"innerStart\\": {
       \\"line\\": 4,
-      \\"column\\": 24
+      \\"column\\": 25
     },
     \\"innerEnd\\": {
       \\"line\\": 4,
-      \\"column\\": 35
+      \\"column\\": 36
     },
-    \\"hash\\": \\"21cbb0b547925ade3cbcccaca98cda7197f34e45\\",
+    \\"hash\\": \\"15e1de951007f437069067906e10358cc5699794\\",
     \\"nextSibling\\": {
       \\"start\\": {
         \\"line\\": 5,
@@ -65,7 +65,7 @@ const elem = <div __mometa={{
       },
       \\"text\\": \\"<Tabs\\\\n        // @ts-expect-error\\\\n      >\\\\n      <Tabs.TabPane key={'tool'} tab={'物料'}>\\\\n        <p>物料</p>\\\\n        {arr.map((x, i) => (\\\\n          <p key={i}>content_{i}</p>\\\\n        ))}\\\\n        <p className='empty'></p>\\\\n      </Tabs.TabPane>\\\\n      <Tabs.TabPane key={'attr'} tab={'属性'}></Tabs.TabPane>\\\\n      </Tabs>\\"
     }
-  }}>Hello World</h1>
+  }}>Hello World</ONE>
       <Tabs // @ts-expect-error
   __mometa={{
     \\"start\\": {
@@ -99,9 +99,9 @@ const elem = <div __mometa={{
       },
       \\"end\\": {
         \\"line\\": 4,
-        \\"column\\": 40
+        \\"column\\": 42
       },
-      \\"text\\": \\"<h1 title={'abc'}>Hello World</h1>\\"
+      \\"text\\": \\"<ONE title={'abc'}>Hello World</ONE>\\"
     }
   }}>
       <Tabs.TabPane key={'tool'} tab={'物料'} __mometa={{

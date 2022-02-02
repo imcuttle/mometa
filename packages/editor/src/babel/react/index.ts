@@ -158,7 +158,7 @@ export default function babelPluginMometaReactInject(api) {
                   }
                 }
 
-                const objExp = templateBuilder.expression(JSON.stringify(mometaData))()
+                const objExp = templateBuilder.expression(JSON.stringify(mometaData), { placeholderPattern: false })()
                 const newProp = t.JSXAttribute(t.JSXIdentifier('__mometa'), t.JSXExpressionContainer(objExp))
                 openingElement.node.attributes.push(newProp)
 

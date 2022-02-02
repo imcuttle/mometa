@@ -7,7 +7,7 @@ describe('babel-react', () => {
       `
     const arr = new Array(100).fill(1)
     const elem = <div>
-      <h1 title={'abc'}>Hello World</h1>
+      <ONE title={'abc'}>Hello World</ONE>
       <Tabs
         // @ts-expect-error
       >

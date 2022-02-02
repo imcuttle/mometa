@@ -1,4 +1,4 @@
-module.exports = function locateMaterialParents(materialsConfig, path) {
+export const locateMaterialParents = function locateMaterialParents(materialsConfig, path) {
   var parents = []
   var target = materialsConfig[path[0]]
   if (!target) {

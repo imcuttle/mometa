@@ -1,7 +1,7 @@
 import { EventEmitter } from 'events'
 import React from 'react'
 import getWindow from 'get-window'
-import { getLatestFiber, parseReactDomNodeDeep, ReactFiber } from '../utils/dom-utils'
+import { getLatestFiber, getMometaDataFromFiber, parseReactDomNodeDeep, ReactFiber } from '../utils/dom-utils'
 
 const findClosest = <T extends HTMLElement>(
   from: T,
@@ -71,7 +71,7 @@ export class MometaDomApi extends EventEmitter {
     if (data?.fiber) {
       findClosestFiber(data.fiber, (f) => {
         f = getLatestFiber(f)
-        while (f && !f._debugSource?.__mometa) {
+        while (f && !getMometaDataFromFiber(f)) {
           f = getLatestFiber(f.return)
         }
         let t = f
@@ -82,7 +82,7 @@ export class MometaDomApi extends EventEmitter {
           // if (t.stateNode !== this.dom) {
           //   return true
           // }
-          parents.add(getLatestFiber(f)._debugSource?.__mometa)
+          parents.add(getMometaDataFromFiber(getLatestFiber(f)))
         }
         return f
       })
@@ -105,7 +105,7 @@ export class MometaDomApi extends EventEmitter {
     if (data?.fiber) {
       findClosestFiber(data.fiber, (f) => {
         f = getLatestFiber(f)
-        while (f && !f._debugSource?.__mometa) {
+        while (f && !getMometaDataFromFiber(f)) {
           f = getLatestFiber(f.return)
         }
         let t = f

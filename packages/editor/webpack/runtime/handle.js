@@ -1,4 +1,4 @@
-var locateMaterialParents = require('./locate-material-parents')
+var { locateMaterialParents } = require('../../es/shared/locate-material-parents')
 
 function get(target, name) {
   if (!target) {

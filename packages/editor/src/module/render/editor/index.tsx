@@ -20,7 +20,6 @@ import { createClientConnection } from './sse'
 import { Button } from 'antd'
 import { fetchPreload } from '../utils/fetch-preload'
 import AppErrorBoundary from '../components/error-boundary'
-import { handleErrors } from '../utils/error-overlay'
 
 const cn = p('')
 const c = p(`${CLS_PREFIX}`)
@@ -28,6 +27,7 @@ const c = p(`${CLS_PREFIX}`)
 export interface EditorProps {
   className?: string
   apiBaseURL?: string
+  errorOverlay?: boolean
   bundlerURL?: StageProps['bundlerURL']
   stageProps?: StageProps
   leftPanelProps?: LeftPanelProps
@@ -62,7 +62,15 @@ function CollapseBtn({ hide, dir, onClick }: any) {
   )
 }
 
-const Body = ({ className, apiBaseURL, leftPanelProps, rightPanelProps, stageProps, bundlerURL }: EditorProps) => {
+const Body = ({
+  className,
+  apiBaseURL,
+  errorOverlay,
+  leftPanelProps,
+  rightPanelProps,
+  stageProps,
+  bundlerURL
+}: EditorProps) => {
   const [mats, setMats] = React.useState([])
   const [loading, setLoading] = React.useState(true)
   React.useEffect(() => {
@@ -75,6 +83,13 @@ const Body = ({ className, apiBaseURL, leftPanelProps, rightPanelProps, stagePro
         disposeError?.()
         disposeError = null
       } catch (err) {
+        let handleErrors
+        if (errorOverlay) {
+          const res = await import('../utils/error-overlay')
+          handleErrors = res.handleErrors
+        } else {
+          handleErrors = ([err]) => message.error(String(err))
+        }
         // console.error(err)
         disposeError = handleErrors([err])
       }
@@ -199,7 +214,8 @@ const Editor: React.FC<EditorProps> = React.memo((props) => {
 
 Editor.defaultProps = {
   apiBaseURL: 'http://localhost:8686/',
-  bundlerURL: '/bundler.html'
+  bundlerURL: '/bundler.html',
+  errorOverlay: true
 }
 
 export default Editor

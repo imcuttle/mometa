@@ -42,6 +42,9 @@ module.exports = {
         },
         apiBaseURL: {
           type: 'string'
+        },
+        errorOverlay: {
+          type: 'boolean'
         }
       }
     }

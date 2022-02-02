@@ -25,6 +25,8 @@ export interface ReactFiber {
   child?: ReactFiber
   alternate?: ReactFiber
   sibling?: ReactFiber
+  pendingProps?: Record<any, any>
+  memoizedProps?: Record<any, any>
   stateNode: HTMLElement | any | null
   _debugSource?: {
     __mometa: MometaData
@@ -45,12 +47,12 @@ export function parseReactDomNodeDeep(dom: HTMLElement) {
 
     if (data.fiber) {
       let fiber = data.fiber
-      while (fiber && !fiber?._debugSource?.__mometa) {
+      while (fiber && !getMometaDataFromFiber(fiber)) {
         fiber = fiber.return
       }
       if (fiber) {
         return {
-          mometa: fiber._debugSource?.__mometa,
+          mometa: getMometaDataFromFiber(fiber),
           fiber
         }
       }
@@ -68,6 +70,14 @@ export function getLatestFiber(f?: ReactFiber) {
   }
   return f
 }
+
+export function getMometaDataFromFiber(f: ReactFiber): MometaData | undefined {
+  if (!f) {
+    return
+  }
+  return f._debugSource?.__mometa ?? f.memoizedProps?.__mometa ?? f.pendingProps?.__mometa
+}
+
 const domMap = new WeakMap()
 export function parseReactDomNode(dom: HTMLElement) {
   const cachedName = domMap.get(dom)
@@ -79,10 +89,10 @@ export function parseReactDomNode(dom: HTMLElement) {
         mometa: dom[propName]?.__mometa
       }
     }
-    if (fiberName && dom[fiberName]?._debugSource?.__mometa) {
+    if (fiberName && getMometaDataFromFiber(getLatestFiber(dom[fiberName]))) {
       return {
         fiber: getLatestFiber(dom[cachedName?.fiberName]) as ReactFiber,
-        mometa: getLatestFiber(dom[cachedName?.fiberName])?._debugSource?.__mometa
+        mometa: getMometaDataFromFiber(getLatestFiber(dom[cachedName?.fiberName]))
       }
     }
   }
@@ -90,11 +100,12 @@ export function parseReactDomNode(dom: HTMLElement) {
   const fiberName = Object.keys(dom).find(
     (name) => /^__reactFiber\$.+$/.test(name) || /^__reactInternalInstance\$.+$/.test(name)
   )
-  if (fiberName && dom[fiberName]?._debugSource?.__mometa) {
+  if (fiberName && getMometaDataFromFiber(dom[fiberName])) {
     domMap.set(dom, { fiberName })
+    const fiberNode = getLatestFiber(dom[fiberName])
     return {
-      fiber: getLatestFiber(dom[fiberName]) as ReactFiber,
-      mometa: getLatestFiber(dom[fiberName])?._debugSource?.__mometa
+      fiber: fiberNode as ReactFiber,
+      mometa: getMometaDataFromFiber(fiberNode)
     }
   }
 

@@ -6,7 +6,7 @@ const { sha1 } = require('object-hash')
 const paths = require('../../paths')
 const genCode = require('./preview-code-gen')
 const goodbye = require('./bye')
-const locateMaterialParents = require('./../../runtime/locate-material-parents')
+const { locateMaterialParents } = require('./../../../lib/shared/locate-material-parents')
 
 const roots = new Set()
 // goodbye(() => {
