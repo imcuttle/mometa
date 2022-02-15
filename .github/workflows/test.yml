@@ -50,4 +50,5 @@ jobs:
       - uses: imcuttle/gh-release-changelog@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
+          checkPkgAvailable: false
           token: ${{ secrets.GITHUB_TOKEN }}
