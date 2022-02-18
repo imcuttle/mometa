@@ -69,7 +69,7 @@
   "scripts": {
     "node": "__MOMETA_LOCAL__=true NODE_OPTIONS=\"--loader ts-node/esm -r tsconfig-paths/register\" node",
     "start": "npm run node scripts/start.js",
-    "build:runtime": "DISABLE_COPY_PUBLIC=true BUILD_MOD=runtime npm run node scripts/build.js",
+    "build:runtime": "DISABLE_COPY_PUBLIC=true GENERATE_SOURCEMAP=false BUILD_MOD=runtime npm run node scripts/build.js",
     "build": "BUILD_MOD=app npm run node scripts/build.js",
     "test": "node scripts/test.js"
   },

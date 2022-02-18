@@ -215,7 +215,7 @@ const Editor: React.FC<EditorProps> = React.memo((props) => {
 Editor.defaultProps = {
   apiBaseURL: 'http://localhost:8686/',
   bundlerURL: '/bundler.html',
-  errorOverlay: true
+  errorOverlay: false
 }
 
 export default Editor
