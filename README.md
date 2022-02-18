@@ -1,7 +1,6 @@
 ### 由于个人工作原因，近期不太有时间持续迭代，所以寻求帮助支持：[Windows 系统支持](https://github.com/imcuttle/mometa/issues/20)，[Vue 支持](https://github.com/imcuttle/mometa/issues/17)
 
-微信联系方式：moyuuuuu  备注 mometa
-
+微信联系方式：moyuuuuu 备注 mometa
 
 <p align="center">
   <img src="./images/logo.png" />
