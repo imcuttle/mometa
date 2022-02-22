@@ -25,6 +25,9 @@ const MoreButton: React.FC<MoreButtonProps> = React.memo(({ className, dom, menu
   const [paths, setPaths] = React.useState(null)
 
   const renderMenuItem = ({ mometa: data, dom: _dom }, i = 0) => {
+    if (!data) {
+      return null
+    }
     const isActive = dom.__mometa.getKey() === data.hash
     return (
       <Menu.Item

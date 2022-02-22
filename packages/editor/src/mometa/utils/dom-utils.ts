@@ -132,7 +132,7 @@ export function getDomName(dom: HTMLElement) {
     return name
   }
   if (dom.getAttribute('class')?.trim()) {
-    name += `.${Array.from(dom.classList.entries()).join('.')}`
+    name += `.${Array.from(dom.classList.values()).join('.')}`
   }
   return name
 }
