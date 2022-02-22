@@ -1,6 +1,6 @@
 {
   "name": "@mometa/materials-resolver",
-  "version": "0.0.32",
+  "version": "0.0.33",
   "publishConfig": {
     "access": "public"
   },
@@ -29,7 +29,7 @@
     "globby": "^11.0.4"
   },
   "devDependencies": {
-    "@mometa/materials-generator": "^0.0.32"
+    "@mometa/materials-generator": "^0.0.33"
   },
   "keywords": [
     "余聪",

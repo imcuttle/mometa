@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+### [0.0.33](https://github.com/imcuttle/mometa/compare/v0.0.32...v0.0.33) (2022-02-22)
+
+### Bug Fixes
+
+- data is null ([466af47](https://github.com/imcuttle/mometa/commit/466af4712fb92d099da6e2f1c6fdd9c42b9d72bd))
+
 ### [0.0.32](https://github.com/imcuttle/mometa/compare/v0.0.31...v0.0.32) (2022-02-18)
 
 **Note:** Version bump only for package mometa
