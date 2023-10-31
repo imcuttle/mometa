@@ -4,6 +4,7 @@ const fs = require('fs')
 const { promisify } = require('util')
 const { execSync } = require('child_process')
 const concurrently = require('concurrently')
+const shelljs = require('shelljs')
 
 const restArgs = process.argv.slice(2)
 
@@ -22,7 +23,8 @@ const buildArgStr = hasBuildJson ? '--project tsconfig.build.json' : '--project 
 
 ;(async () => {
   try {
-    execSync(`${rootBin}/rimraf es lib types`, { stdio: 'inherit' })
+    shelljs.rm('-rf', ['es', 'lib', 'types'])
+    // execSync(`${rootBin}/rimraf es lib types`, { stdio: 'inherit' })
     const { exitCode, ...data } = await concurrently([
       {
         command: `${rootBin}/tsc ${buildArgStr} --outDir es --module es2020 ` + restArgs.join(' '),

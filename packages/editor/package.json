@@ -18,17 +18,17 @@
     "babel"
   ],
   "scripts": {
-    "test": "NODE_OPTIONS=--experimental-vm-modules ../../scripts/run test",
+    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules ../../scripts/run.js test",
     "build:app": "cd example && npm run build",
-    "build:lib": "../../scripts/run build",
+    "build:lib": "npx ../../scripts/run.js build",
     "build:runtime": "cd example && npm run build:runtime",
     "postbuild:runtime": "node ./example/config/post-buildruntime",
-    "build": "run-p -l 'build:*'",
+    "build": "run-p -l build:*",
     "start": "cd example && npm start",
-    "packlimit": "../../scripts/run packlimit",
+    "packlimit": "npx ../../scripts/run.js packlimit",
     "prepare": "npm run build",
-    "prepublishOnly": "npm run packlimit && ../../scripts/run pkgxo --submit",
-    "postpublish": "../../scripts/run pkgxo --reset",
+    "prepublishOnly": "npm run packlimit && npx ../../scripts/run.js pkgxo --submit",
+    "postpublish": "npx ../../scripts/run.js pkgxo --reset",
     "version": "npm test && npm run packlimit"
   },
   "peerDependencies": {

@@ -6,10 +6,10 @@
   "author": "imcuttle <imcuttle@163.com>",
   "scripts": {
     "preinstall": "npx only-allow pnpm",
-    "start": "pnpm start --filter=@mometa/editor",
-    "start:app:cr:debug": "pnpm run start:cr:debug --filter=@mometa/app",
-    "start:app:cr": "pnpm run start:cr --filter=@mometa/app",
-    "start:app-webpack4:cr": "pnpm run start:cr --filter=@mometa/app-webpack4",
+    "start": "pnpm --filter @mometa/editor start",
+    "start:app:cr:debug": "pnpm --filter=@mometa/app start:cr:debug ",
+    "start:app:cr": "pnpm --filter=@mometa/app  start:cr",
+    "start:app-webpack4:cr": "pnpm --filter=@mometa/app-webpack4 start:cr",
     "test": "npx jest",
     "test:watch": "npm test -- --watch",
     "preversion": "npm test",
@@ -128,6 +128,7 @@
     "commander": "^8.3.0",
     "concurrently": "^6.4.0",
     "conventional-changelog-conventionalcommits": "^4.6.3",
+    "cross-env": "^7.0.3",
     "edam-cli": "^3.4.15",
     "human-format": "^0.11.0",
     "husky": "^4.3.8",
@@ -140,6 +141,7 @@
     "prettier": "^2.4.1",
     "pretty-quick": "^3.1.2",
     "rimraf": "^3.0.2",
+    "shelljs": "^0.8.5",
     "ts-jest": "^27.0.7",
     "typescript": "^4.5.2"
   }

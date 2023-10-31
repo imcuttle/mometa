@@ -17,7 +17,7 @@
   ],
   "scripts": {
     "test": "echo noop",
-    "build": "../../scripts/run build",
+    "build": "npx ../../scripts/run.js build",
     "packlimit": "../../scripts/run packlimit",
     "dev": "npm run build -- --watch",
     "prepare": "npm run build",

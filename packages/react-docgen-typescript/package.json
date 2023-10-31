@@ -16,9 +16,9 @@
     "types"
   ],
   "scripts": {
-    "__test": "../../scripts/run test",
-    "build": "../../scripts/run build",
-    "packlimit": "../../scripts/run packlimit",
+    "__test": "../../scripts/run.js test",
+    "build": "../../scripts/run.js build",
+    "packlimit": "../../scripts/run.js packlimit",
     "dev": "npm run build -- --watch",
     "prepublishOnly": "npm run build && npm run packlimit",
     "version": "npm run packlimit"
