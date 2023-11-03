@@ -2,7 +2,6 @@ import React from 'react'
 import p from 'prefix-classname'
 import { isEqual, cloneDeep, isMatch } from 'lodash-es'
 import { Button, Empty, Form, Input, Tabs, Tooltip, Typography } from 'antd'
-import { NumberOutlined } from '@ant-design/icons'
 import { CLS_PREFIX, useSelectedNode } from '../../../config/const'
 
 import './style.scss'
@@ -13,6 +12,7 @@ import { ApiServerPack } from '../stage/create-api'
 import { OpType } from '@mometa/fs-handler/const'
 import { CodeEditor } from '../../../../shared/code-editor'
 import { createPreload } from '../../utils/utils'
+import AttrPanelView from '../attr-panel-view'
 
 const cn = p('')
 const c = p(`${CLS_PREFIX}-rpanel`)
@@ -21,7 +21,7 @@ export interface RightPanelProps {
   className?: string
 }
 
-const BaseInfoForm = () => {
+const CodeView = () => {
   const [selectedNode] = useSelectedNode()
   const mometaData = selectedNode?.__mometa?.getMometaData()
   const [form] = Form.useForm()
@@ -81,24 +81,6 @@ const BaseInfoForm = () => {
         // !isDirty && setIsDirty(true)
       }}
     >
-      <Form.Item label={'定位'}>
-        <Typography.Title level={5}>
-          <Tooltip title={`${mometaData.relativeFilename}:${mometaData.start?.line}:${mometaData.start?.column}`}>
-            <Typography.Link
-              onClick={() =>
-                api.openEditor({
-                  fileName: mometaData.filename,
-                  lineNumber: mometaData.start?.line,
-                  colNumber: mometaData.start?.column
-                })
-              }
-            >
-              {'📌 '}
-              {mometaData.name}
-            </Typography.Link>
-          </Tooltip>
-        </Typography.Title>
-      </Form.Item>
       <Form.Item name={'text'} label={'代码'}>
         <CodeEditor language={'typescript'} height={'200px'} />
       </Form.Item>
@@ -142,7 +124,10 @@ const RightPanel: React.FC<RightPanelProps> = React.memo(({ className }) => {
       {!!mometaData ? (
         <Tabs className={c('__tabs')}>
           <Tabs.TabPane key={'attr'} tab={'属性'}>
-            <BaseInfoForm />
+            <AttrPanelView />
+          </Tabs.TabPane>
+          <Tabs.TabPane key={'code'} tab={'代码'}>
+            <CodeView />
           </Tabs.TabPane>
           <Tabs.TabPane key={'meta'} tab={'元信息'}>
             <MetaInfo />

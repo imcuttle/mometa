@@ -1,0 +1,10 @@
+@import '../../style/_var';
+
+.#{$prefix}-attr-panel-view {
+  padding: 0 10px;
+
+  &__btns {
+    display: flex;
+    justify-content: flex-end;
+  }
+}

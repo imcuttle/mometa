@@ -34,5 +34,8 @@
     "url": "git+https://github.com/imcuttle/mometa.git",
     "directory": "packages/materials-generator"
   },
-  "gitHead": "333b833f49286bef901694a6f84b1248131098a0"
+  "gitHead": "333b833f49286bef901694a6f84b1248131098a0",
+  "devDependencies": {
+    "@formily/json-schema": "^2.3.0"
+  }
 }

@@ -145,6 +145,10 @@ module.exports = class MometaEditorPlugin extends CommonPlugin {
     }
 
     if (this.options.react && this.options.react.refresh !== false) {
+      compiler.options.plugins = compiler.options.plugins.filter(
+        (plg) => plg?.constructor?.name !== 'ReactRefreshPlugin'
+      )
+
       const opts = Object.assign(
         {
           __webpack: this.getWebpack(compiler),

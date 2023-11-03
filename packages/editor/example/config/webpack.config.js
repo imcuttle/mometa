@@ -211,7 +211,7 @@ function getSingleConfig(
   let entries = entry || paths.appIndexJs
 
   return {
-    ignoreWarnings: [/Failed to parse source map/],
+    ignoreWarnings: [/./],
     target: target || ['browserslist'],
     mode: isEnvProduction ? 'production' : isEnvDevelopment && 'development',
     // Stop compilation early in production
@@ -441,7 +441,7 @@ function getSingleConfig(
             // The preset includes JSX, Flow, TypeScript, and some ESnext features.
             {
               test: /\.(js|mjs|jsx|ts|tsx)$/,
-              include: paths.appSrc,
+              include: [paths.appSrc, /@formily\/antd/],
               loader: require.resolve('babel-loader'),
               options: {
                 customize: require.resolve('babel-preset-react-app/webpack-overrides'),
@@ -458,6 +458,11 @@ function getSingleConfig(
                 plugins: [
                   ...babelPlugins,
                   ['babel-plugin-import', { libraryName: 'antd', style: true }],
+                  [
+                    'babel-plugin-import',
+                    { libraryName: '@formily/antd', style: true, libraryDirectory: 'esm' },
+                    'babel-plugin-import-formily/antd'
+                  ],
                   isEnvDevelopment && shouldUseReactRefresh && require.resolve('react-refresh/babel')
                 ].filter(Boolean),
                 // This is a feature of `babel-loader` for webpack (not Babel itself).

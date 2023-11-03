@@ -1,3 +1,5 @@
+import { SchemaProperties } from '@formily/json-schema'
+
 export interface Material {
   name: string
   key: any
@@ -28,6 +30,8 @@ export interface Asset {
     code: string // '<Button></Button>'
     dependencies?: Record<string, AssetImport> // { Button: { mode: 'named', source: 'antd' } }
     sideEffectDependencies?: Array<string>
+
+    propsFields?: SchemaProperties<any, any, any, any, any, any, any, any>
   }
 
   runtime?: {
